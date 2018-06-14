@@ -19,12 +19,13 @@ $app->get('/volunteers', function (Request $request, Response $response, array $
 		$response = array([]);
 		$query = "SELECT * FROM volunteer";
 		$result = $mysqli->query($query);
-		while($row = $result->fetch_assoc()) {
-	        $arr = $row;
+		$rows = array();
+         while($r = mysqli_fetch_assoc($result)) {
+                 $rows[] = $r;
         }
-        $response['data'] = $arr;
-		return  json_encode($response);
+        print json_encode($rows);
 
 mysqli_close($mysqli);
 });
 ?>
+
