@@ -12,7 +12,7 @@ $app->get('/hello/{name}', function (Request $request, Response $response, array
     return $response;
 });
 
-$app->get('/mysql', function (Request $request, Response $response, array $args) {
+$app->get('/volunteers', function (Request $request, Response $response, array $args) {
     $user = 'root';
 $password = 'root';
 $db = 'DiplomaThesis';

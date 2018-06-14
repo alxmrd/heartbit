@@ -1,1 +1,5 @@
-php -S localhost:8080 -t /Users/alxmrd/projects/heartbit/api/public ../api/public/index.php
+#! /bin/bash
+
+#serve the Api:
+php -S localhost:8080 -t  public public/index.php
+ 
