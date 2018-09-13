@@ -44,5 +44,14 @@ $app->get('/api/volunteers/{id}', function (Request $request, Response $response
 
 mysqli_close($mysqli);
 });
+
+$app->post('/api/volunteers', function (Request $request, Response $response, array $args) {
+        require_once ('configuration.php');
+       $volunteers_id =(int)$args['id'];
+       
+        $my_name = $_POST['my_name'];
+        echo "hello ".$my_name;
+   mysqli_close($mysqli);
+   });
 ?>
 
