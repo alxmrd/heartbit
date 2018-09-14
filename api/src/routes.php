@@ -45,13 +45,34 @@ $app->get('/api/volunteers/{id}', function (Request $request, Response $response
 mysqli_close($mysqli);
 });
 
-$app->post('/api/volunteers', function (Request $request, Response $response, array $args) {
+$app->post('/login', function (Request $request, Response $response, array $args) {
         require_once ('configuration.php');
        $volunteers_id =(int)$args['id'];
+       $username = mysql_real_escape_string($_POST['username']);
+       $password = mysql_real_escape_string($_POST['password']);
        
-        $my_name = $_POST['my_name'];
-        echo "hello ".$my_name;
+          $arr = array();
+                   $response = array([]);
+                   $query = "SELECT * FROM volunteer WHERE username='$username' AND password='password' ";
+                   $result = $mysqli->query($query);
+                   if (mysqpli_num_rows($reslut) == 1) {
+
+                        $_SESSION['username'] = $username;
+                        $_SESSION['success'] = "You are now logged in";
+                        header('logation: routes.php');
+                }else{
+                        array_push($errors, "wrong username/password combination  ");
+                        header('location: login.php');
+                }
+                   $rows = array();
+            while($r = mysqli_fetch_assoc($result)) {
+                    $rows[] = $r;
+           }
+           print json_encode($rows);
+   
    mysqli_close($mysqli);
    });
+
+
 ?>
 
