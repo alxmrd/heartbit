@@ -1,5 +1,6 @@
 <?php
 //include("configuration.php");
+session_start();
 
 
 use Slim\Http\Request;
@@ -49,13 +50,15 @@ mysqli_close($mysqli);
 
 $app->post('/api/login', function (Request $request, Response $response, array $args) {
         require_once ('configuration.php');
-        session_start();
        //$volunteers_id =(int)$args['id'];
-       $username = mysqli_real_escape_string($mysqli,$_POST['username']);
-       $password = mysqli_real_escape_string($mysqli,$_POST['password']);
+         $username = $request->getParsedBody()['username'];
+         $password = $request->getParsedBody()['password'];
+       // $parsedBody = $request->getParsedBody();
+        //echo $parsedBody;
        
-          $arr = array();
-                   $response = array([]);
+       
+          //$arr = array();
+                //    $response = array([]);
                    $query = "SELECT id FROM volunteer WHERE username='$username' AND password='$password'";
                    $result = mysqli_query($mysqli,$query);
                    $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
@@ -66,17 +69,43 @@ $app->post('/api/login', function (Request $request, Response $response, array $
 
                         $_SESSION['username'] = $username;
                         $_SESSION['success'] = "You are now logged in";
-                       
-                }else{
-                        echo "Wrong username & password compination";
+                        $message="successfully logged in";
+                        //$response->withJSon($username);
+                        
+                         $data = array("username" => $username,'status' => 'success', 'message' => $message);
+                         $response=json_encode($data);
+                         
+                         return $response;
+                         //print $response;
+                        // $status=$response->getStatusCode();
+                        // print $status;
+                    
+                        // echo $message;
+                        // echo "ok";
+                         
+                         //echo $data;
+               
+                        
+                         }else{
+                                $message="Wrong username & password compination";
+                                $data=array('status' => 'error', 'data' => null, 'message' => 'Incorrect username or password', 401);
+                                $response=json_encode($data);
+                                return $response;
+                      
                 }
-                   $rows = array();
-            while($r = mysqli_fetch_assoc($result)) {
-                    $rows[] = $r;
-           }
-           print json_encode($rows);
+
+                
+                 
    
    mysqli_close($mysqli);
+   });
+
+   $app->post('/api/logout', function (Request $request, Response $response, array $args) {
+        require_once ('configuration.php');
+       
+        unset($SESSION['username']);
+        session_destroy;
+        mysqli_close($mysqli);
    });
 
 
