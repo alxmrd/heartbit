@@ -23,3 +23,6 @@ isset — Determine if a variable is set and is not NULL
     (http://php.net/manual/en/function.isset.php)
 
 ##What is proggresive web apps?
+    (https://blog.ionicframework.com/what-is-a-progressive-web-app/)
+##What is RESTful API ?
+    (https://searchmicroservices.techtarget.com/definition/RESTful-API)

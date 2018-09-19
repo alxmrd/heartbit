@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import "./Login.css";
+import $ from 'jquery';
 
 export default class Login extends Component {
   constructor(props) {
@@ -24,6 +25,40 @@ export default class Login extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
+    this.setState({
+      contactEmail: '',
+      contactMessage: ''
+    });
+
+    $.ajax({
+      url: process.env.NODE_ENV !== "production" ? '/login' : "http://localhost:8080/api/login",
+      type: 'POST',
+      data: {
+        'form_email': this.state.contactEmail,
+        'form_msg': this.state.contactMessage
+      },
+      cache: false,
+      success: function(data) {
+        // Success..
+        this.setState({
+          contactEmail: 'success',
+          contactMessage: '<h1>Success!</h1><p>Successfull Logged in.</p>'
+        });
+        $('#formContact').slideUp();
+        $('#formContact').after(this.state.contactMessage);
+        console.log('success', data);
+      }.bind(this),
+      // Fail..
+      error: function(xhr, status, err) {
+        console.log(xhr, status);
+        console.log(err);
+        this.setState({
+          contactEmail: 'danger',
+          contactMessage: '<h1>error</h1><p>Wrong Password & Username compination</p>'
+        });
+        console.log(this.state.contactEmail + this.state.contactMessage + 'fail');
+      }.bind(this)
+    });
   }
 
   render() {

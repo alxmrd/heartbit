@@ -1,5 +1,6 @@
 <?php
-//include("configuration.php");
+require_once ('configuration.php');
+
 session_start();
 
 
@@ -16,8 +17,8 @@ $app->get('/hello/{name}', function (Request $request, Response $response, array
 });
 
 $app->get('/api/volunteers', function (Request $request, Response $response, array $args) {
-    require_once ('configuration.php');
-    
+    //require_once ('configuration.php');
+       global $mysqli;
        $arr = array();
 		$response = array([]);
 		$query = "SELECT * FROM volunteer";
@@ -32,7 +33,8 @@ mysqli_close($mysqli);
 });
 
 $app->get('/api/volunteers/{id}', function (Request $request, Response $response, array $args) {
-     require_once ('configuration.php');
+     //require_once ('configuration.php');
+     global $mysqli;
     $volunteers_id =(int)$args['id'];
     
        $arr = array();
@@ -49,7 +51,8 @@ mysqli_close($mysqli);
 });
 
 $app->post('/api/login', function (Request $request, Response $response, array $args) {
-        require_once ('configuration.php');
+        global $mysqli;
+        //require_once ('configuration.php');
        //$volunteers_id =(int)$args['id'];
          $username = $request->getParsedBody()['username'];
          $password = $request->getParsedBody()['password'];

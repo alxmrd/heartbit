@@ -19,7 +19,7 @@ class App extends Component {
     </Navbar.Header>
     <Navbar.Collapse>
     <Nav pullRight>
-    <RouteNavItem href="/signup">Signup</RouteNavItem>
+    <RouteNavItem href="/signup">Home</RouteNavItem>
     <RouteNavItem href="/login">Login</RouteNavItem>
     </Nav>
     </Navbar.Collapse>
