@@ -1,9 +1,15 @@
 <?php
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json"); 
+//header("Access-Control-Allow-Credentials");
+
 require_once ('configuration.php');
 
 session_start();
 
 
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -50,32 +56,38 @@ $app->get('/api/volunteers/{id}', function (Request $request, Response $response
 mysqli_close($mysqli);
 });
 
-$app->post('/api/login', function (Request $request, Response $response, array $args) {
+$app->post('/api/login', function (Request $request, Response $response) {
         global $mysqli;
         //require_once ('configuration.php');
        //$volunteers_id =(int)$args['id'];
          $username = $request->getParsedBody()['username'];
          $password = $request->getParsedBody()['password'];
-       // $parsedBody = $request->getParsedBody();
-        //echo $parsedBody;
+        
+       $parsedBody = $request->getParsedBody();
+        return $parsedBody;
        
        
           //$arr = array();
                 //    $response = array([]);
-                   $query = "SELECT id FROM volunteer WHERE username='$username' AND password='$password'";
+                
+                   $query = "SELECT * FROM volunteer WHERE username='$username' AND password='$password'";
                    $result = mysqli_query($mysqli,$query);
                    $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
                    $active = $row['active'];
+                   //echo $result;
+                   
 
                    $count = mysqli_num_rows($result);
                    if (mysqli_num_rows($result) == 1) {
+                          
 
                         $_SESSION['username'] = $username;
                         $_SESSION['success'] = "You are now logged in";
                         $message="successfully logged in";
                         //$response->withJSon($username);
-                        
+                         
                          $data = array("username" => $username,'status' => 'success', 'message' => $message);
+                         
                          $response=json_encode($data);
                          
                          return $response;
@@ -90,7 +102,7 @@ $app->post('/api/login', function (Request $request, Response $response, array $
                
                         
                          }else{
-                                $message="Wrong username & password compination";
+                               // $message="Wrong username & password compination";
                                 $data=array('status' => 'error', 'data' => null, 'message' => 'Incorrect username or password', 401);
                                 $response=json_encode($data);
                                 return $response;

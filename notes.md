@@ -26,3 +26,10 @@ isset — Determine if a variable is set and is not NULL
     (https://blog.ionicframework.com/what-is-a-progressive-web-app/)
 ##What is RESTful API ?
     (https://searchmicroservices.techtarget.com/definition/RESTful-API)
+##What is AXIOS;
+    (https://medium.com/@MinimalGhost/what-is-axios-js-and-why-should-i-care-7eb72b111dc0)
+##Fetch data from API?
+    (https://reactjs.org/docs/faq-ajax.html)
+## What is promises in javascript
+A promise is an object that may produce a single value some time in the future
+ (https://medium.com/javascript-scene/master-the-javascript-interview-what-is-a-promise-27fc71e77261)
