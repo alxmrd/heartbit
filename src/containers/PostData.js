@@ -6,7 +6,7 @@ export  const PostData = (type, userData) => {
         
         fetch(url,{
             //credentials: 'include',
-            method: "POST", // *GET, POST, PUT, DELETE, etc.
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
             mode: "cors", // no-cors, cors, *same-origin
             cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
            // credentials: "same-origin", // include, same-origin, *omit
@@ -23,7 +23,7 @@ export  const PostData = (type, userData) => {
                 return response.json();
             })
         .then((responseJson) => {
-            console.log(userData);
+           // console.log(userData);
             resolve(responseJson);
 
         })

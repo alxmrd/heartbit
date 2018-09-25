@@ -7,9 +7,8 @@ require_once ('configuration.php');
 
 session_start();
 
-
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
+//use Psr\Http\Message\ServerRequestInterface;
+//use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -56,15 +55,27 @@ $app->get('/api/volunteers/{id}', function (Request $request, Response $response
 mysqli_close($mysqli);
 });
 
-$app->post('/api/login', function (Request $request, Response $response) {
+$app->post('/api/login', function (Request $request, Response $response, array $args) {
         global $mysqli;
+        
+        
+        $userData = json_decode(file_get_contents('php://input'));
+        $username = $userData->{"username"};
+        $password = $userData->{"password"};
+        
+
         //require_once ('configuration.php');
        //$volunteers_id =(int)$args['id'];
-         $username = $request->getParsedBody()['username'];
-         $password = $request->getParsedBody()['password'];
+        // $username = $request->getParsedBody()['username'];
+         //$password = $request->getParsedBody()['password'];
+        // $username = (isset($_POST['username']) ? $_POST['username'] :null);
+       //  $password= (isset($_POST['password']) ? $_POST['password'] :null);
+         //return json_encode($username);
+         
         
-       $parsedBody = $request->getParsedBody();
-        return $parsedBody;
+        
+      //$parsedBody = $request->getParsedBody();
+       // return $username;
        
        
           //$arr = array();
@@ -74,7 +85,7 @@ $app->post('/api/login', function (Request $request, Response $response) {
                    $result = mysqli_query($mysqli,$query);
                    $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
                    $active = $row['active'];
-                   //echo $result;
+                 
                    
 
                    $count = mysqli_num_rows($result);
