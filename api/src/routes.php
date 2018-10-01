@@ -9,6 +9,7 @@ session_start();
 
 //use Psr\Http\Message\ServerRequestInterface;
 //use Psr\Http\Message\ResponseInterface;
+use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -23,40 +24,43 @@ $app->get('/hello/{name}', function (Request $request, Response $response, array
 
 $app->get('/api/volunteers', function (Request $request, Response $response, array $args) {
     //require_once ('configuration.php');
-       global $mysqli;
-       $arr = array();
-		$response = array([]);
-		$query = "SELECT * FROM volunteer";
-		$result = $mysqli->query($query);
-		$rows = array();
-         while($r = mysqli_fetch_assoc($result)) {
-                 $rows[] = $r;
-        }
-        print json_encode($rows);
+    
+    global $pdo;
+    $arr = array();
+             $response = array([]);
+             $query = "SELECT * FROM volunteer";
+             $result = $pdo->query($query);
+             $rows = array();
+             while($r = $result->fetch(PDO::FETCH_ASSOC)) {
+              $rows[] = $r;
+     }
+     print json_encode($rows);
 
-mysqli_close($mysqli);
+     $result->closeCursor();
+     $pdo = null;
 });
 
 $app->get('/api/volunteers/{id}', function (Request $request, Response $response, array $args) {
      //require_once ('configuration.php');
-     global $mysqli;
+     global $pdo;
     $volunteers_id =(int)$args['id'];
     
        $arr = array();
 		$response = array([]);
 		$query = "SELECT * FROM volunteer WHERE id=$volunteers_id";
-		$result = $mysqli->query($query);
+		$result = $pdo->query($query);
 		$rows = array();
-         while($r = mysqli_fetch_assoc($result)) {
+                while($r = $result->fetch(PDO::FETCH_ASSOC)) {
                  $rows[] = $r;
         }
         print json_encode($rows);
 
-mysqli_close($mysqli);
+        $result->closeCursor();
+        $pdo = null;
 });
 
 $app->post('/api/login', function (Request $request, Response $response, array $args) {
-        global $mysqli;
+        global $pdo;
         
         
         $userData = json_decode(file_get_contents('php://input'));
@@ -82,14 +86,12 @@ $app->post('/api/login', function (Request $request, Response $response, array $
                 //    $response = array([]);
                 
                    $query = "SELECT * FROM volunteer WHERE username='$username' AND password='$password'";
-                   $result = mysqli_query($mysqli,$query);
-                   $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-                   $active = $row['active'];
-                 
-                   
-
-                   $count = mysqli_num_rows($result);
-                   if (mysqli_num_rows($result) == 1) {
+                   $result = $pdo->prepare($query);
+                
+                   $result->execute(array($username,$password));
+                   $count = $result->rowCount();
+                   $row = $result->fetch(PDO::FETCH_BOTH);
+                   if($count == 1 && !empty($row)) {
                           
 
                         $_SESSION['username'] = $username;
@@ -123,15 +125,17 @@ $app->post('/api/login', function (Request $request, Response $response, array $
                 
                  
    
-   mysqli_close($mysqli);
+                $result->closeCursor();
+                $pdo = null;
    });
 
    $app->post('/api/logout', function (Request $request, Response $response, array $args) {
-        require_once ('configuration.php');
+        global $pdo;
        
         unset($SESSION['username']);
         session_destroy;
-        mysqli_close($mysqli);
+        $result->closeCursor();
+        $pdo = null;
    });
 
 

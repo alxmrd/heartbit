@@ -38,8 +38,17 @@ export default class Login extends Component {
     PostData('login',this.state).then ((result) =>{
       let responseJSON = result;
       console.log(responseJSON);
+      if (responseJSON.status==="success"){
+        // alert('Logged in');
+        window.location.assign('/signup');
+        //history.push('/');
+      }
+      else{
+        alert('unsuccessfull log in');
+      }
       
-    }) .catch( error => console.log("egine malakia",error));
+      
+    }) .catch( error => console.log("error",error));
     //axios.post('/api/login',{user: this.state});
      }
 
