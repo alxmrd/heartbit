@@ -1,15 +1,16 @@
 <?php
+session_start();
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json"); 
 //header("Access-Control-Allow-Credentials");
 
 require_once ('configuration.php');
 
-session_start();
+
 
 //use Psr\Http\Message\ServerRequestInterface;
 //use Psr\Http\Message\ResponseInterface;
-use Slim\Container;
+//use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -47,7 +48,8 @@ $app->get('/api/volunteers/{id}', function (Request $request, Response $response
     
        $arr = array();
 		$response = array([]);
-		$query = "SELECT * FROM volunteer WHERE id=$volunteers_id";
+        $query = "SELECT * FROM volunteer WHERE id=$volunteers_id";
+       // $result->bindParam(‘:id’,$volunteers_id, PDO::PARAM_INT);
 		$result = $pdo->query($query);
 		$rows = array();
                 while($r = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -84,11 +86,12 @@ $app->post('/api/login', function (Request $request, Response $response, array $
        
           //$arr = array();
                 //    $response = array([]);
-                
-                   $query = "SELECT * FROM volunteer WHERE username='$username' AND password='$password'";
+                // me bind oxi $ sto query !!!!
+                  $query = "SELECT * FROM volunteer WHERE username=:username AND password=:password";
                    $result = $pdo->prepare($query);
-                
-                   $result->execute(array($username,$password));
+                  // $result->bindParam(‘:username’,$username, PDO::PARAM_STR);
+                   //$result->bindParam(‘:password’,$password, PDO::PARAM_STR);
+                   $result->execute(array(':username' => $username,':password' => $password));
                    $count = $result->rowCount();
                    $row = $result->fetch(PDO::FETCH_BOTH);
                    if($count == 1 && !empty($row)) {
@@ -98,11 +101,11 @@ $app->post('/api/login', function (Request $request, Response $response, array $
                         $_SESSION['success'] = "You are now logged in";
                         $message="successfully logged in";
                         //$response->withJSon($username);
-                         
+                        if ( isset( $_SESSION['username'] ) ) {
                          $data = array("username" => $username,'status' => 'success', 'message' => $message);
                          
                          $response=json_encode($data);
-                         
+                        }
                          return $response;
                          //print $response;
                         // $status=$response->getStatusCode();
@@ -115,7 +118,8 @@ $app->post('/api/login', function (Request $request, Response $response, array $
                
                         
                          }else{
-                               // $message="Wrong username & password compination";
+                            //sinepeia sto tropo grafis, me ton idio tropo
+                                $message="Wrong username & password compination";
                                 $data=array('status' => 'error', 'data' => null, 'message' => 'Incorrect username or password', 401);
                                 $response=json_encode($data);
                                 return $response;
@@ -133,7 +137,7 @@ $app->post('/api/login', function (Request $request, Response $response, array $
         global $pdo;
        
         unset($SESSION['username']);
-        session_destroy;
+        session_destroy();
         $result->closeCursor();
         $pdo = null;
    });

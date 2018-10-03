@@ -36,15 +36,15 @@ export default class Login extends Component {
     
     event.preventDefault();
     PostData('login',this.state).then ((result) =>{
-      let responseJSON = result;
-      console.log(responseJSON);
-      if (responseJSON.status==="success"){
+      let responseJson = result;
+      console.log(responseJson);
+      if (responseJson.status==="success"){
         // alert('Logged in');
         window.location.assign('/signup');
         //history.push('/');
       }
       else{
-        alert('unsuccessfull log in');
+        window.location.assign('/login');
       }
       
       

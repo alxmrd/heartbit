@@ -19,10 +19,12 @@ export  const PostData = (type, userData) => {
             body: JSON.stringify(userData), // body data type must match "Content-Type" header
         })
             .then((response) => {
+                
                 console.log("response", response);
                 return response.json();
             })
         .then((responseJson) => {
+        
            // console.log(userData);
             resolve(responseJson);
 
