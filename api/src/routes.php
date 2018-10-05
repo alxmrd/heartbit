@@ -27,7 +27,8 @@ $app->get('/hello/{name}', function (Request $request, Response $response, array
 
 $app->get('/api/volunteers', function (Request $request, Response $response, array $args) {
     global $pdo;
-
+    
+    
     //require_once ('configuration.php');
     
 
@@ -35,11 +36,13 @@ $app->get('/api/volunteers', function (Request $request, Response $response, arr
              $response = array([]);
              $query = "SELECT * FROM volunteer";
              $result = $pdo->query($query);
-             $rows = array();
+             $data = array();
              while($r = $result->fetch(PDO::FETCH_ASSOC)) {
-              $rows[] = $r;
+              $data[] = $r;
      }
-     print json_encode($rows);
+   //  print json_encode($data);
+     $response=json_encode($data);;
+    return $response;
 
      $result->closeCursor();
      $pdo = null;
@@ -57,11 +60,12 @@ $app->get('/api/volunteers/{id}', function (Request $request, Response $response
         $query = "SELECT * FROM volunteer WHERE id=$volunteers_id";
        // $result->bindParam(‘:id’,$volunteers_id, PDO::PARAM_INT);
 		$result = $pdo->query($query);
-		$rows = array();
+		$data = array();
                 while($r = $result->fetch(PDO::FETCH_ASSOC)) {
-                 $rows[] = $r;
+                 $data[] = $r;
         }
-        print json_encode($rows);
+        $response=json_encode($data);
+        return $response;
 
         $result->closeCursor();
         $pdo = null;

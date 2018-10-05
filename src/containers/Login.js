@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import "./Login.css";
-import {PostData} from "/Users/alxmrd/projects/heartbit/src/containers/PostData.js";
+import { PostData } from "/Users/alxmrd/projects/heartbit/src/containers/PostData.js";
 //import axios from 'axios';
 //import $ from 'jquery';
 
@@ -13,44 +13,37 @@ export default class Login extends Component {
       username: "",
       password: ""
     };
-   this.handleSubmit = this.handleSubmit.bind(this);
-   this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
-
-  
 
   validateForm() {
     return this.state.username.length > 0 && this.state.password.length > 0;
   }
 
-
-
   handleChange = event => {
     this.setState({
       [event.target.id]: event.target.value
     });
-    
-  }
+  };
 
   handleSubmit = event => {
-    
     event.preventDefault();
-    PostData('login',this.state).then ((result) =>{
-      let responseJson = result;
-      console.log(responseJson);
-      if (responseJson.status==="success"){
-        // alert('Logged in');
-        window.location.assign('/VolunteersPage');
-        //history.push('/');
-      }
-      else{
-        window.location.assign('/login');
-      }
-      
-      
-    }) .catch( error => console.log("error",error));
+    PostData("login", this.state)
+      .then(result => {
+        let responseJson = result;
+        console.log(responseJson);
+        if (responseJson.status === "success") {
+          //alert("Logged in");
+          window.location.assign("/volunteers");
+          //history.push('/');
+        } else {
+          window.location.assign("/login");
+        }
+      })
+      .catch(error => console.log("error", error));
     //axios.post('/api/login',{user: this.state});
-     }
+  };
 
   render() {
     return (
@@ -78,7 +71,6 @@ export default class Login extends Component {
             bsSize="large"
             disabled={!this.validateForm()}
             type="submit"
-            
           >
             Login
           </Button>
