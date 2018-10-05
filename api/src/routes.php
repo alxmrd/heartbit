@@ -17,6 +17,8 @@ use Slim\Http\Response;
 // Routes
 
 $app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
+    global $pdo;
+
     $name = $args['name'];
     $response->getBody()->write("Hello, $name");
   
@@ -24,9 +26,11 @@ $app->get('/hello/{name}', function (Request $request, Response $response, array
 });
 
 $app->get('/api/volunteers', function (Request $request, Response $response, array $args) {
+    global $pdo;
+
     //require_once ('configuration.php');
     
-    global $pdo;
+
     $arr = array();
              $response = array([]);
              $query = "SELECT * FROM volunteer";
@@ -42,8 +46,10 @@ $app->get('/api/volunteers', function (Request $request, Response $response, arr
 });
 
 $app->get('/api/volunteers/{id}', function (Request $request, Response $response, array $args) {
+    global $pdo;
+
      //require_once ('configuration.php');
-     global $pdo;
+    
     $volunteers_id =(int)$args['id'];
     
        $arr = array();
@@ -62,8 +68,10 @@ $app->get('/api/volunteers/{id}', function (Request $request, Response $response
 });
 
 $app->post('/api/login', function (Request $request, Response $response, array $args) {
-        global $pdo;
-        
+    global $pdo;
+
+      
+   
         
         $userData = json_decode(file_get_contents('php://input'));
         $username = $userData->{"username"};
@@ -134,7 +142,9 @@ $app->post('/api/login', function (Request $request, Response $response, array $
    });
 
    $app->post('/api/logout', function (Request $request, Response $response, array $args) {
-        global $pdo;
+    global $pdo;
+
+       
        
         unset($SESSION['username']);
         session_destroy();

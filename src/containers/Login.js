@@ -40,7 +40,7 @@ export default class Login extends Component {
       console.log(responseJson);
       if (responseJson.status==="success"){
         // alert('Logged in');
-        window.location.assign('/volunteers');
+        window.location.assign('/VolunteersPage');
         //history.push('/');
       }
       else{

@@ -15,6 +15,7 @@ $options = [
  
 
 try {
+   
     $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $password);
    
     // set the PDO error mode to exception
