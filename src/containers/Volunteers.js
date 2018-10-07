@@ -1,8 +1,5 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
-import { volunteers } from "../pages/volunteers/moufaData";
-
-console.log("volunteers", volunteers);
 
 export default class Volunteer extends Component {
   constructor(props) {
@@ -16,7 +13,8 @@ export default class Volunteer extends Component {
   loadFromServer = () => {
     fetch(`http://localhost:8080/api/volunteers`)
       .then(result => result.json())
-      .then(parsedJSON => console.log("parsedJSON", parsedJSON))
+      .then(data => this.setState({ data: data }))
+      //.then(parsedJSON => console.log("parsedJSON", parsedJSON))
       .catch(error => console.log("error", error));
   };
   componentDidMount() {
@@ -45,34 +43,24 @@ export default class Volunteer extends Component {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>alex</td>
-              <td>test</td>
-              <td>35235</td>
-              <td>25535</td>
-              <td> alex</td>
-              <td>alex</td>
-              <td> alexmrd1@hotmail.com</td>
-              <td>dgadg</td>
-              <td>2018-05-14</td>
-              <td>2017-05-09</td>
-              <td>sbsdbsdba</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>joey</td>
-              <td>1234</td>
-              <td>696969</td>
-              <td> null</td>
-              <td>joey</td>
-              <td> tribbiani</td>
-              <td>asasas@gmail.com</td>
-              <td>null</td>
-              <td>2018-06-04</td>
-              <td>2018-06-28</td>
-              <td>asdfadsgad</td>
-            </tr>
+            {this.state.data.map(function(item, key) {
+              return (
+                <tr key={key}>
+                  <td>{item.id}</td>
+                  <td>{item.username}</td>
+                  <td>{item.password}</td>
+                  <td>{item.tel1}</td>
+                  <td>{item.tel2}</td>
+                  <td>{item.name}</td>
+                  <td>{item.surname}</td>
+                  <td>{item.email}</td>
+                  <td>{item.notes}</td>
+                  <td>{item.latesttraining}</td>
+                  <td>{item.dateofbirth}</td>
+                  <td>{item.address}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </Table>
       </div>
