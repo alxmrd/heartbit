@@ -4,14 +4,6 @@ import { Nav, Navbar } from "react-bootstrap";
 import RouteNavItem from "./components/RouteNavItem";
 import "./App.css";
 import Routes from "./Routes";
-import SideNav, {
-  Toggle,
-  NavItem,
-  NavIcon,
-  NavText
-} from "@trendmicro/react-sidenav";
-
-import "@trendmicro/react-sidenav/dist/react-sidenav.css";
 
 class App extends Component {
   render() {
@@ -32,32 +24,6 @@ class App extends Component {
           </Navbar.Collapse>
         </Navbar>
         <Routes />
-        <SideNav
-          onSelect={selected => {
-            // Add your code here
-          }}
-        >
-          <SideNav.Toggle />
-          <SideNav.Nav defaultSelected="home">
-            <NavItem eventKey="home">
-              <NavIcon>
-                <i className="fa fa-fw fa-home" style={{ fontSize: "2em" }} />
-              </NavIcon>
-              <NavText>Home</NavText>
-            </NavItem>
-            <NavItem eventKey="charts">
-              <NavIcon>
-                <i
-                  className="fa fa-fw fa-line-chart"
-                  style={{ fontSize: "2em" }}
-                />
-              </NavIcon>
-              <NavText>Volunteers</NavText>
-              <NavItem eventKey="/volunteers" />
-            </NavItem>
-          </SideNav.Nav>
-        </SideNav>
-        ;
       </div>
     );
   }
