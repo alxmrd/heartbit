@@ -172,32 +172,12 @@ $app->post('/api/login', function (Request $request, Response $response, array $
    
         
         $userData = json_decode(file_get_contents('php://input'));
-        $username = $userData->{"username"};
-        $password = $userData->{"password"};
-        
-
-        //require_once ('configuration.php');
-       //$volunteers_id =(int)$args['id'];
-        // $username = $request->getParsedBody()['username'];
-         //$password = $request->getParsedBody()['password'];
-        // $username = (isset($_POST['username']) ? $_POST['username'] :null);
-       //  $password= (isset($_POST['password']) ? $_POST['password'] :null);
-         //return json_encode($username);
-         
-        
-        
-      //$parsedBody = $request->getParsedBody();
-       // return $username;
+         $username = $userData->{'username'};
+         $password = $userData->{"password"};
        
-       
-          //$arr = array();
-                //    $response = array([]);
-                // me bind oxi $ sto query !!!!
                   $query = "SELECT * FROM volunteer WHERE username=:username AND password=:password";
                    $result = $pdo->prepare($query);
-                  // $result->bindParam(‘:username’,$username, PDO::PARAM_STR);
-                   //$result->bindParam(‘:password’,$password, PDO::PARAM_STR);
-                   $result->execute(array(':username' => $username,':password' => $password));
+                          $result->execute(array(':username' => $username,':password' => $password));
                    $count = $result->rowCount();
                    $row = $result->fetch(PDO::FETCH_BOTH);
                    if($count == 1 && !empty($row)) {
@@ -206,25 +186,16 @@ $app->post('/api/login', function (Request $request, Response $response, array $
                         $_SESSION['username'] = $username;
                         $_SESSION['success'] = "You are now logged in";
                         $message="successfully logged in";
-                        //$response->withJSon($username);
+                        
                         if ( isset( $_SESSION['username'] ) ) {
                          $data = array("username" => $username,'status' => 'success', 'message' => $message);
                          
                          $response=json_encode($data);
                         }
                          return $response;
-                         //print $response;
-                        // $status=$response->getStatusCode();
-                        // print $status;
-                    
-                        // echo $message;
-                        // echo "ok";
-                         
-                         //echo $data;
-               
-                        
-                         }else{
-                            //sinepeia sto tropo grafis, me ton idio tropo
+                     
+                           }else{
+                       
                                 $message="Wrong username & password compination";
                                 $data=array('status' => 'error', 'data' => null, 'message' => 'Incorrect username or password', 401);
                                 $response=json_encode($data);
@@ -248,6 +219,44 @@ $app->post('/api/login', function (Request $request, Response $response, array $
         session_destroy();
         $result->closeCursor();
         $pdo = null;
+   });
+   $app->post('/api/insert', function (Request $request, Response $response, array $args) {
+    global $pdo;
+
+      
+   
+        
+        //$userData = json_decode(file_get_contents('php://input'));
+        $username = $_POST['username']; 
+        $email = $_POST['email'];// you should really do some more logic to see if it's set first
+        $query = "INSERT INTO volunteer (username,email) VALUES (:username,:email)";
+        $result = $pdo->prepare($query);
+       
+        $result->execute(array(':username' => $username,':email'=>$email));
+        
+       
+       
+        $response=json_encode($data);
+        return $response;
+        
+                $result->closeCursor();
+                $pdo = null;
+   });
+
+   $app->post('/api/delete', function (Request $request, Response $response, array $args) {
+    global $pdo;
+         
+            $query=("DELETE FROM volunteer WHERE username = :username");
+            $result = $pdo->prepare($query);
+            $username = $_POST['username'];
+            $result->execute(array(':username' => $username));
+    
+            echo "Deleted.";
+         
+ 
+        
+                $result->closeCursor();
+                $pdo = null;
    });
 
 
