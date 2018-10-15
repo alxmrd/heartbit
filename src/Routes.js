@@ -3,11 +3,11 @@ import { Route, Switch } from "react-router-dom";
 import Home from "./containers/Home";
 import Login from "./containers/Login";
 import NotFound from "./containers/NotFound";
-import Volunteers from "/Users/alxmrd/projects/heartbit/src/AdminPages/Volunteers.js";
-import patients from "/Users/alxmrd/projects/heartbit/src/AdminPages/patients.js";
-import event from "/Users/alxmrd/projects/heartbit/src/AdminPages/event.js";
-import defibrillators from "/Users/alxmrd/projects/heartbit/src/AdminPages/defibrillators.js";
-import admin from "/Users/alxmrd/projects/heartbit/src/AdminPages/admin.js";
+import Volunteers from "./AdminPages/Volunteers.js";
+import patients from "./AdminPages/patients.js";
+import event from "./AdminPages/event.js";
+import defibrillators from "./AdminPages/defibrillators.js";
+import admin from "./AdminPages/admin.js";
 
 export default () => (
   <Switch>

@@ -1,12 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
+
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
+
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
+import Routes from "./Routes";
+import { Link } from "react-router-dom";
+import RouteNavItem from "./components/RouteNavItem";
+window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
 
 const styles = {
   root: {
@@ -34,12 +40,16 @@ function ButtonAppBar(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" color="inherit" className={classes.grow}>
-            News
+          <Typography variant="h4" color="inherit" className={classes.grow}>
+            <Link to="/">HeartBit</Link>
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button color="inherit">
+            <RouteNavItem href="/login">Login</RouteNavItem>
+          </Button>
         </Toolbar>
       </AppBar>
+
+      <Routes />
     </div>
   );
 }

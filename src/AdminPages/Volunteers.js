@@ -1,7 +1,26 @@
 import React, { Component } from "react";
-import { Table } from "react-bootstrap";
 
-export default class Volunteer extends Component {
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core";
+
+const styles = theme => ({
+  root: {
+    width: "100%",
+    marginTop: theme.spacing.unit * 3,
+    overflowX: "auto"
+  },
+  table: {
+    minWidth: 700
+  }
+});
+
+class Volunteer extends Component {
   constructor(props) {
     super();
     this.props = props;
@@ -23,47 +42,60 @@ export default class Volunteer extends Component {
   }
 
   render() {
+    const { classes } = this.props;
     return (
-      <div>
-        <Table striped bordered condensed hover>
-          <thead>
-            <tr>
-              <th>id</th>
-              <th>username</th>
-              <th>password</th>
-              <th>tel1</th>
-              <th>tel2</th>
-              <th>name</th>
-              <th>surname</th>
-              <th>email</th>
-              <th>notes</th>
-              <th>latesttraining</th>
-              <th>dateofbirth</th>
-              <th>address</th>
-            </tr>
-          </thead>
-          <tbody>
+      <Paper className={classes.root}>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell>id</TableCell>
+              <TableCell>username</TableCell>
+              <TableCell>password</TableCell>
+              <TableCell>tel1</TableCell>
+              <TableCell>tel2</TableCell>
+              <TableCell>name</TableCell>
+              <TableCell>surname</TableCell>
+              <TableCell>email</TableCell>
+              <TableCell>notes</TableCell>
+              <TableCell>latesttraining</TableCell>
+              <TableCell>dateofbirth</TableCell>
+              <TableCell>address</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {this.state.data.map(function(item, key) {
               return (
-                <tr key={key}>
-                  <td>{item.id}</td>
-                  <td>{item.username}</td>
-                  <td>{item.password}</td>
-                  <td>{item.tel1}</td>
-                  <td>{item.tel2}</td>
-                  <td>{item.name}</td>
-                  <td>{item.surname}</td>
-                  <td>{item.email}</td>
-                  <td>{item.notes}</td>
-                  <td>{item.latesttraining}</td>
-                  <td>{item.dateofbirth}</td>
-                  <td>{item.address}</td>
-                </tr>
+                <TableRow key={item.id}>
+                  <TableCell component="th" scope="item">
+                    {item.id}
+                  </TableCell>
+                  <TableCell>{item.username}</TableCell>
+                  <TableCell>{item.password}</TableCell>
+                  <TableCell>{item.tel1}</TableCell>
+                  <TableCell>{item.tel2}</TableCell>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.surname}</TableCell>
+                  <TableCell>{item.email}</TableCell>
+                  <TableCell>{item.notes}</TableCell>
+                  <TableCell>{item.latesttraining}</TableCell>
+                  <TableCell>{item.dateofbirth}</TableCell>
+                  <TableCell>{item.address}</TableCell>
+                </TableRow>
               );
             })}
-          </tbody>
+          </TableBody>
         </Table>
-      </div>
+        {/* <Tooltip title="FAB 'position: absolute;'">
+          <Button variant="fab" color="secondary" className={classes.absolute}>
+            <AddIcon />
+          </Button>
+        </Tooltip> */}
+      </Paper>
     );
   }
 }
+Volunteer.propTypes = {
+  classes: PropTypes.object.isRequired
+};
+
+export default withStyles(styles)(Volunteer);
