@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import Tooltip from "@material-ui/core/Tooltip";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -7,7 +7,13 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core";
+import { withStyles, Button, TextField } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 const styles = theme => ({
   root: {
@@ -17,6 +23,14 @@ const styles = theme => ({
   },
   table: {
     minWidth: 700
+  },
+  fab: {
+    margin: theme.spacing.unit * 2
+  },
+  absolute: {
+    position: "absolute",
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 3
   }
 });
 
@@ -28,6 +42,17 @@ class Volunteer extends Component {
       data: []
     };
   }
+  state = {
+    open: false
+  };
+
+  handleClickOpen = () => {
+    this.setState({ open: true });
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
+  };
 
   loadFromServer = () => {
     fetch(`http://localhost:8080/api/volunteers`)
@@ -85,11 +110,56 @@ class Volunteer extends Component {
             })}
           </TableBody>
         </Table>
-        {/* <Tooltip title="FAB 'position: absolute;'">
-          <Button variant="fab" color="secondary" className={classes.absolute}>
+        <Tooltip title="Add Volunteer">
+          <Button
+            onClick={this.handleClickOpen}
+            variant="fab"
+            color="secondary"
+            className={classes.absolute}
+          >
             <AddIcon />
           </Button>
-        </Tooltip> */}
+        </Tooltip>
+        <Dialog
+          open={this.state.open}
+          onClose={this.handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">New Volunteer</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Please Insert The Username Of The Volunteer
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Username"
+              type="Username"
+              fullWidth
+            />
+            <DialogContentText>
+              Please Insert The Username Of The Volunteer
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Password"
+              type="Password"
+              fullWidth
+            />
+          </DialogContent>
+
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.handleClose} color="primary">
+              Insert
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Paper>
     );
   }

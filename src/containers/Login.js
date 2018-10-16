@@ -1,64 +1,10 @@
-// import React, { Component } from "react";
-// import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-
 import { PostData } from "/Users/alxmrd/projects/heartbit/src/containers/PostData.js";
-// //import axios from 'axios';
-// //import $ from 'jquery';
-
-// export default class Login extends Component {
-//   constructor(props) {
-//     super(props);
-
-//     this.state = {
-//       username: "",
-//       password: ""
-//     };
-//     this.handleSubmit = this.handleSubmit.bind(this);
-//     this.handleChange = this.handleChange.bind(this);
-//   }
-
-//   render() {
-//     return (
-//       <div className="Login">
-//         <form onSubmit={this.handleSubmit}>
-//           <FormGroup controlId="username" bsSize="large">
-//             <ControlLabel>Username</ControlLabel>
-//             <FormControl
-//               autoFocus
-//               type="username"
-//               value={this.state.username}
-//               onChange={this.handleChange}
-//             />
-//           </FormGroup>
-//           <FormGroup controlId="password" bsSize="large">
-//             <ControlLabel>Password</ControlLabel>
-//             <FormControl
-//               value={this.state.password}
-//               onChange={this.handleChange}
-//               type="password"
-//             />
-//           </FormGroup>
-//           <Button
-//             block
-//             bsSize="large"
-//             disabled={!this.validateForm()}
-//             type="submit"
-//           >
-//             Login
-//           </Button>
-//         </form>
-//       </div>
-//     );
-//   }
-// }
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import LockIcon from "@material-ui/icons/LockOutlined";
