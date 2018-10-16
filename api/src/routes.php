@@ -173,7 +173,7 @@ $app->post('/api/login', function (Request $request, Response $response, array $
         
         $userData = json_decode(file_get_contents('php://input'));
          $username = $userData->{'username'};
-         $password = $userData->{"password"};
+         $password = $userData->{'password'};
        
                   $query = "SELECT * FROM volunteer WHERE username=:username AND password=:password";
                    $result = $pdo->prepare($query);
@@ -226,13 +226,15 @@ $app->post('/api/login', function (Request $request, Response $response, array $
       
    
         
-        //$userData = json_decode(file_get_contents('php://input'));
-        $username = $_POST['username']; 
-        $email = $_POST['email'];// you should really do some more logic to see if it's set first
-        $query = "INSERT INTO volunteer (username,email) VALUES (:username,:email)";
+        $userData = json_decode(file_get_contents('php://input'));
+        // $username = $_POST['username']; 
+        // $password = $_POST['password'];// you should really do some more logic to see if it's set first
+        $username = $userData->{'username'};
+        $password = $userData->{'password'};
+        $query = "INSERT INTO volunteer (username,password) VALUES (:username,:password)";
         $result = $pdo->prepare($query);
        
-        $result->execute(array(':username' => $username,':email'=>$email));
+        $result->execute(array(':username' => $username,':password'=>$password));
         
        
        

@@ -4,8 +4,7 @@ import { withStyles } from "@material-ui/core/styles";
 
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import Drawer from "@material-ui/core/Drawer";
-import Tooltip from "@material-ui/core/Tooltip";
+
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
@@ -13,9 +12,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Routes from "./Routes";
 import { Link } from "react-router-dom";
 import RouteNavItem from "./components/RouteNavItem";
-import AddIcon from "@material-ui/icons/Add";
 
-const drawerWidth = 240;
 const styles = {
   root: {
     flexGrow: 1

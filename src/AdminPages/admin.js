@@ -1,15 +1,49 @@
 import React, { Component } from "react";
-import { Table } from "react-bootstrap";
 
-export default class admin extends Component {
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core";
+
+const styles = theme => ({
+  root: {
+    width: "100%",
+    marginTop: theme.spacing.unit * 3,
+    overflowX: "auto"
+  },
+  table: {
+    minWidth: 700
+  },
+  fab: {
+    margin: theme.spacing.unit * 2
+  },
+  absolute: {
+    position: "absolute",
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 3
+  }
+});
+
+class admin extends Component {
   constructor(props) {
     super();
     this.props = props;
     this.state = {
-      data: []
+      data: [],
+      open: false
     };
   }
+  handleClickOpen = () => {
+    this.setState({ open: true });
+  };
 
+  handleClose = () => {
+    this.setState({ open: false });
+  };
   loadFromServer = () => {
     fetch(`http://localhost:8080/api/admin`)
       .then(result => result.json())
@@ -23,41 +57,48 @@ export default class admin extends Component {
   }
 
   render() {
+    const { classes } = this.props;
     return (
-      <div>
-        <Table striped bordered condensed hover>
-          <thead>
-            <tr>
-              <th>id</th>
-              <th>type</th>
-              <th>name</th>
-              <th>surname</th>
-              <th>tel</th>
-              <th>email</th>
-              <th>address</th>
-              <th>username</th>
-              <th>password</th>
-            </tr>
-          </thead>
-          <tbody>
+      <Paper className={classes.root}>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell>id</TableCell>
+              <TableCell>type</TableCell>
+              <TableCell>name</TableCell>
+              <TableCell>surname</TableCell>
+              <TableCell>email</TableCell>
+              <TableCell>address</TableCell>
+              <TableCell>username</TableCell>
+              <TableCell>password</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {this.state.data.map(function(item, key) {
               return (
-                <tr key={key}>
-                  <td>{item.id}</td>
-                  <td>{item.type}</td>
-                  <td>{item.name}</td>
-                  <td>{item.surname}</td>
-                  <td>{item.tel}</td>
-                  <td>{item.email}</td>
-                  <td>{item.address}</td>
-                  <td>{item.username}</td>
-                  <td>{item.password}</td>
-                </tr>
+                <TableRow key={item.id}>
+                  <TableCell component="th" scope="item">
+                    {item.id}
+                  </TableCell>
+                  <TableCell>{item.type}</TableCell>
+                  <TableCell>{item.name}</TableCell>
+
+                  <TableCell>{item.surname}</TableCell>
+                  <TableCell>{item.email}</TableCell>
+                  <TableCell>{item.address}</TableCell>
+                  <TableCell>{item.username}</TableCell>
+                  <TableCell>{item.password}</TableCell>
+                </TableRow>
               );
             })}
-          </tbody>
+          </TableBody>
         </Table>
-      </div>
+      </Paper>
     );
   }
 }
+admin.propTypes = {
+  classes: PropTypes.object.isRequired
+};
+
+export default withStyles(styles)(admin);

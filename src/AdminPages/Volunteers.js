@@ -39,12 +39,10 @@ class Volunteer extends Component {
     super();
     this.props = props;
     this.state = {
-      data: []
+      data: [],
+      open: false
     };
   }
-  state = {
-    open: false
-  };
 
   handleClickOpen = () => {
     this.setState({ open: true });
