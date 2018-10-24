@@ -57,10 +57,6 @@ class Login extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  validateForm() {
-    return this.state.username.length > 0 && this.state.password.length > 0;
-  }
-
   handleChange = event => {
     this.setState({
       [event.target.id]: event.target.value
@@ -75,6 +71,7 @@ class Login extends Component {
         console.log(responseJson);
         if (responseJson.status === "success") {
           //alert("Logged in");
+
           window.location.assign("/volunteers");
           //history.push('/');
         } else {

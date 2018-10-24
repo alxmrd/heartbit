@@ -7,13 +7,16 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import PropTypes from "prop-types";
-import { withStyles, Button, TextField } from "@material-ui/core";
+import { withStyles, Button, Input } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { PostData } from "/Users/alxmrd/projects/heartbit/src/containers/PostData.js";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
 
 const styles = theme => ({
   root: {
@@ -21,6 +24,7 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3,
     overflowX: "auto"
   },
+
   table: {
     minWidth: 700
   },
@@ -31,6 +35,12 @@ const styles = theme => ({
     position: "absolute",
     bottom: theme.spacing.unit * 2,
     right: theme.spacing.unit * 3
+  },
+  button: {
+    margin: theme.spacing.unit
+  },
+  extendedIcon: {
+    marginRight: theme.spacing.unit
   }
 });
 
@@ -40,10 +50,30 @@ class Volunteer extends Component {
     this.props = props;
     this.state = {
       data: [],
-      open: false
+      open: false,
+      username: "",
+      email: ""
     };
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
+  handleChange = event => {
+    this.setState({
+      [event.target.id]: event.target.value
+    });
+  };
 
+  handleSubmit = event => {
+    event.preventDefault();
+    PostData("insert", this.state)
+      .then(result => {
+        let responseJson = result;
+        console.log(responseJson);
+      })
+
+      .catch(error => console.log("error", error));
+    //axios.post('/api/login',{user: this.state});
+  };
   handleClickOpen = () => {
     this.setState({ open: true });
   };
@@ -66,6 +96,7 @@ class Volunteer extends Component {
 
   render() {
     const { classes } = this.props;
+
     return (
       <Paper className={classes.root}>
         <Table className={classes.table}>
@@ -83,6 +114,8 @@ class Volunteer extends Component {
               <TableCell>latesttraining</TableCell>
               <TableCell>dateofbirth</TableCell>
               <TableCell>address</TableCell>
+              <TableCell>Delete Volunteer</TableCell>
+              <TableCell>Edit Volunteer</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -103,6 +136,12 @@ class Volunteer extends Component {
                   <TableCell>{item.latesttraining}</TableCell>
                   <TableCell>{item.dateofbirth}</TableCell>
                   <TableCell>{item.address}</TableCell>
+                  <TableCell>
+                    <DeleteIcon />
+                  </TableCell>
+                  <TableCell>
+                    <EditIcon />
+                  </TableCell>
                 </TableRow>
               );
             })}
@@ -118,46 +157,49 @@ class Volunteer extends Component {
             <AddIcon />
           </Button>
         </Tooltip>
-        <Dialog
-          open={this.state.open}
-          onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <DialogTitle id="form-dialog-title">New Volunteer</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Please Insert The Username Of The Volunteer
-            </DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Username"
-              type="Username"
-              fullWidth
-            />
-            <DialogContentText>
-              Please Insert The Username Of The Volunteer
-            </DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Password"
-              type="Password"
-              fullWidth
-            />
-          </DialogContent>
+        <form onSubmit={this.handleSubmit}>
+          <Dialog
+            open={this.state.open}
+            onClose={this.handleClose}
+            aria-labelledby="form-dialog-title"
+          >
+            <DialogTitle id="form-dialog-title">New Volunteer</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Please Insert The Username Of The Volunteer
+              </DialogContentText>
+              <Input
+                id="username"
+                name="username"
+                type="username"
+                value={this.state.username}
+                onChange={this.handleChange}
+                autoFocus
+                fullWidth
+              />
+              <DialogContentText>
+                Please Insert The Email Of The Volunteer
+              </DialogContentText>
+              <Input
+                name="email"
+                type="email"
+                id="email"
+                value={this.state.email}
+                onChange={this.handleChange}
+                fullWidth
+              />
+            </DialogContent>
 
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={this.handleClose} color="primary">
-              Insert
-            </Button>
-          </DialogActions>
-        </Dialog>
+            <DialogActions>
+              <Button onClick={this.handleClose} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={this.handleSubmit} type="submit" color="primary">
+                Insert
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </form>
       </Paper>
     );
   }
