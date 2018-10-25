@@ -7,16 +7,17 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import PropTypes from "prop-types";
-import { withStyles, Button, Input } from "@material-ui/core";
+import { withStyles, Button, Input, TextField } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { PostData } from "/Users/alxmrd/projects/heartbit/src/containers/PostData.js";
+
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
+import { PostData } from "../containers/PostData";
 
 const styles = theme => ({
   root: {
@@ -41,6 +42,10 @@ const styles = theme => ({
   },
   extendedIcon: {
     marginRight: theme.spacing.unit
+  },
+  container: {
+    display: "flex",
+    flexWrap: "wrap"
   }
 });
 
@@ -52,7 +57,9 @@ class Volunteer extends Component {
       data: [],
       open: false,
       username: "",
-      email: ""
+      email: "",
+      dateofbirth: "",
+      latesttraining: ""
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -180,7 +187,7 @@ class Volunteer extends Component {
               <DialogContentText>
                 Please Insert The Email Of The Volunteer
               </DialogContentText>
-              <Input
+              <TextField
                 name="email"
                 type="email"
                 id="email"
@@ -188,6 +195,39 @@ class Volunteer extends Component {
                 onChange={this.handleChange}
                 fullWidth
               />
+              <DialogContentText>
+                Please Insert date of birth Of The Volunteer
+              </DialogContentText>
+              <form className={classes.container} noValidate>
+                <Input
+                  id="date"
+                  label="date of birth"
+                  name="date of birth"
+                  type="date"
+                  onChange={this.handleChange}
+                  className={classes.textField}
+                  InputLabelProps={{
+                    shrink: true
+                  }}
+                />
+              </form>
+              <DialogContentText>
+                Please Insert Latest Training Of The Volunteer
+              </DialogContentText>
+              <form className={classes.container} noValidate>
+                <Input
+                  id="date"
+                  label="Birthday"
+                  name="Latest Training"
+                  type="date"
+                  defaultValue="0000-00-00"
+                  className={classes.textField}
+                  InputLabelProps={{
+                    shrink: true
+                  }}
+                  // value={this.state.latesttraining}
+                />
+              </form>
             </DialogContent>
 
             <DialogActions>

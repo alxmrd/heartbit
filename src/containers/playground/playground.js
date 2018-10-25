@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Karta from "./karta";
 
 export default class Home extends Component {
   constructor(props) {
@@ -9,24 +10,33 @@ export default class Home extends Component {
   }
 
   handleClick = () => {
-    if (this.state.open === false) {
-      this.setState({ open: true });
-    } else {
-      this.setState({ open: false });
-    }
+    const nextOpenState = !this.state.open;
+    this.setState({ open: nextOpenState });
   };
 
   render() {
-    let componentToRender = "MyDiplomaThesis";
-    if (this.state.open !== true) {
-      componentToRender = "";
-    }
+    let componentToRender = (
+      <Karta
+        word="paparia"
+        onWorkClick={() => {
+          console.log("kdpsae");
+          this.handleClick();
+        }}
+      />
+    );
 
     return (
       <div className="Home">
         <div className="lander">
-          <h1 onClick={this.handleClick}>HeartBit</h1>
-          <p>{componentToRender}</p>
+          <h1
+            onClick={e => {
+              console.log("onClick event: ", e);
+              this.handleClick();
+            }}
+          >
+            HeartBit
+          </h1>
+          <p>{this.state.open ? componentToRender : null} </p>
         </div>
       </div>
     );

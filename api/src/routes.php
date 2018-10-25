@@ -228,11 +228,12 @@ $app->post('/api/login', function (Request $request, Response $response, array $
         
         $userData = json_decode(file_get_contents('php://input'));
         $username = $userData->{'username'};
-         $email = $userData->{'email'};// you should really do some more logic to see if it's set first
-        $query = "INSERT INTO volunteer (username,email) VALUES (:username,:email)";
+         $email = $userData->{'email'};
+         $dateofbirth=  $userData->{'dateofbirth'};
+        $query = "INSERT INTO volunteer (username,email,dateofbirth) VALUES (:username,:email,:dateofbirth)";
         $result = $pdo->prepare($query);
        
-        $result->execute(array(':username' => $username,':email'=>$email));
+        $result->execute(array(':username' => $username,':email'=>$email,':dateofbirth'=>$dateofbirth));
         
        
        

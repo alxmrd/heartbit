@@ -9,6 +9,7 @@ import event from "./AdminPages/event.js";
 import defibrillators from "./AdminPages/defibrillators.js";
 import admin from "./AdminPages/admin.js";
 import playground from "./containers/playground/playground.js";
+import MiniDrawer from "./components/MiniDrawer";
 
 export default () => (
   <Switch>
@@ -20,6 +21,7 @@ export default () => (
     <Route path="/event" exact component={event} />
     <Route path="/login" exact component={Login} />
     <Route path="/playground" exact component={playground} />
+    <Route path="/MiniDrawer" exact component={MiniDrawer} />
     <Route component={NotFound} />
   </Switch>
 );
