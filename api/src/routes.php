@@ -230,10 +230,11 @@ $app->post('/api/login', function (Request $request, Response $response, array $
         $username = $userData->{'username'};
          $email = $userData->{'email'};
          $dateofbirth=  $userData->{'dateofbirth'};
-        $query = "INSERT INTO volunteer (username,email,dateofbirth) VALUES (:username,:email,:dateofbirth)";
+         $latesttraining=  $userData->{'latesttraining'};
+        $query = "INSERT INTO volunteer (username,email,dateofbirth,latesttraining) VALUES (:username,:email,:dateofbirth,:latesttraining)";
         $result = $pdo->prepare($query);
        
-        $result->execute(array(':username' => $username,':email'=>$email,':dateofbirth'=>$dateofbirth));
+        $result->execute(array(':username' => $username,':email'=>$email,':dateofbirth'=>$dateofbirth,':latesttraining'=>$latesttraining));
         
        
        

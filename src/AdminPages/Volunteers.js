@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Tooltip from "@material-ui/core/Tooltip";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -8,16 +7,15 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import PropTypes from "prop-types";
 import { withStyles, Button, Input, TextField } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import { PostData } from "../containers/PostData";
+import SimpleToolips from "../components/SimpleTooltips";
 
 const styles = theme => ({
   root: {
@@ -29,14 +27,7 @@ const styles = theme => ({
   table: {
     minWidth: 700
   },
-  fab: {
-    margin: theme.spacing.unit * 2
-  },
-  absolute: {
-    position: "absolute",
-    bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 3
-  },
+
   button: {
     margin: theme.spacing.unit
   },
@@ -154,16 +145,13 @@ class Volunteer extends Component {
             })}
           </TableBody>
         </Table>
-        <Tooltip title="Add Volunteer">
-          <Button
-            onClick={this.handleClickOpen}
-            variant="fab"
-            color="secondary"
-            className={classes.absolute}
-          >
-            <AddIcon />
-          </Button>
-        </Tooltip>
+        <SimpleToolips
+          definition="Add Volunteer"
+          onButtonClick={() => {
+            this.handleClickOpen();
+          }}
+        />
+
         <form onSubmit={this.handleSubmit}>
           <Dialog
             open={this.state.open}
@@ -198,36 +186,32 @@ class Volunteer extends Component {
               <DialogContentText>
                 Please Insert date of birth Of The Volunteer
               </DialogContentText>
-              <form className={classes.container} noValidate>
-                <Input
-                  id="date"
-                  label="date of birth"
-                  name="date of birth"
-                  type="date"
-                  onChange={this.handleChange}
-                  className={classes.textField}
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                />
-              </form>
+
+              <Input
+                className={classes.container}
+                noValidate
+                id="dateofbirth"
+                label="date of birth"
+                name="date of birth"
+                type="date"
+                onChange={this.handleChange}
+              />
+
               <DialogContentText>
                 Please Insert Latest Training Of The Volunteer
               </DialogContentText>
-              <form className={classes.container} noValidate>
-                <Input
-                  id="date"
-                  label="Birthday"
-                  name="Latest Training"
-                  type="date"
-                  defaultValue="0000-00-00"
-                  className={classes.textField}
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                  // value={this.state.latesttraining}
-                />
-              </form>
+
+              <Input
+                className={classes.container}
+                noValidate
+                id="latesttraining"
+                label="Birthday"
+                name="Latest Training"
+                type="date"
+                onChange={this.handleChange}
+
+                // value={this.state.latesttraining}
+              />
             </DialogContent>
 
             <DialogActions>
