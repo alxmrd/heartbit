@@ -17,21 +17,18 @@ const styles = theme => ({
   }
 });
 
-function SimpleTooltips(props, definition, onButtonClick) {
-  const { classes } = props;
+function SimpleTooltips({ classes, definition, onButtonClick }) {
   return (
-    <div>
-      <Tooltip title={props.definition}>
-        <Button
-          variant="fab"
-          color="secondary"
-          className={classes.absolute}
-          onClick={props.onButtonClick}
-        >
-          <AddIcon />
-        </Button>
-      </Tooltip>
-    </div>
+    <Tooltip title={definition}>
+      <Button
+        variant="fab"
+        color="secondary"
+        className={classes.absolute}
+        onClick={onButtonClick}
+      >
+        <AddIcon />
+      </Button>
+    </Tooltip>
   );
 }
 

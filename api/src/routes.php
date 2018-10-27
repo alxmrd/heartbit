@@ -145,15 +145,14 @@ $app->get('/api/admin', function (Request $request, Response $response, array $a
 $app->get('/api/volunteers/{id}', function (Request $request, Response $response, array $args) {
     global $pdo;
 
-     //require_once ('configuration.php');
+     
     
     $volunteers_id =(int)$args['id'];
     
        $arr = array();
 		$response = array([]);
         $query = "SELECT * FROM volunteer WHERE id=$volunteers_id";
-       // $result->bindParam(‘:id’,$volunteers_id, PDO::PARAM_INT);
-		$result = $pdo->query($query);
+        $result = $pdo->query($query);
 		$data = array();
                 while($r = $result->fetch(PDO::FETCH_ASSOC)) {
                  $data[] = $r;
@@ -171,7 +170,7 @@ $app->post('/api/login', function (Request $request, Response $response, array $
       
    
         
-        $userData = json_decode(file_get_contents('php://input'));
+         $userData = json_decode(file_get_contents('php://input'));
          $username = $userData->{'username'};
          $password = $userData->{'password'};
        
@@ -223,16 +222,16 @@ $app->post('/api/login', function (Request $request, Response $response, array $
    $app->post('/api/insert', function (Request $request, Response $response, array $args) {
     global $pdo;
 
-      
-   
-        
-        $userData = json_decode(file_get_contents('php://input'));
+       $userData = json_decode(file_get_contents('php://input'));
+
+
         $username = $userData->{'username'};
         $tel1=$userData->{'tel1'};
         $tel2=$userData->{'tel2'};
-         $email = $userData->{'email'};
-         $dateofbirth=  $userData->{'dateofbirth'};
-         $latesttraining=  $userData->{'latesttraining'};
+        $email = $userData->{'email'};
+        $dateofbirth=  $userData->{'dateofbirth'};
+        $latesttraining=  $userData->{'latesttraining'};
+
         $query = "INSERT INTO volunteer (username,tel1,tel2,email,dateofbirth,latesttraining) VALUES (:username,:tel1,:tel2,:email,:dateofbirth,:latesttraining)";
         $result = $pdo->prepare($query);
        

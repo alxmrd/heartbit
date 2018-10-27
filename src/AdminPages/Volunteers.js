@@ -60,9 +60,8 @@ class Volunteer extends Component {
       tel1: "",
       tel2: ""
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
   }
+
   handleChange = event => {
     this.setState({
       [event.target.id]: event.target.value
@@ -71,7 +70,14 @@ class Volunteer extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    PostData("insert", this.state)
+    PostData("insert", {
+      username: this.state.username,
+      email: this.state.email,
+      dateofbirth: this.state.dateofbirth,
+      latesttraining: this.state.latesttraining,
+      tel1: this.state.tel1,
+      tel2: this.state.tel2
+    })
       .then(result => {
         let responseJson = result;
         console.log(responseJson);
@@ -160,90 +166,88 @@ class Volunteer extends Component {
           }}
         />
 
-        <form onSubmit={this.handleSubmit}>
-          <Dialog
-            open={this.state.open}
-            onClose={this.handleClose}
-            aria-labelledby="form-dialog-title"
-          >
-            <DialogTitle id="form-dialog-title">New Volunteer</DialogTitle>
-            <DialogContent>
-              <TextField
-                id="username"
-                label="Username"
-                name="username"
-                type="username"
-                value={this.state.username}
-                onChange={this.handleChange}
-                autoFocus
-                fullWidth
-                margin="normal"
-              />
-              <TextField
-                id="tel1"
-                label="Contact Number"
-                value={this.state.tel1}
-                onChange={this.handleChange}
-                type="number"
-                fullWidth
-                margin="normal"
-              />
-              <TextField
-                id="tel2"
-                label="Second Contact Number"
-                value={this.state.tel2}
-                onChange={this.handleChange}
-                type="number"
-                fullWidth
-                margin="normal"
-              />
-              <TextField
-                name="email"
-                label="email"
-                type="email"
-                id="email"
-                value={this.state.email}
-                onChange={this.handleChange}
-                fullWidth
-                margin="normal"
-              />
-              <TextField
-                id="dateofbirthday"
-                label="Birthday"
-                type="date"
-                className={classes.container}
-                fullWidth
-                margin="normal"
-                InputLabelProps={{
-                  shrink: true
-                }}
-              />
+        <Dialog
+          open={this.state.open}
+          onClose={this.handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">New Volunteer</DialogTitle>
+          <DialogContent>
+            <TextField
+              id="username"
+              label="Username"
+              name="username"
+              type="username"
+              value={this.state.username}
+              onChange={this.handleChange}
+              autoFocus
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              id="tel1"
+              label="Contact Number"
+              value={this.state.tel1}
+              onChange={this.handleChange}
+              type="number"
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              id="tel2"
+              label="Second Contact Number"
+              value={this.state.tel2}
+              onChange={this.handleChange}
+              type="number"
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              name="email"
+              label="email"
+              type="email"
+              id="email"
+              value={this.state.email}
+              onChange={this.handleChange}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              id="dateofbirthday"
+              label="Birthday"
+              type="date"
+              className={classes.container}
+              fullWidth
+              margin="normal"
+              InputLabelProps={{
+                shrink: true
+              }}
+            />
 
-              <TextField
-                noValidate
-                id="latesttraining"
-                label="Latest Training"
-                type="date"
-                onChange={this.handleChange}
-                fullWidth
-                margin="normal"
-                className={classes.container}
-                InputLabelProps={{
-                  shrink: true
-                }}
-              />
-            </DialogContent>
+            <TextField
+              noValidate
+              id="latesttraining"
+              label="Latest Training"
+              type="date"
+              onChange={this.handleChange}
+              fullWidth
+              margin="normal"
+              className={classes.container}
+              InputLabelProps={{
+                shrink: true
+              }}
+            />
+          </DialogContent>
 
-            <DialogActions>
-              <Button onClick={this.handleClose} color="primary">
-                Cancel
-              </Button>
-              <Button onClick={this.handleSubmit} type="submit" color="primary">
-                Insert
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </form>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.handleSubmit} type="submit" color="primary">
+              Insert
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Paper>
     );
   }
