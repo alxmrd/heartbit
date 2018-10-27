@@ -6,16 +6,12 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import PropTypes from "prop-types";
-import { withStyles, Button, Input, TextField } from "@material-ui/core";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import { withStyles } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import { PostData } from "../containers/PostData";
 import SimpleToolips from "../components/SimpleTooltips";
+import VolunteerDialog from "../components/VolunteerComponents/VolunteerDialog";
 
 const styles = theme => ({
   root: {
@@ -68,22 +64,35 @@ class Volunteer extends Component {
     });
   };
 
+  handleNumber = event => {
+    this.setState({
+      [event.target.id]: event.target.valueAsNumber
+    });
+  };
+
   handleSubmit = event => {
     event.preventDefault();
-    PostData("insert", {
+    const dataPouStelnw = {
       username: this.state.username,
       email: this.state.email,
       dateofbirth: this.state.dateofbirth,
       latesttraining: this.state.latesttraining,
       tel1: this.state.tel1,
       tel2: this.state.tel2
-    })
+    };
+    PostData("insert", dataPouStelnw)
       .then(result => {
         let responseJson = result;
         console.log(responseJson);
+        const updatedData = [...this.state.data, dataPouStelnw];
+        this.setState({
+          data: updatedData
+        });
       })
 
       .catch(error => console.log("error", error));
+
+    this.setState({ open: false });
     //axios.post('/api/login',{user: this.state});
   };
   handleClickOpen = () => {
@@ -161,93 +170,25 @@ class Volunteer extends Component {
         </Table>
         <SimpleToolips
           definition="Add Volunteer"
-          onButtonClick={() => {
-            this.handleClickOpen();
+          onButtonClick={e => {
+            this.handleClickOpen(e);
           }}
         />
-
-        <Dialog
+        <VolunteerDialog
           open={this.state.open}
           onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <DialogTitle id="form-dialog-title">New Volunteer</DialogTitle>
-          <DialogContent>
-            <TextField
-              id="username"
-              label="Username"
-              name="username"
-              type="username"
-              value={this.state.username}
-              onChange={this.handleChange}
-              autoFocus
-              fullWidth
-              margin="normal"
-            />
-            <TextField
-              id="tel1"
-              label="Contact Number"
-              value={this.state.tel1}
-              onChange={this.handleChange}
-              type="number"
-              fullWidth
-              margin="normal"
-            />
-            <TextField
-              id="tel2"
-              label="Second Contact Number"
-              value={this.state.tel2}
-              onChange={this.handleChange}
-              type="number"
-              fullWidth
-              margin="normal"
-            />
-            <TextField
-              name="email"
-              label="email"
-              type="email"
-              id="email"
-              value={this.state.email}
-              onChange={this.handleChange}
-              fullWidth
-              margin="normal"
-            />
-            <TextField
-              id="dateofbirthday"
-              label="Birthday"
-              type="date"
-              className={classes.container}
-              fullWidth
-              margin="normal"
-              InputLabelProps={{
-                shrink: true
-              }}
-            />
-
-            <TextField
-              noValidate
-              id="latesttraining"
-              label="Latest Training"
-              type="date"
-              onChange={this.handleChange}
-              fullWidth
-              margin="normal"
-              className={classes.container}
-              InputLabelProps={{
-                shrink: true
-              }}
-            />
-          </DialogContent>
-
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={this.handleSubmit} type="submit" color="primary">
-              Insert
-            </Button>
-          </DialogActions>
-        </Dialog>
+          onInputChange={this.handleChange}
+          onNumberChange={this.handleNumber}
+          onSave={this.handleSubmit}
+          // values={{
+          //   username: this.state.username,
+          //   email: this.state.email,
+          //   dateofbirth: this.state.dateofbirth,
+          //   latesttraining: this.state.latesttraining,
+          //   tel1: this.state.tel1,
+          //   tel2: this.state.tel2
+          // }}
+        />
       </Paper>
     );
   }

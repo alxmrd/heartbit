@@ -1,99 +1,110 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
+import PropTypes from "prop-types";
 import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
 
-export default class FormDialog extends React.Component {
-  state = {
-    open: false
-  };
+import { Button, DialogActions, TextField } from "@material-ui/core";
 
-  handleClickOpen = () => {
-    this.setState({ open: true });
-  };
+const VolunteerDialog = ({
+  open,
+  onClose,
+  // values,
+  onInputChange,
+  onSave,
+  onNumberChange
+}) => (
+  <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
+    <DialogTitle id="form-dialog-title">New Volunteer</DialogTitle>
+    <DialogContent>
+      <TextField
+        id="username"
+        label="Username"
+        name="username"
+        type="username"
+        //value={values.username}
+        onChange={onInputChange}
+        autoFocus
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        id="tel1"
+        label="Contact Number"
+        //value={values.tel1}
+        onChange={onNumberChange}
+        type="number"
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        id="tel2"
+        label="Second Contact Number"
+        //value={values.tel2}
+        onChange={onNumberChange}
+        type="number"
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        name="email"
+        label="email"
+        type="email"
+        id="email"
+        // value={values.email}
+        onChange={onInputChange}
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        id="dateofbirthday"
+        label="Birthday"
+        type="date"
+        // className={classes.container}
+        fullWidth
+        margin="normal"
+        InputLabelProps={{
+          shrink: true
+        }}
+      />
 
-  handleClose = () => {
-    this.setState({ open: false });
-  };
+      <TextField
+        noValidate
+        id="latesttraining"
+        label="Latest Training"
+        type="date"
+        onChange={onInputChange}
+        fullWidth
+        margin="normal"
+        //className={classes.container}
+        InputLabelProps={{
+          shrink: true
+        }}
+      />
+    </DialogContent>
 
-  render() {
-    return (
-      <div>
-        <Dialog
-          open={this.state.open}
-          onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <DialogTitle id="form-dialog-title">New Volunteer</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Please Insert The Username Of The Volunteer
-            </DialogContentText>
-            <Input
-              id="username"
-              name="username"
-              type="username"
-              value={this.state.username}
-              onChange={this.handleChange}
-              autoFocus
-              fullWidth
-            />
-            <DialogContentText>
-              Please Insert The Email Of The Volunteer
-            </DialogContentText>
-            <TextField
-              name="email"
-              type="email"
-              id="email"
-              value={this.state.email}
-              onChange={this.handleChange}
-              fullWidth
-            />
-            <DialogContentText>
-              Please Insert date of birth Of The Volunteer
-            </DialogContentText>
+    <DialogActions>
+      <Button onClick={onClose} color="primary">
+        Cancel
+      </Button>
+      <Button onClick={onSave} type="submit" color="primary">
+        Insert
+      </Button>
+    </DialogActions>
+  </Dialog>
+);
 
-            <Input
-              className={classes.container}
-              noValidate
-              id="dateofbirth"
-              label="date of birth"
-              name="date of birth"
-              type="date"
-              onChange={this.handleChange}
-            />
+VolunteerDialog.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  values: PropTypes.shape({
+    username: PropTypes.string.isRequired,
+    tel1: PropTypes.number,
+    email: PropTypes.string.isRequired,
+    tel2: PropTypes.number
+  }),
+  onInputChange: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired
+};
 
-            <DialogContentText>
-              Please Insert Latest Training Of The Volunteer
-            </DialogContentText>
-
-            <Input
-              className={classes.container}
-              noValidate
-              id="latesttraining"
-              label="Birthday"
-              name="Latest Training"
-              type="date"
-              onChange={this.handleChange}
-
-              // value={this.state.latesttraining}
-            />
-          </DialogContent>
-
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={this.handleSubmit} type="submit" color="primary">
-              Insert
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
-    );
-  }
-}
+export default VolunteerDialog;
