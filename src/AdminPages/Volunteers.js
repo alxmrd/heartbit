@@ -37,6 +37,12 @@ const styles = theme => ({
   container: {
     display: "flex",
     flexWrap: "wrap"
+  },
+
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200
   }
 });
 
@@ -50,7 +56,9 @@ class Volunteer extends Component {
       username: "",
       email: "",
       dateofbirth: "",
-      latesttraining: ""
+      latesttraining: "",
+      tel1: "",
+      tel2: ""
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -160,57 +168,69 @@ class Volunteer extends Component {
           >
             <DialogTitle id="form-dialog-title">New Volunteer</DialogTitle>
             <DialogContent>
-              <DialogContentText>
-                Please Insert The Username Of The Volunteer
-              </DialogContentText>
-              <Input
+              <TextField
                 id="username"
+                label="Username"
                 name="username"
                 type="username"
                 value={this.state.username}
                 onChange={this.handleChange}
                 autoFocus
                 fullWidth
+                margin="normal"
               />
-              <DialogContentText>
-                Please Insert The Email Of The Volunteer
-              </DialogContentText>
+              <TextField
+                id="tel1"
+                label="Contact Number"
+                value={this.state.tel1}
+                onChange={this.handleChange}
+                type="number"
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                id="tel2"
+                label="Second Contact Number"
+                value={this.state.tel2}
+                onChange={this.handleChange}
+                type="number"
+                fullWidth
+                margin="normal"
+              />
               <TextField
                 name="email"
+                label="email"
                 type="email"
                 id="email"
                 value={this.state.email}
                 onChange={this.handleChange}
                 fullWidth
+                margin="normal"
               />
-              <DialogContentText>
-                Please Insert date of birth Of The Volunteer
-              </DialogContentText>
-
-              <Input
-                className={classes.container}
-                noValidate
-                id="dateofbirth"
-                label="date of birth"
-                name="date of birth"
+              <TextField
+                id="dateofbirthday"
+                label="Birthday"
                 type="date"
-                onChange={this.handleChange}
+                className={classes.container}
+                fullWidth
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true
+                }}
               />
 
-              <DialogContentText>
-                Please Insert Latest Training Of The Volunteer
-              </DialogContentText>
-
-              <Input
-                className={classes.container}
+              <TextField
                 noValidate
                 id="latesttraining"
-                label="Birthday"
-                name="Latest Training"
+                label="Latest Training"
                 type="date"
                 onChange={this.handleChange}
-
-                // value={this.state.latesttraining}
+                fullWidth
+                margin="normal"
+                className={classes.container}
+                InputLabelProps={{
+                  shrink: true
+                }}
               />
             </DialogContent>
 

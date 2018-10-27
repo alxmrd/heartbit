@@ -228,13 +228,15 @@ $app->post('/api/login', function (Request $request, Response $response, array $
         
         $userData = json_decode(file_get_contents('php://input'));
         $username = $userData->{'username'};
+        $tel1=$userData->{'tel1'};
+        $tel2=$userData->{'tel2'};
          $email = $userData->{'email'};
          $dateofbirth=  $userData->{'dateofbirth'};
          $latesttraining=  $userData->{'latesttraining'};
-        $query = "INSERT INTO volunteer (username,email,dateofbirth,latesttraining) VALUES (:username,:email,:dateofbirth,:latesttraining)";
+        $query = "INSERT INTO volunteer (username,tel1,tel2,email,dateofbirth,latesttraining) VALUES (:username,:tel1,:tel2,:email,:dateofbirth,:latesttraining)";
         $result = $pdo->prepare($query);
        
-        $result->execute(array(':username' => $username,':email'=>$email,':dateofbirth'=>$dateofbirth,':latesttraining'=>$latesttraining));
+        $result->execute(array(':username' => $username,':tel1' => $tel1,':tel2'=>$tel2,':email'=>$email,':dateofbirth'=>$dateofbirth,':latesttraining'=>$latesttraining));
         
        
        
