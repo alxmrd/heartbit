@@ -33,3 +33,6 @@ isset — Determine if a variable is set and is not NULL
 ## What is promises in javascript
 A promise is an object that may produce a single value some time in the future
  (https://medium.com/javascript-scene/master-the-javascript-interview-what-is-a-promise-27fc71e77261)
+ ##
+ props vs state 
+ (https://hackernoon.com/understanding-state-and-props-in-react-94bc09232b9c)

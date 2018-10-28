@@ -9,7 +9,6 @@ import { Button, DialogActions, TextField } from "@material-ui/core";
 const VolunteerDialog = ({
   open,
   onClose,
-  // values,
   onInputChange,
   onSave,
   onNumberChange
