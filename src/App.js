@@ -1,12 +1,10 @@
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-
-import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
@@ -16,18 +14,16 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-
 import { Link } from "react-router-dom";
-import RouteNavItem from "./components/RouteNavItem";
-import { Button } from "@material-ui/core";
+import { Button, CssBaseline } from "@material-ui/core";
 import Routes from "./Routes";
 
 const drawerWidth = 240;
-
 const styles = theme => ({
   root: {
     display: "flex"
   },
+
   grow: {
     flexGrow: 1
   },
@@ -47,6 +43,7 @@ const styles = theme => ({
       duration: theme.transitions.duration.enteringScreen
     })
   },
+  LoginButton: { marginRight: "20px" },
   menuButton: {
     marginLeft: 12,
     marginRight: 36
@@ -87,7 +84,7 @@ const styles = theme => ({
   }
 });
 
-class MiniDrawer extends React.Component {
+class App extends React.Component {
   state = {
     open: false
   };
@@ -104,107 +101,112 @@ class MiniDrawer extends React.Component {
     const { classes, theme } = this.props;
 
     return (
-      <div className={classes.root}>
-        <CssBaseline />
-        <AppBar
-          position="fixed"
-          className={classNames(classes.appBar, {
-            [classes.appBarShift]: this.state.open
-          })}
-        >
-          <Toolbar disableGutters={!this.state.open}>
-            <IconButton
-              color="inherit"
-              aria-label="Open drawer"
-              onClick={this.handleDrawerOpen}
-              className={classNames(classes.menuButton, {
-                [classes.hide]: this.state.open
-              })}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h4" color="primary" className={classes.grow}>
-              <Link to="/">HeartBit</Link>
-            </Typography>
-            <Button color="inherit">
-              <RouteNavItem href="/login">Login</RouteNavItem>
-            </Button>
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          variant="permanent"
-          classes={{
-            paper: classNames(
-              classes.drawerPaper,
-              !this.state.open && classes.drawerPaperClose
-            )
-          }}
-          open={this.state.open}
-        >
-          <div className={classes.toolbar}>
-            <IconButton onClick={this.handleDrawerClose}>
-              {theme.direction === "rtl" ? (
-                <ChevronRightIcon />
-              ) : (
-                <ChevronLeftIcon />
-              )}
-            </IconButton>
-          </div>
-          <Divider />
-          <ListItem button>
-            <ListItemIcon>
-              <Link to="/" className="material-icons">
-                home
-              </Link>
-            </ListItemIcon>
-            <ListItemText primary="Προφίλ" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <Link to="/Volunteers" className="material-icons">
-                account_circle
-              </Link>
-            </ListItemIcon>
-            <ListItemText primary="Εθελοντές" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <Link to="/defibrillators" className="material-icons">
-                local_hospital
-              </Link>
-            </ListItemIcon>
-            <ListItemText primary="Απινιδοτές" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <Link to="/patients" className="material-icons">
-                healing
-              </Link>
-            </ListItemIcon>
-            <ListItemText primary="Ασθενείς" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <Link to="/event" className="material-icons">
-                add_location
-              </Link>
-            </ListItemIcon>
-            <ListItemText primary="Περιστατικό" />
-          </ListItem>
-          <Divider />
-        </Drawer>
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-          <Routes />
-        </main>
-      </div>
+      <Fragment>
+        <div className={classes.root}>
+          <AppBar
+            position="fixed"
+            className={classNames(classes.appBar, {
+              [classes.appBarShift]: this.state.open
+            })}
+          >
+            <Toolbar disableGutters={!this.state.open}>
+              <IconButton
+                color="inherit"
+                aria-label="Open drawer"
+                onClick={this.handleDrawerOpen}
+                className={classNames(classes.menuButton, {
+                  [classes.hide]: this.state.open
+                })}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h4" color="primary" className={classes.grow}>
+                <Link to="/">HeartBit</Link>
+              </Typography>
+              <Button
+                color="inherit"
+                href="/login"
+                className={classes.LoginButton}
+              >
+                Login
+              </Button>
+            </Toolbar>
+          </AppBar>
+          <Drawer
+            variant="permanent"
+            classes={{
+              paper: classNames(
+                classes.drawerPaper,
+                !this.state.open && classes.drawerPaperClose
+              )
+            }}
+            open={this.state.open}
+          >
+            <div className={classes.toolbar}>
+              <IconButton onClick={this.handleDrawerClose}>
+                {theme.direction === "rtl" ? (
+                  <ChevronRightIcon />
+                ) : (
+                  <ChevronLeftIcon />
+                )}
+              </IconButton>
+            </div>
+            <Divider />
+            <Link to="/">
+              <ListItem>
+                <ListItemIcon>
+                  <i className="material-icons">home</i>
+                </ListItemIcon>
+                <ListItemText primary="Προφίλ" />
+              </ListItem>
+            </Link>
+            <Link to="/Volunteers">
+              <ListItem>
+                <ListItemIcon>
+                  <i className="material-icons">account_circle</i>
+                </ListItemIcon>
+                <ListItemText primary="Εθελοντές" />
+              </ListItem>
+            </Link>
+            <Link to="/defibrillators">
+              <ListItem>
+                <ListItemIcon>
+                  <i className="material-icons">local_hospital</i>
+                </ListItemIcon>
+
+                <ListItemText primary="Απινιδοτές" />
+              </ListItem>
+            </Link>
+            <Link to="/patients">
+              <ListItem>
+                <ListItemIcon>
+                  <i className="material-icons">healing</i>
+                </ListItemIcon>
+                <ListItemText primary="Ασθενείς" />
+              </ListItem>
+            </Link>
+            <Link to="/event">
+              <ListItem>
+                <ListItemIcon>
+                  <i className="material-icons">add_location</i>
+                </ListItemIcon>
+                <ListItemText primary="Περιστατικό" />
+              </ListItem>
+            </Link>
+            <Divider />
+          </Drawer>
+          <main className={classes.content}>
+            <div className={classes.toolbar} />
+            <Routes />
+          </main>
+        </div>
+      </Fragment>
     );
   }
 }
 
-MiniDrawer.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+App.propTypes = {
+  classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(MiniDrawer);
+export default withStyles(styles, { withTheme: true })(App);
