@@ -3,10 +3,11 @@
   text-align: center;
  }
  .Home .lander h1 {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Roboto", roboto;
   font-weight: 600;
   color:#DBA901;
  }
  .Home .lander p {
+  font-family: "Roboto", roboto;
   color: #999;
  }

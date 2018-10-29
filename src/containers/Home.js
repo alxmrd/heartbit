@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "./Home.css";
 
-import "@trendmicro/react-sidenav/dist/react-sidenav.css";
 export default class Home extends Component {
   render() {
     return (

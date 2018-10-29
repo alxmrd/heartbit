@@ -4,8 +4,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import { teal } from "@material-ui/core/colors";
-import { amber } from "@material-ui/core/colors";
+
 import { CssBaseline } from "@material-ui/core";
 
 const theme = createMuiTheme({
@@ -28,6 +27,13 @@ const theme = createMuiTheme({
     useNextVariants: true,
     fontFamily: 'Avenir Next, Roboto,"Helvetica Neue",Arial,sans-serif',
     htmlFontSize: 16
+  },
+  link: {
+    color: "green",
+    "&:hover": {
+      extend: "link",
+      textDecoration: "none"
+    }
   }
 });
 
@@ -35,6 +41,7 @@ ReactDOM.render(
   <Router>
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
+
       <App />
     </MuiThemeProvider>
   </Router>,
