@@ -247,6 +247,30 @@ $app->post('/api/login', function (Request $request, Response $response, array $
                 $pdo = null;
    });
 
+ 
+
+   $app->post('/api/edit/{id}', function (Request $request, Response $response, array $args) {
+    global $pdo;
+
+     
+    
+    $volunteers_id =(int)$args['id'];
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    
+      
+    
+        $query ="UPDATE volunteer SET username=':username', email=':email' WHERE id=':id'";
+        $result = $pdo->prepare($query);
+        $data = array(':id' => $volunteers_id,':username'=>$username,':email'=>$email);
+        $result->execute($data);
+      
+        $response=json_encode($data);
+        return $response;
+
+        $result->closeCursor();
+        $pdo = null;
+});
 
    $app->post('/api/delete', function (Request $request, Response $response, array $args) {
     global $pdo;

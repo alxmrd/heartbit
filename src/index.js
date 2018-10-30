@@ -18,7 +18,7 @@ const theme = createMuiTheme({
     },
     secondary: {
       light: "#F5FFFC",
-      main: "#BBEDE1",
+      main: "#f5deb3",
       // dark: will be calculated from palette.secondary.main,
       contrastText: "#4E878C"
     }
@@ -27,13 +27,6 @@ const theme = createMuiTheme({
     useNextVariants: true,
     fontFamily: 'Avenir Next, Roboto,"Helvetica Neue",Arial,sans-serif',
     htmlFontSize: 16
-  },
-  link: {
-    color: "green",
-    "&:hover": {
-      extend: "link",
-      textDecoration: "none"
-    }
   }
 });
 

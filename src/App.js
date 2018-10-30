@@ -19,6 +19,7 @@ import { Button } from "@material-ui/core";
 import Routes from "./Routes";
 
 const drawerWidth = 240;
+
 const styles = theme => ({
   root: {
     display: "flex"
@@ -52,6 +53,7 @@ const styles = theme => ({
     display: "none"
   },
   drawerPaper: {
+    height: "-webkit-fill-available",
     position: "relative",
     whiteSpace: "nowrap",
     width: drawerWidth,
@@ -81,6 +83,10 @@ const styles = theme => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing.unit * 3
+  },
+  link: {
+    color: "wheat",
+    textDecoration: "none"
   }
 });
 
@@ -121,7 +127,9 @@ class App extends React.Component {
                 <MenuIcon />
               </IconButton>
               <Typography variant="h4" color="primary" className={classes.grow}>
-                <Link to="/">HeartBit</Link>
+                <Link to="/" className={classes.link}>
+                  HeartBit
+                </Link>
               </Typography>
               <Button
                 color="inherit"
@@ -152,7 +160,7 @@ class App extends React.Component {
               </IconButton>
             </div>
             <Divider />
-            <Link to="/">
+            <Link to="/" className={classes.link}>
               <ListItem>
                 <ListItemIcon>
                   <i className="material-icons">home</i>
@@ -160,7 +168,7 @@ class App extends React.Component {
                 <ListItemText primary="Προφίλ" />
               </ListItem>
             </Link>
-            <Link to="/Volunteers">
+            <Link to="/Volunteers" className={classes.link}>
               <ListItem>
                 <ListItemIcon>
                   <i className="material-icons">account_circle</i>
@@ -168,7 +176,7 @@ class App extends React.Component {
                 <ListItemText primary="Εθελοντές" />
               </ListItem>
             </Link>
-            <Link to="/defibrillators">
+            <Link to="/defibrillators" className={classes.link}>
               <ListItem>
                 <ListItemIcon>
                   <i className="material-icons">local_hospital</i>
@@ -177,7 +185,7 @@ class App extends React.Component {
                 <ListItemText primary="Απινιδοτές" />
               </ListItem>
             </Link>
-            <Link to="/patients">
+            <Link to="/patients" className={classes.link}>
               <ListItem>
                 <ListItemIcon>
                   <i className="material-icons">healing</i>
@@ -185,7 +193,7 @@ class App extends React.Component {
                 <ListItemText primary="Ασθενείς" />
               </ListItem>
             </Link>
-            <Link to="/event">
+            <Link to="/event" className={classes.link}>
               <ListItem>
                 <ListItemIcon>
                   <i className="material-icons">add_location</i>
