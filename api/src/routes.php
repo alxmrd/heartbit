@@ -151,9 +151,10 @@ $app->get('/api/volunteers/{id}', function (Request $request, Response $response
     
        $arr = array();
 		$response = array([]);
-        $query = "SELECT * FROM volunteer WHERE id=$volunteers_id";
-        $result = $pdo->query($query);
-		$data = array();
+        $query = "SELECT * FROM volunteer WHERE id=:id";
+        $result = $pdo->prepare($query);
+        $data = array(":id" => $volunteers_id);
+        $result->execute($data);
                 while($r = $result->fetch(PDO::FETCH_ASSOC)) {
                  $data[] = $r;
         }
