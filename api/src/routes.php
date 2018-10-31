@@ -145,7 +145,6 @@ $app->get('/api/admin', function (Request $request, Response $response, array $a
 $app->get('/api/volunteers/{id}', function (Request $request, Response $response, array $args) {
     global $pdo;
 
-     
     
     $volunteers_id =(int)$args['id'];
     
@@ -153,7 +152,7 @@ $app->get('/api/volunteers/{id}', function (Request $request, Response $response
 		$response = array([]);
         $query = "SELECT * FROM volunteer WHERE id=:id";
         $result = $pdo->prepare($query);
-        $data = array(":id" => $volunteers_id);
+        $data = array("id" => $volunteers_id);
         $result->execute($data);
                 while($r = $result->fetch(PDO::FETCH_ASSOC)) {
                  $data[] = $r;
@@ -254,16 +253,20 @@ $app->post('/api/login', function (Request $request, Response $response, array $
 
      
     
-    $volunteers_id =(int)$args['id'];
-    $username = $_POST['username'];
-    $email = $_POST['email'];
+
+
+   
+    $volunteers_id =$args['id'];
+    // $username = $userData->{'username'};
+    // $email=$userData->{'email'};
     
       
     
         $query ="UPDATE volunteer SET username=':username', email=':email' WHERE id=':id'";
         $result = $pdo->prepare($query);
-        $data = array(':id' => $volunteers_id,':username'=>$username,':email'=>$email);
-        $result->execute($data);
+       // $data = array(':id' => $volunteers_id,':username'=>$username,':email'=>$email);
+        $result->execute(array(':username'=>$username,':email'=>$email,':id' => $volunteers_id));
+        
       
         $response=json_encode($data);
         return $response;

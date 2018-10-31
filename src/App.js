@@ -182,7 +182,7 @@ class App extends React.Component {
                   <i className="material-icons">local_hospital</i>
                 </ListItemIcon>
 
-                <ListItemText primary="Απινιδοτές" />
+                <ListItemText primary="Απινιδωτές" />
               </ListItem>
             </Link>
             <Link to="/patients" className={classes.link}>
