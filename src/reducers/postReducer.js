@@ -13,16 +13,11 @@ export default function(state = initialState, action) {
         ...state,
         items: action.payload
       };
-    case "SKATA": {
-      console.log(action);
-      console.log(state);
-      const neoState = {
+    case "SKATA":
+      return {
         ...state,
         color: action.eidos
       };
-
-      return neoState;
-    }
     case FETCH_POSTS:
       console.log("reducer");
       return {

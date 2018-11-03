@@ -8,6 +8,7 @@ import VolunteerDialog from "../components/VolunteerComponents/VolunteerDialog";
 import VolunteerTable from "../components/VolunteerComponents/VolunteerTable";
 import { connect } from "react-redux";
 import { fetchPosts } from "../actions/postActions";
+import { volunteers } from "../dummyData/volunteers";
 
 const styles = theme => ({
   root: {
@@ -137,21 +138,23 @@ const VolunteerWithStyles = withStyles(styles)(Volunteer);
 
 // Container !!
 const mapStateToProps = state => ({
-  posts: state.posts.items
+  posts: state.posts.items,
+  data: state.volunteers
 });
 
-const sendSkata = tiskata => ({
-  type: "SKATA",
-  eidos: tiskata
-});
+const updateVolunteers = dispatch => {
+  fetch(`http://localhost:8080/api/volunteers`)
+    .then(result => result.json())
+    .then(volunteers =>
+      dispatch({
+        type: "UPDATE_VOLUNTEERS",
+        payload: volunteers
+      })
+    );
+};
 
 const mapDispatchToProps = dispatch => ({
-  fetchPosts: () =>
-    dispatch({
-      type: "UPDATE_ITEMS",
-      payload: [{ name: "Mpampis" }, { name: "Lampis" }]
-    }),
-  onClick: () => dispatch(sendSkata("kafe"))
+  fetchPosts: () => updateVolunteers(dispatch)
 });
 
 export default connect(
