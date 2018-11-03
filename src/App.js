@@ -17,6 +17,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import Routes from "./Routes";
+import { Provider } from "react-redux";
+import store from "./components/store";
 
 const drawerWidth = 240;
 
@@ -107,6 +109,7 @@ class App extends React.Component {
     const { classes, theme } = this.props;
 
     return (
+      <Provider store={store}>
       <Fragment>
         <div className={classes.root}>
           <AppBar
@@ -126,7 +129,11 @@ class App extends React.Component {
               >
                 <MenuIcon />
               </IconButton>
-              <Typography variant="h4" color="primary" className={classes.grow}>
+                <Typography
+                  variant="h4"
+                  color="primary"
+                  className={classes.grow}
+                >
                 <Link to="/" className={classes.link}>
                   HeartBit
                 </Link>
@@ -209,6 +216,7 @@ class App extends React.Component {
           </main>
         </div>
       </Fragment>
+      </Provider>
     );
   }
 }

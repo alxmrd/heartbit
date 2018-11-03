@@ -6,6 +6,8 @@ import { PostData } from "../containers/PostData";
 import SimpleToolips from "../components/SimpleTooltips";
 import VolunteerDialog from "../components/VolunteerComponents/VolunteerDialog";
 import VolunteerTable from "../components/VolunteerComponents/VolunteerTable";
+import { connect } from "react-redux";
+import { fetchPosts } from "../actions/postActions";
 
 const styles = theme => ({
   root: {
@@ -96,26 +98,17 @@ class Volunteer extends Component {
   handleClose = () => {
     this.setState({ open: false });
   };
-
-  loadFromServer = () => {
-    fetch(`http://localhost:8080/api/volunteers`)
-      .then(result => result.json())
-      .then(data => this.setState({ data: data }))
-
-      //.then(parsedJSON => console.log("parsedJSON", parsedJSON))
-      .catch(error => console.log("error", error));
-  };
-  componentDidMount() {
-    // If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
-    this.loadFromServer();
+  componentWillMount() {
+    // console.log("componentWillMount");
+    this.props.fetchPosts();
   }
-
   render() {
-    const { classes } = this.props;
+    const { classes, onClick } = this.props;
 
     return (
       <Paper className={classes.root}>
-        <VolunteerTable tabledata={this.state.data} />
+        <div onClick={onClick}>SKATA</div>
+        <VolunteerTable tabledata={this.props.data} />
         <SimpleToolips
           definition="Add Volunteer"
           onButtonClick={e => {
@@ -133,8 +126,35 @@ class Volunteer extends Component {
     );
   }
 }
+
 Volunteer.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.func.isRequired,
+  fetchPosts: PropTypes.object.isRequired,
+  posts: PropTypes.array.isRequired
 };
 
-export default withStyles(styles)(Volunteer);
+const VolunteerWithStyles = withStyles(styles)(Volunteer);
+
+// Container !!
+const mapStateToProps = state => ({
+  posts: state.posts.items
+});
+
+const sendSkata = tiskata => ({
+  type: "SKATA",
+  eidos: tiskata
+});
+
+const mapDispatchToProps = dispatch => ({
+  fetchPosts: () =>
+    dispatch({
+      type: "UPDATE_ITEMS",
+      payload: [{ name: "Mpampis" }, { name: "Lampis" }]
+    }),
+  onClick: () => dispatch(sendSkata("kafe"))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(VolunteerWithStyles);
