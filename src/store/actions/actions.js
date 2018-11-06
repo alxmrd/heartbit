@@ -9,7 +9,7 @@ export const fetchVolunteers = dispatch => {
     );
 };
 
-export const NewVolunteer = (dispatch, userData) => {
+export const NewVolunteer = dispatch => {
   fetch(`http://localhost:8080/api/insertvolunteer`, {
     method: "POST",
     mode: "cors",
@@ -22,14 +22,12 @@ export const NewVolunteer = (dispatch, userData) => {
     referrer: "no-referrer",
     body: JSON.stringify(userData)
   })
-    .then(result => {
-      result.json();
-    })
-
-    .then(() => {
+    .then(result => result.json())
+    .then(res => {
+      console.log("res", res);
       dispatch({
         type: "NEW_VOLUNTEER",
-        payload: userData
+        payload: res
       });
     })
     .catch(error => {
