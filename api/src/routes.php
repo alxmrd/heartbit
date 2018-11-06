@@ -200,6 +200,41 @@ $app->post('/api/login', function (Request $request, Response $response, array $
    });
 
 
+
+
+   $app->post('/api/insertvolunteer', function (Request $request, Response $response, array $args) {
+    global $pdo;
+
+       $userData = json_decode(file_get_contents('php://input'));
+
+    
+        $username = $userData->{'username'};
+        $tel1=$userData->{'tel1'};
+        $tel2=$userData->{'tel2'};
+        $email = $userData->{'email'};
+        $dateofbirth=  $userData->{'dateofbirth'};
+        $latesttraining=  $userData->{'latesttraining'};
+     
+      
+        $query = "INSERT INTO volunteer (username,tel1,tel2,email,dateofbirth,latesttraining) VALUES (:username,:tel1,:tel2,:email,:dateofbirth,:latesttraining)";
+        $result = $pdo->prepare($query);
+
+    
+       
+        $result->execute(array(':username' => $username,':tel1' => $tel1,':tel2'=>$tel2,':email'=>$email,':dateofbirth'=>$dateofbirth,':latesttraining'=>$latesttraining));
+        $lastId = $pdo->lastInsertId();
+   //  $response=json_encode($lastId);
+   $myObj = new stdClass();
+   $myObj->id = $lastId;
+   $myObj->username = $username;
+   $myObj->email = $email;
+   
+   $response = json_encode($myObj);
+
+        return $response;
+   });
+
+ 
    $app->get('/api/volunteers/{id}', function (Request $request, Response $response, array $args) {
     global $pdo;
 
@@ -210,6 +245,7 @@ $app->post('/api/login', function (Request $request, Response $response, array $
         $result->execute(array("id" => $volunteers_id));
                 while($r = $result->fetch(PDO::FETCH_ASSOC)) {
                  $data = $r;
+                 
         }
         $response=json_encode($data);
         return $response;
@@ -218,52 +254,33 @@ $app->post('/api/login', function (Request $request, Response $response, array $
         $pdo = null;
 });
 
-
-   $app->post('/api/insert', function (Request $request, Response $response, array $args) {
-    global $pdo;
-
-       $userData = json_decode(file_get_contents('php://input'));
-
-
-        $username = $userData->{'username'};
-        $tel1=$userData->{'tel1'};
-        $tel2=$userData->{'tel2'};
-        $email = $userData->{'email'};
-        $dateofbirth=  $userData->{'dateofbirth'};
-        $latesttraining=  $userData->{'latesttraining'};
-
-        $query = "INSERT INTO volunteer (username,tel1,tel2,email,dateofbirth,latesttraining) VALUES (:username,:tel1,:tel2,:email,:dateofbirth,:latesttraining)";
-        $result = $pdo->prepare($query);
-       
-        $result->execute(array(':username' => $username,':tel1' => $tel1,':tel2'=>$tel2,':email'=>$email,':dateofbirth'=>$dateofbirth,':latesttraining'=>$latesttraining));
-        
-       
-       
-        $response=json_encode($data);
-        return $response;
-        
-                $result->closeCursor();
-                $pdo = null;
-   });
-
- 
-
    $app->post('/api/editvolunteer/{id}', function (Request $request, Response $response, array $args) {
     global $pdo;
 
-   $volunteers_id =$args['id'];
+    $volunteers_id =(int)$args['id'];
     // $username = $userData->{'username'};
     // $email=$userData->{'email'};
-    $username=$_POST['username'];
-    $email=$_POST['email'];
+  $username=$request->getParsedBody()['username'];
+  $email=$request->getParsedBody()['email'];
+
    // $volunteers_id=$_POST['id'];
       
+   
+  $query="UPDATE volunteer SET username=:username, email=:email WHERE id=:id";
+  $result = $pdo->prepare($query);
+  $result->execute( array(':username'=>$username,':email'=>$email,':id' => $volunteers_id));
+  
+  // while($r = $result->fetch(PDO::FETCH_ASSOC)) {
+  //        // $data = $r;
+  //           return json_encode($r);
+         
+  // }
+
+  $row = $result->fetch_assoc();
+
+
     
-        $query ="UPDATE volunteer SET username=':username', email=':email' WHERE id=':id'";
-        $result = $pdo->prepare($query);
-        $result->execute( array(':username'=>$username,':email'=>$email,':id' => $volunteers_id));
-    
-        $response=json_encode($data);
+        $response=json_encode($row);
         return $response;
 
         $result->closeCursor();
