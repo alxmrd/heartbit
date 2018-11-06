@@ -2,13 +2,12 @@ import React, { Component } from "react";
 import Paper from "@material-ui/core/Paper";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core";
-import { PostData } from "../containers/PostData";
+
 import SimpleToolips from "../components/SimpleTooltips";
 import VolunteerDialog from "../components/VolunteerComponents/VolunteerDialog";
 import VolunteerTable from "../components/VolunteerComponents/VolunteerTable";
 import { connect } from "react-redux";
-import { fetchPosts } from "../actions/postActions";
-import { volunteers } from "../dummyData/volunteers";
+import { fetchVolunteers, NewVolunteer } from "../store/actions/actions";
 
 const styles = theme => ({
   root: {
@@ -44,7 +43,6 @@ class Volunteer extends Component {
     super();
     this.props = props;
     this.state = {
-      data: [],
       open: false,
       username: "",
       email: "",
@@ -77,20 +75,10 @@ class Volunteer extends Component {
       tel1: this.state.tel1,
       tel2: this.state.tel2
     };
-    PostData("insert", dataPouStelnw)
-      .then(result => {
-        let responseJson = result;
-        console.log(responseJson);
-        const updatedData = [...this.state.data, dataPouStelnw];
-        this.setState({
-          data: updatedData
-        });
-      })
 
-      .catch(error => console.log("error", error));
+    this.props.NewVolunteer(dataPouStelnw);
 
     this.setState({ open: false });
-    //axios.post('/api/login',{user: this.state});
   };
   handleClickOpen = () => {
     this.setState({ open: true });
@@ -100,15 +88,15 @@ class Volunteer extends Component {
     this.setState({ open: false });
   };
   componentWillMount() {
-    // console.log("componentWillMount");
-    this.props.fetchPosts();
+    this.props.fetchVolunteers();
+
+    // this.props.
   }
   render() {
-    const { classes, onClick } = this.props;
+    const { classes } = this.props;
 
     return (
       <Paper className={classes.root}>
-        <div onClick={onClick}>SKATA</div>
         <VolunteerTable tabledata={this.props.data} />
         <SimpleToolips
           definition="Add Volunteer"
@@ -129,32 +117,21 @@ class Volunteer extends Component {
 }
 
 Volunteer.propTypes = {
-  classes: PropTypes.func.isRequired,
-  fetchPosts: PropTypes.object.isRequired,
-  posts: PropTypes.array.isRequired
+  classes: PropTypes.object.isRequired,
+  fetchVolunteers: PropTypes.func.isRequired,
+  NewVolunteer: PropTypes.func.isRequired
 };
 
 const VolunteerWithStyles = withStyles(styles)(Volunteer);
 
 // Container !!
 const mapStateToProps = state => ({
-  posts: state.posts.items,
   data: state.volunteers
 });
 
-const updateVolunteers = dispatch => {
-  fetch(`http://localhost:8080/api/volunteers`)
-    .then(result => result.json())
-    .then(volunteers =>
-      dispatch({
-        type: "UPDATE_VOLUNTEERS",
-        payload: volunteers
-      })
-    );
-};
-
 const mapDispatchToProps = dispatch => ({
-  fetchPosts: () => updateVolunteers(dispatch)
+  fetchVolunteers: () => fetchVolunteers(dispatch),
+  NewVolunteer: dataPouStelnw => NewVolunteer(dispatch, dataPouStelnw)
 });
 
 export default connect(

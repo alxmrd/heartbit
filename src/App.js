@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import Routes from "./Routes";
 import { Provider } from "react-redux";
-import store from "./components/store";
+import store from "./store/store";
 
 const drawerWidth = 240;
 
@@ -110,112 +110,112 @@ class App extends React.Component {
 
     return (
       <Provider store={store}>
-      <Fragment>
-        <div className={classes.root}>
-          <AppBar
-            position="fixed"
-            className={classNames(classes.appBar, {
-              [classes.appBarShift]: this.state.open
-            })}
-          >
-            <Toolbar disableGutters={!this.state.open}>
-              <IconButton
-                color="inherit"
-                aria-label="Open drawer"
-                onClick={this.handleDrawerOpen}
-                className={classNames(classes.menuButton, {
-                  [classes.hide]: this.state.open
-                })}
-              >
-                <MenuIcon />
-              </IconButton>
+        <Fragment>
+          <div className={classes.root}>
+            <AppBar
+              position="fixed"
+              className={classNames(classes.appBar, {
+                [classes.appBarShift]: this.state.open
+              })}
+            >
+              <Toolbar disableGutters={!this.state.open}>
+                <IconButton
+                  color="inherit"
+                  aria-label="Open drawer"
+                  onClick={this.handleDrawerOpen}
+                  className={classNames(classes.menuButton, {
+                    [classes.hide]: this.state.open
+                  })}
+                >
+                  <MenuIcon />
+                </IconButton>
                 <Typography
                   variant="h4"
                   color="primary"
                   className={classes.grow}
                 >
-                <Link to="/" className={classes.link}>
-                  HeartBit
-                </Link>
-              </Typography>
-              <Button
-                color="inherit"
-                href="/login"
-                className={classes.LoginButton}
-              >
-                Login
-              </Button>
-            </Toolbar>
-          </AppBar>
-          <Drawer
-            variant="permanent"
-            classes={{
-              paper: classNames(
-                classes.drawerPaper,
-                !this.state.open && classes.drawerPaperClose
-              )
-            }}
-            open={this.state.open}
-          >
-            <div className={classes.toolbar}>
-              <IconButton onClick={this.handleDrawerClose}>
-                {theme.direction === "rtl" ? (
-                  <ChevronRightIcon />
-                ) : (
-                  <ChevronLeftIcon />
-                )}
-              </IconButton>
-            </div>
-            <Divider />
-            <Link to="/" className={classes.link}>
-              <ListItem>
-                <ListItemIcon>
-                  <i className="material-icons">home</i>
-                </ListItemIcon>
-                <ListItemText primary="Προφίλ" />
-              </ListItem>
-            </Link>
-            <Link to="/Volunteers" className={classes.link}>
-              <ListItem>
-                <ListItemIcon>
-                  <i className="material-icons">account_circle</i>
-                </ListItemIcon>
-                <ListItemText primary="Εθελοντές" />
-              </ListItem>
-            </Link>
-            <Link to="/defibrillators" className={classes.link}>
-              <ListItem>
-                <ListItemIcon>
-                  <i className="material-icons">local_hospital</i>
-                </ListItemIcon>
+                  <Link to="/" className={classes.link}>
+                    HeartBit
+                  </Link>
+                </Typography>
+                <Button
+                  color="inherit"
+                  href="/login"
+                  className={classes.LoginButton}
+                >
+                  Login
+                </Button>
+              </Toolbar>
+            </AppBar>
+            <Drawer
+              variant="permanent"
+              classes={{
+                paper: classNames(
+                  classes.drawerPaper,
+                  !this.state.open && classes.drawerPaperClose
+                )
+              }}
+              open={this.state.open}
+            >
+              <div className={classes.toolbar}>
+                <IconButton onClick={this.handleDrawerClose}>
+                  {theme.direction === "rtl" ? (
+                    <ChevronRightIcon />
+                  ) : (
+                    <ChevronLeftIcon />
+                  )}
+                </IconButton>
+              </div>
+              <Divider />
+              <Link to="/" className={classes.link}>
+                <ListItem>
+                  <ListItemIcon>
+                    <i className="material-icons">home</i>
+                  </ListItemIcon>
+                  <ListItemText primary="Προφίλ" />
+                </ListItem>
+              </Link>
+              <Link to="/Volunteers" className={classes.link}>
+                <ListItem>
+                  <ListItemIcon>
+                    <i className="material-icons">account_circle</i>
+                  </ListItemIcon>
+                  <ListItemText primary="Εθελοντές" />
+                </ListItem>
+              </Link>
+              <Link to="/defibrillators" className={classes.link}>
+                <ListItem>
+                  <ListItemIcon>
+                    <i className="material-icons">local_hospital</i>
+                  </ListItemIcon>
 
-                <ListItemText primary="Απινιδωτές" />
-              </ListItem>
-            </Link>
-            <Link to="/patients" className={classes.link}>
-              <ListItem>
-                <ListItemIcon>
-                  <i className="material-icons">healing</i>
-                </ListItemIcon>
-                <ListItemText primary="Ασθενείς" />
-              </ListItem>
-            </Link>
-            <Link to="/event" className={classes.link}>
-              <ListItem>
-                <ListItemIcon>
-                  <i className="material-icons">add_location</i>
-                </ListItemIcon>
-                <ListItemText primary="Περιστατικό" />
-              </ListItem>
-            </Link>
-            <Divider />
-          </Drawer>
-          <main className={classes.content}>
-            <div className={classes.toolbar} />
-            <Routes />
-          </main>
-        </div>
-      </Fragment>
+                  <ListItemText primary="Απινιδωτές" />
+                </ListItem>
+              </Link>
+              <Link to="/patients" className={classes.link}>
+                <ListItem>
+                  <ListItemIcon>
+                    <i className="material-icons">healing</i>
+                  </ListItemIcon>
+                  <ListItemText primary="Ασθενείς" />
+                </ListItem>
+              </Link>
+              <Link to="/event" className={classes.link}>
+                <ListItem>
+                  <ListItemIcon>
+                    <i className="material-icons">add_location</i>
+                  </ListItemIcon>
+                  <ListItemText primary="Περιστατικό" />
+                </ListItem>
+              </Link>
+              <Divider />
+            </Drawer>
+            <main className={classes.content}>
+              <div className={classes.toolbar} />
+              <Routes />
+            </main>
+          </div>
+        </Fragment>
       </Provider>
     );
   }

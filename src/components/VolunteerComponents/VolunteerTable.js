@@ -58,8 +58,4 @@ const VolunteerTable = ({ tabledata }) => (
   </Table>
 );
 
-VolunteerTable.defaultProps = {
-  tabledata: []
-};
-
 export default VolunteerTable;
