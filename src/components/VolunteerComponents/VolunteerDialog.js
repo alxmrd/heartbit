@@ -8,6 +8,8 @@ import { Button, DialogActions, TextField } from "@material-ui/core";
 
 const VolunteerDialog = ({
   open,
+  props,
+  isOpen,
   onClose,
   onInputChange,
   onSave,
@@ -86,9 +88,15 @@ const VolunteerDialog = ({
       <Button onClick={onClose} color="primary">
         Cancel
       </Button>
-      <Button onClick={onSave} type="submit" color="primary">
-        Insert
-      </Button>
+      {isOpen === false ? (
+        <Button onClick={onClose} type="submit" color="primary">
+          Update
+        </Button>
+      ) : (
+        <Button onClick={onSave} type="submit" color="primary">
+          Insert
+        </Button>
+      )}
     </DialogActions>
   </Dialog>
 );

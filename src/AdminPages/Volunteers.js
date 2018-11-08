@@ -53,7 +53,8 @@ class Volunteer extends Component {
       dateofbirth: "",
       latesttraining: "",
       tel1: "",
-      tel2: ""
+      tel2: "",
+      opendialog: false
     };
   }
 
@@ -86,10 +87,19 @@ class Volunteer extends Component {
   };
   handleClickOpen = () => {
     this.setState({ open: true });
+    this.setState({ opendialog: true });
+    console.log("dialog", this.state.opendialog);
+    console.log(this.state.open, "open");
+  };
+
+  handleEdit = () => {
+    this.setState({ opendialog: false });
+    console.log(this.state.opendialog, "opendialog");
   };
 
   handleClose = () => {
     this.setState({ open: false });
+    console.log("cancel", this.state.open);
   };
   componentWillMount() {
     this.props.fetchVolunteers();
@@ -104,7 +114,11 @@ class Volunteer extends Component {
       <Paper className={classes.root}>
         <VolunteerTable
           tabledata={this.props.data}
-          onEditClick={this.props.onEditVolunteer}
+          //onEditClick={this.props.onEditVolunteer}
+          onEditClick={e => {
+            this.handleClickOpen(e);
+            this.handleEdit(e);
+          }}
         />
         <SimpleToolips
           definition="Add Volunteer"
@@ -113,6 +127,7 @@ class Volunteer extends Component {
           }}
         />
         <VolunteerDialog
+          opendialog={this.state.opendialog}
           open={this.state.open}
           onClose={this.handleClose}
           onInputChange={this.handleChange}
