@@ -7,7 +7,11 @@ import SimpleToolips from "../components/SimpleTooltips";
 import VolunteerDialog from "../components/VolunteerComponents/VolunteerDialog";
 import VolunteerTable from "../components/VolunteerComponents/VolunteerTable";
 import { connect } from "react-redux";
-import { fetchVolunteers, NewVolunteer } from "../store/actions/actions";
+import {
+  fetchVolunteers,
+  NewVolunteer,
+  editVolunteer
+} from "../store/actions/actions";
 
 const styles = theme => ({
   root: {
@@ -92,12 +96,16 @@ class Volunteer extends Component {
 
     // this.props.
   }
+
   render() {
     const { classes } = this.props;
 
     return (
       <Paper className={classes.root}>
-        <VolunteerTable tabledata={this.props.data} />
+        <VolunteerTable
+          tabledata={this.props.data}
+          onEditClick={this.props.onEditVolunteer}
+        />
         <SimpleToolips
           definition="Add Volunteer"
           onButtonClick={e => {
@@ -131,7 +139,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchVolunteers: () => fetchVolunteers(dispatch),
-  NewVolunteer: dataPouStelnw => NewVolunteer(dispatch, dataPouStelnw)
+  NewVolunteer: dataPouStelnw => NewVolunteer(dispatch, dataPouStelnw),
+  onEditVolunteer: id => dispatch(editVolunteer(id))
 });
 
 export default connect(
