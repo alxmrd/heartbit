@@ -51,7 +51,7 @@ const VolunteerTable = ({ tabledata, onEditClick }) => (
             </TableCell>
             <TableCell>
               <Button>
-                <EditIcon onClick={onEditClick} />
+                <EditIcon onClick={() => onEditClick(item.id)} />
               </Button>
             </TableCell>
           </TableRow>

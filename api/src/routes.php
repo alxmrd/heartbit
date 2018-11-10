@@ -227,12 +227,12 @@ $app->get('/api/volunteers/{id}', function (Request $request, Response $response
 
 $app->post('/api/editvolunteer/{id}', function (Request $request, Response $response, array $args) {
     global $pdo;
-
+    $userData = json_decode(file_get_contents('php://input'));
     $volunteers_id = (int) $args['id'];
-    // $username = $userData->{'username'};
-    // $email=$userData->{'email'};
-    $username = $request->getParsedBody()['username'];
-    $email = $request->getParsedBody()['email'];
+    $username = $userData->{'username'};
+    $email=$userData->{'email'};
+    // $username = $request->getParsedBody()['username'];
+    // $email = $request->getParsedBody()['email'];
 
     // $volunteers_id=$_POST['id'];
 
@@ -246,14 +246,18 @@ $app->post('/api/editvolunteer/{id}', function (Request $request, Response $resp
 
     // }
 
-    $row = $result->fetch_assoc();
+    $myObj = new stdClass();
+   
+    $myObj->username = $username;
+    $myObj->email = $email;
 
-    $response = json_encode($row);
+
+    $response = json_encode($myObj);
+
     return $response;
-
-    $result->closeCursor();
-    $pdo = null;
 });
+
+  
 
 $app->post('/api/delete', function (Request $request, Response $response, array $args) {
     global $pdo;

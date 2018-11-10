@@ -9,8 +9,9 @@ import VolunteerTable from "../components/VolunteerComponents/VolunteerTable";
 import { connect } from "react-redux";
 import {
   fetchVolunteers,
-  NewVolunteer,
-  editVolunteer
+  newVolunteer,
+  editVolunteer,
+  updateVolunteer
 } from "../store/actions/actions";
 
 const styles = theme => ({
@@ -54,7 +55,7 @@ class Volunteer extends Component {
       latesttraining: "",
       tel1: "",
       tel2: "",
-      opendialog: false
+      isOpen: false
     };
   }
 
@@ -81,25 +82,36 @@ class Volunteer extends Component {
       tel2: this.state.tel2
     };
 
-    this.props.NewVolunteer(dataPouStelnw);
+    this.props.onNewVolunteer(dataPouStelnw);
+
+    this.setState({ open: false });
+  };
+  handleUpdate = event => {
+    event.preventDefault();
+    const dataPouStelnw = {
+      username: this.state.username,
+      email: this.state.email,
+      dateofbirth: this.state.dateofbirth,
+      latesttraining: this.state.latesttraining,
+      tel1: this.state.tel1,
+      tel2: this.state.tel2
+    };
+
+    this.props.onUpdateVolunteer();
 
     this.setState({ open: false });
   };
   handleClickOpen = () => {
     this.setState({ open: true });
-    this.setState({ opendialog: true });
-    console.log("dialog", this.state.opendialog);
-    console.log(this.state.open, "open");
+    this.setState({ isOpen: true });
   };
 
   handleEdit = () => {
-    this.setState({ opendialog: false });
-    console.log(this.state.opendialog, "opendialog");
+    this.setState({ isOpen: false });
   };
 
   handleClose = () => {
     this.setState({ open: false });
-    console.log("cancel", this.state.open);
   };
   componentWillMount() {
     this.props.fetchVolunteers();
@@ -114,10 +126,10 @@ class Volunteer extends Component {
       <Paper className={classes.root}>
         <VolunteerTable
           tabledata={this.props.data}
-          //onEditClick={this.props.onEditVolunteer}
-          onEditClick={e => {
-            this.handleClickOpen(e);
-            this.handleEdit(e);
+          onEditClick={id => {
+            this.handleClickOpen();
+            this.handleEdit();
+            this.props.onEditVolunteer(id);
           }}
         />
         <SimpleToolips
@@ -127,12 +139,13 @@ class Volunteer extends Component {
           }}
         />
         <VolunteerDialog
-          opendialog={this.state.opendialog}
+          isOpen={this.state.isOpen}
           open={this.state.open}
           onClose={this.handleClose}
           onInputChange={this.handleChange}
           onNumberChange={this.handleNumber}
           onSave={this.handleSubmit}
+          onUpdate={this.handleUpdate}
         />
       </Paper>
     );
@@ -142,7 +155,7 @@ class Volunteer extends Component {
 Volunteer.propTypes = {
   classes: PropTypes.object.isRequired,
   fetchVolunteers: PropTypes.func.isRequired,
-  NewVolunteer: PropTypes.func.isRequired
+  onNewVolunteer: PropTypes.func.isRequired
 };
 
 const VolunteerWithStyles = withStyles(styles)(Volunteer);
@@ -154,8 +167,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchVolunteers: () => fetchVolunteers(dispatch),
-  NewVolunteer: dataPouStelnw => NewVolunteer(dispatch, dataPouStelnw),
-  onEditVolunteer: id => dispatch(editVolunteer(id))
+  onNewVolunteer: dataPouStelnw => newVolunteer(dispatch, dataPouStelnw),
+  onEditVolunteer: id => dispatch(editVolunteer(id)),
+  onUpdateVolunteer: (id, dataPouStelnw) =>
+    dispatch(updateVolunteer(id, dataPouStelnw))
 });
 
 export default connect(

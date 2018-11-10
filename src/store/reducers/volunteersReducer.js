@@ -3,11 +3,12 @@ const volunteersReducer = (state = [], action) => {
     case "UPDATE_VOLUNTEERS":
       return action.payload;
     case "NEW_VOLUNTEER":
-      return [...state, action.payload];
+      return state;
     case "EDIT_VOLUNTEER":
       return [action.payload];
-    case "EDIT":
-      return [action.payload];
+
+    case "UPDATE":
+      return [...state];
     default:
       return state;
   }
