@@ -55,13 +55,15 @@ class Volunteer extends Component {
       latesttraining: "",
       tel1: "",
       tel2: "",
-      isOpen: false
+      onEdit: false,
+      hasChanged: false
     };
   }
 
   handleChange = event => {
     this.setState({
-      [event.target.id]: event.target.value
+      [event.target.id]: event.target.value,
+      hasChanged: true
     });
   };
 
@@ -103,11 +105,11 @@ class Volunteer extends Component {
   };
   handleClickOpen = () => {
     this.setState({ open: true });
-    this.setState({ isOpen: true });
+    this.setState({ onEdit: true });
   };
 
   handleEdit = () => {
-    this.setState({ isOpen: false });
+    this.setState({ onEdit: false });
   };
 
   handleClose = () => {
@@ -139,13 +141,14 @@ class Volunteer extends Component {
           }}
         />
         <VolunteerDialog
-          isOpen={this.state.isOpen}
+          onEdit={this.state.onEdit}
           open={this.state.open}
           onClose={this.handleClose}
           onInputChange={this.handleChange}
           onNumberChange={this.handleNumber}
           onSave={this.handleSubmit}
           onUpdate={this.handleUpdate}
+          hasChanged={this.state.hasChanged}
         />
       </Paper>
     );
