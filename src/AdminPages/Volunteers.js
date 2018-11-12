@@ -42,11 +42,14 @@ const styles = theme => ({
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
     width: 200
+  },
+  AppBar: {
+    backgroundColor: "#EEEEEE",
+    color: "#FFC107",
+    borderRadius: "50px",
+    boxShadow: "5px 5px  5px grey ",
+    width: "99%"
   }
-  // AppBar: {
-  //   backgroundColor: "4e878c",
-  //   color: "wheat"
-  // }
 });
 
 class Volunteer extends Component {
@@ -133,7 +136,7 @@ class Volunteer extends Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static" color="default">
+        <AppBar position="static" className={classes.AppBar}>
           <Toolbar>
             <Typography variant="h6" color="inherit">
               Volunteers
