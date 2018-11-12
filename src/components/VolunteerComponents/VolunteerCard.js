@@ -1,11 +1,11 @@
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
+import { Button, TextField, Dialog } from "@material-ui/core";
+
 import React from "react";
-import red from "@material-ui/core/colors/red";
-import Dialog from "@material-ui/core/Dialog";
+import { connect } from "react-redux";
+
 import CardHeader from "@material-ui/core/CardHeader";
 import Avatar from "@material-ui/core/Avatar";
 import Divider from "@material-ui/core/Divider";
@@ -37,78 +37,91 @@ const styles = theme => ({
     transform: "rotate(180deg)"
   },
   avatar: {
-    backgroundColor: red[500]
+    backgroundColor: "#4e878c"
   }
 });
 
-const VolunteerCard = ({ classes, props, open, onClose, scroll }) => (
+const VolunteerCard = ({ classes, props, open, onClose, volunteerData }) => (
   <Dialog
     open={open}
     onClose={onClose}
-    scroll={scroll}
+    scroll="paper"
     aria-labelledby="form-dialog-title"
   >
     <CardHeader
       className={classes.cardHeader}
       avatar={
         <Avatar aria-label="Recipe" className={classes.avatar}>
-          R
+          <i className="material-icons">account_circle</i>
         </Avatar>
       }
-      title="Shrimp and Chorizo Paella"
-      subheader="September 14, 2016"
+      title={volunteerData.username}
+      subheader="Username"
     />
 
     <Divider />
 
     <DialogContent>
-      <Typography>
-        Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-        dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-        consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel
-        scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue
-        laoreet rutrum faucibus dolor auctor. Aenean lacinia bibendum nulla sed
-        consectetur. Praesent commodo cursus magna, vel scelerisque nisl
-        consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus
-        auctor fringilla. Cras mattis consectetur purus sit amet fermentum. Cras
-        justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus,
-        porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus
-        magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel
-        augue laoreet rutrum faucibus dolor auctor. Aenean lacinia bibendum
-        nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque
-        nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non
-        metus auctor fringilla. Cras mattis consectetur purus sit amet
-        fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-        Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent
-        commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus
-        sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Aenean
-        lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna,
-        vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
-        ullamcorper nulla non metus auctor fringilla. Cras mattis consectetur
-        purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in,
-        egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum
-        at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur
-        et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor
-        auctor. Aenean lacinia bibendum nulla sed consectetur. Praesent commodo
-        cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui.
-        Donec ullamcorper nulla non metus auctor fringilla. Cras mattis
-        consectetur purus sit amet fermentum. Cras justo odio, dapibus ac
-        facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur
-        ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque
-        nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum
-        faucibus dolor auctor. Aenean lacinia bibendum nulla sed consectetur.
-        Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-        Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
-        Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-        dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-        consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel
-        scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue
-        laoreet rutrum faucibus dolor auctor. Aenean lacinia bibendum nulla sed
-        consectetur. Praesent commodo cursus magna, vel scelerisque nisl
-        consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus
-        auctor fringilla.
-      </Typography>
+      <TextField
+        id="tel1"
+        label="Contact Number"
+        defaultValue={volunteerData.tel1}
+        type="number"
+        fullWidth
+        margin="normal"
+        InputProps={{
+          readOnly: true
+        }}
+      />
+      <TextField
+        id="tel2"
+        label="Second Contact Number"
+        defaultValue={volunteerData.tel2}
+        type="number"
+        fullWidth
+        margin="normal"
+        InputProps={{
+          readOnly: true
+        }}
+      />
+      <TextField
+        name="email"
+        label="email"
+        type="email"
+        id="email"
+        defaultValue={volunteerData.email}
+        fullWidth
+        margin="normal"
+        InputProps={{
+          readOnly: true
+        }}
+      />
+      <TextField
+        id="dateofbirth"
+        label="Birthday"
+        type="date"
+        defaultValue={volunteerData.dateofbirth}
+        fullWidth
+        margin="normal"
+        InputProps={{
+          readOnly: true
+        }}
+      />
+
+      <TextField
+        noValidate
+        id="latesttraining"
+        label="Latest Training"
+        type="date"
+        fullWidth
+        margin="normal"
+        defaultValue={volunteerData.latesttraining}
+        InputProps={{
+          readOnly: true
+        }}
+      />
     </DialogContent>
+
     <DialogActions>
       <Button onClick={onClose} color="primary">
         Close Card
@@ -116,9 +129,14 @@ const VolunteerCard = ({ classes, props, open, onClose, scroll }) => (
     </DialogActions>
   </Dialog>
 );
+const VolunteerCardWithStyles = withStyles(styles)(VolunteerCard);
+const mapStateToProps = state => ({
+  volunteerData:
+    state.volunteers.filter(volunteer => volunteer.id === state.id)[0] || {}
+});
 
 VolunteerCard.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(VolunteerCard);
+export default connect(mapStateToProps)(VolunteerCardWithStyles);

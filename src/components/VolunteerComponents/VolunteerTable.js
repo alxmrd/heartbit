@@ -31,7 +31,7 @@ const VolunteerTable = ({ tabledata, onEditClick, onRowClick }) => (
     <TableBody>
       {tabledata.map(function(item, key) {
         return (
-          <TableRow key={item.id} onClick={onRowClick}>
+          <TableRow key={item.id} onClick={() => onRowClick(item.id)} hover>
             <TableCell component="th" scope="item">
               {item.id}
             </TableCell>

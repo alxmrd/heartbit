@@ -67,14 +67,12 @@ class Volunteer extends Component {
       tel2: "",
       onEdit: false,
       hasChanged: false,
-      openCard: false,
-      scroll: "paper"
+      openCard: false
     };
   }
-  handleCardOpen = scroll => () => {
+  handleCardOpen = () => {
     this.setState({
-      openCard: true,
-      scroll
+      openCard: true
     });
   };
   handleCardClose = value => {
@@ -164,7 +162,10 @@ class Volunteer extends Component {
               this.handleEdit();
               this.props.onEditVolunteer(id);
             }}
-            onRowClick={this.handleCardOpen("paper")}
+            onRowClick={id => {
+              this.handleCardOpen();
+              this.props.onEditVolunteer(id);
+            }}
           />
           <SimpleToolips
             definition="Add Volunteer"
