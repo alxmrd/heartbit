@@ -15,6 +15,7 @@ import {
   updateVolunteer
 } from "../store/actions/actions";
 import Typography from "@material-ui/core/Typography";
+import VolunteerCard from "../components/VolunteerComponents/VolunteerCard";
 
 const styles = theme => ({
   root: {
@@ -65,9 +66,20 @@ class Volunteer extends Component {
       tel1: "",
       tel2: "",
       onEdit: false,
-      hasChanged: false
+      hasChanged: false,
+      openCard: false,
+      scroll: "paper"
     };
   }
+  handleCardOpen = scroll => () => {
+    this.setState({
+      openCard: true,
+      scroll
+    });
+  };
+  handleCardClose = value => {
+    this.setState({ openCard: false });
+  };
 
   handleChange = event => {
     this.setState({
@@ -152,6 +164,7 @@ class Volunteer extends Component {
               this.handleEdit();
               this.props.onEditVolunteer(id);
             }}
+            onRowClick={this.handleCardOpen("paper")}
           />
           <SimpleToolips
             definition="Add Volunteer"
@@ -168,6 +181,11 @@ class Volunteer extends Component {
             onSave={this.handleSubmit}
             onUpdate={this.handleUpdate}
             hasChanged={this.state.hasChanged}
+          />
+          <VolunteerCard
+            open={this.state.openCard}
+            onClose={this.handleCardClose}
+            scroll={this.state.scroll}
           />
         </Paper>
       </div>

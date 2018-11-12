@@ -8,7 +8,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import { Button } from "@material-ui/core";
 
-const VolunteerTable = ({ tabledata, onEditClick }) => (
+const VolunteerTable = ({ tabledata, onEditClick, onRowClick }) => (
   <Table>
     <TableHead>
       <TableRow>
@@ -31,7 +31,7 @@ const VolunteerTable = ({ tabledata, onEditClick }) => (
     <TableBody>
       {tabledata.map(function(item, key) {
         return (
-          <TableRow key={item.id}>
+          <TableRow key={item.id} onClick={onRowClick}>
             <TableCell component="th" scope="item">
               {item.id}
             </TableCell>
