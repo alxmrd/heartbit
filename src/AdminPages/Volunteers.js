@@ -70,6 +70,27 @@ class Volunteer extends Component {
       openCard: false
     };
   }
+
+  static getDerivedStateFromProps(props, state) {
+    // Any time the current user changes,
+    // Reset any parts of state that are tied to that user.
+    // In this simple example, that's just the email.
+    if (
+      props.volunteerData.username &&
+      props.volunteerData.username !== state.username
+    ) {
+      return {
+        username: props.volunteerData.username,
+        email: props.volunteerData.email,
+        dateofbirth: props.volunteerData.dateofbirth,
+        latesttraining: props.volunteerData.latesttraining,
+        tel1: props.volunteerData.tel1,
+        tel2: props.volunteerData.tel2
+      };
+    }
+    return null;
+  }
+
   handleCardOpen = () => {
     this.setState({
       openCard: true
@@ -95,18 +116,19 @@ class Volunteer extends Component {
   handleSubmit = event => {
     event.preventDefault();
     const dataPouStelnw = {
-      username: this.props.volunteerData.username,
-      email: this.props.volunteerData.email,
-      dateofbirth: this.props.volunteerData.dateofbirth,
-      latesttraining: this.props.volunteerData.latesttraining,
-      tel1: this.props.volunteerData.tel1,
-      tel2: this.props.volunteerData.tel2
+      username: this.state.username,
+      email: this.state.email,
+      dateofbirth: this.state.dateofbirth,
+      latesttraining: this.state.latesttraining,
+      tel1: this.state.tel1,
+      tel2: this.state.tel2
     };
 
     this.props.onNewVolunteer(dataPouStelnw);
 
     this.setState({ open: false });
   };
+
   handleUpdate = event => {
     event.preventDefault();
     const dataPouStelnw = {
@@ -135,10 +157,9 @@ class Volunteer extends Component {
     this.setState({ open: false });
     this.setState({ hasChanged: false });
   };
-  componentWillMount() {
-    this.props.fetchVolunteers();
 
-    // this.props.
+  componentDidMount() {
+    this.props.fetchVolunteers();
   }
 
   render() {

@@ -68,6 +68,4 @@ export const updateVolunteer = (id, userData) => dispatch => {
     .catch(error => {
       console.log(error, "error");
     });
-  console.log("id", id);
-  console.log("userdata", userData);
 };

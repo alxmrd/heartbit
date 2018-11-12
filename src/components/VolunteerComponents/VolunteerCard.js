@@ -106,6 +106,9 @@ const VolunteerCard = ({ classes, props, open, onClose, volunteerData }) => (
         InputProps={{
           readOnly: true
         }}
+        InputLabelProps={{
+          shrink: true
+        }}
       />
 
       <TextField
@@ -118,6 +121,9 @@ const VolunteerCard = ({ classes, props, open, onClose, volunteerData }) => (
         defaultValue={volunteerData.latesttraining}
         InputProps={{
           readOnly: true
+        }}
+        InputLabelProps={{
+          shrink: true
         }}
       />
     </DialogContent>
