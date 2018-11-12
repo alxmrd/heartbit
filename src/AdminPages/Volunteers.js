@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import Paper from "@material-ui/core/Paper";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core";
-
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
 import SimpleToolips from "../components/SimpleTooltips";
 import VolunteerDialog from "../components/VolunteerComponents/VolunteerDialog";
 import VolunteerTable from "../components/VolunteerComponents/VolunteerTable";
@@ -13,6 +14,7 @@ import {
   editVolunteer,
   updateVolunteer
 } from "../store/actions/actions";
+import Typography from "@material-ui/core/Typography";
 
 const styles = theme => ({
   root: {
@@ -41,6 +43,10 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     width: 200
   }
+  // AppBar: {
+  //   backgroundColor: "4e878c",
+  //   color: "wheat"
+  // }
 });
 
 class Volunteer extends Component {
@@ -76,12 +82,12 @@ class Volunteer extends Component {
   handleSubmit = event => {
     event.preventDefault();
     const dataPouStelnw = {
-      username: this.state.username,
-      email: this.state.email,
-      dateofbirth: this.state.dateofbirth,
-      latesttraining: this.state.latesttraining,
-      tel1: this.state.tel1,
-      tel2: this.state.tel2
+      username: this.props.volunteerData.username,
+      email: this.props.volunteerData.email,
+      dateofbirth: this.props.volunteerData.dateofbirth,
+      latesttraining: this.props.volunteerData.latesttraining,
+      tel1: this.props.volunteerData.tel1,
+      tel2: this.props.volunteerData.tel2
     };
 
     this.props.onNewVolunteer(dataPouStelnw);
@@ -98,8 +104,8 @@ class Volunteer extends Component {
       tel1: this.state.tel1,
       tel2: this.state.tel2
     };
-
-    this.props.onUpdateVolunteer();
+    const id = this.props.id;
+    this.props.onUpdateVolunteer(id, dataPouStelnw);
 
     this.setState({ open: false });
   };
@@ -114,6 +120,7 @@ class Volunteer extends Component {
 
   handleClose = () => {
     this.setState({ open: false });
+    this.setState({ hasChanged: false });
   };
   componentWillMount() {
     this.props.fetchVolunteers();
@@ -125,32 +132,42 @@ class Volunteer extends Component {
     const { classes } = this.props;
 
     return (
-      <Paper className={classes.root}>
-        <VolunteerTable
-          tabledata={this.props.data}
-          onEditClick={id => {
-            this.handleClickOpen();
-            this.handleEdit();
-            this.props.onEditVolunteer(id);
-          }}
-        />
-        <SimpleToolips
-          definition="Add Volunteer"
-          onButtonClick={e => {
-            this.handleClickOpen(e);
-          }}
-        />
-        <VolunteerDialog
-          onEdit={this.state.onEdit}
-          open={this.state.open}
-          onClose={this.handleClose}
-          onInputChange={this.handleChange}
-          onNumberChange={this.handleNumber}
-          onSave={this.handleSubmit}
-          onUpdate={this.handleUpdate}
-          hasChanged={this.state.hasChanged}
-        />
-      </Paper>
+      <div className={classes.root}>
+        <AppBar position="static" color="default">
+          <Toolbar>
+            <Typography variant="h6" color="inherit">
+              Volunteers
+            </Typography>
+          </Toolbar>
+        </AppBar>
+
+        <Paper className={classes.root}>
+          <VolunteerTable
+            tabledata={this.props.data}
+            onEditClick={id => {
+              this.handleClickOpen();
+              this.handleEdit();
+              this.props.onEditVolunteer(id);
+            }}
+          />
+          <SimpleToolips
+            definition="Add Volunteer"
+            onButtonClick={e => {
+              this.handleClickOpen(e);
+            }}
+          />
+          <VolunteerDialog
+            onEdit={this.state.onEdit}
+            open={this.state.open}
+            onClose={this.handleClose}
+            onInputChange={this.handleChange}
+            onNumberChange={this.handleNumber}
+            onSave={this.handleSubmit}
+            onUpdate={this.handleUpdate}
+            hasChanged={this.state.hasChanged}
+          />
+        </Paper>
+      </div>
     );
   }
 }
@@ -165,7 +182,10 @@ const VolunteerWithStyles = withStyles(styles)(Volunteer);
 
 // Container !!
 const mapStateToProps = state => ({
-  data: state.volunteers
+  id: state.id,
+  data: state.volunteers,
+  volunteerData:
+    state.volunteers.filter(volunteer => volunteer.id === state.id)[0] || {}
 });
 
 const mapDispatchToProps = dispatch => ({

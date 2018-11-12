@@ -228,17 +228,22 @@ $app->get('/api/volunteers/{id}', function (Request $request, Response $response
 $app->post('/api/editvolunteer/{id}', function (Request $request, Response $response, array $args) {
     global $pdo;
     $userData = json_decode(file_get_contents('php://input'));
-    $volunteers_id = (int) $args['id'];
+    $volunteers_id =  $args['id'];
     $username = $userData->{'username'};
-    $email=$userData->{'email'};
+    $tel1 = $userData->{'tel1'};
+    $tel2 = $userData->{'tel2'};
+    $email = $userData->{'email'};
+    $dateofbirth = $userData->{'dateofbirth'};
+    $latesttraining = $userData->{'latesttraining'};
+
     // $username = $request->getParsedBody()['username'];
     // $email = $request->getParsedBody()['email'];
 
-    // $volunteers_id=$_POST['id'];
 
-    $query = "UPDATE volunteer SET username=:username, email=:email WHERE id=:id";
+
+    $query = "UPDATE volunteer SET username=:username, tel1=:tel1, tel2=:tel2, email=:email, dateofbirth=:dateofbirth, latesttraining=:latesttraining  WHERE id=:id";
     $result = $pdo->prepare($query);
-    $result->execute(array(':username' => $username, ':email' => $email, ':id' => $volunteers_id));
+    $result->execute(array(':username' => $username, ':tel1'=>$tel1, ':tel2'=>$tel, ':email' => $email, ':dateofbirth'=>$dateofbirth, ':latesttraining'=>$latesttraining, ':id' => $volunteers_id));
 
     // while($r = $result->fetch(PDO::FETCH_ASSOC)) {
     //        // $data = $r;
@@ -247,9 +252,13 @@ $app->post('/api/editvolunteer/{id}', function (Request $request, Response $resp
     // }
 
     $myObj = new stdClass();
-   
+    $myObj->id=$volunteers_id;
     $myObj->username = $username;
     $myObj->email = $email;
+    $myObj->tel1 = $tel1;
+    $myObj->tel2 = $tel2;
+    $myObj->dateofbirth = $dateofbirth;
+    $myObj->latesttraining = $latesttraining;
 
 
     $response = json_encode($myObj);

@@ -9,6 +9,7 @@ import { Button, DialogActions, TextField } from "@material-ui/core";
 const VolunteerDialog = ({
   open,
   hasChanged,
+  props,
   onEdit,
   onClose,
   onInputChange,
@@ -39,7 +40,7 @@ const VolunteerDialog = ({
         <TextField
           id="tel1"
           label="Contact Number"
-          value={volunteerData.tel1}
+          defaultValue={volunteerData.tel1}
           onChange={onNumberChange}
           type="number"
           fullWidth
@@ -48,7 +49,7 @@ const VolunteerDialog = ({
         <TextField
           id="tel2"
           label="Second Contact Number"
-          value={volunteerData.tel2}
+          defaultValue={volunteerData.tel2}
           onChange={onNumberChange}
           type="number"
           fullWidth
@@ -59,17 +60,17 @@ const VolunteerDialog = ({
           label="email"
           type="email"
           id="email"
-          value={volunteerData.email}
+          defaultValue={volunteerData.email}
           onChange={onInputChange}
           fullWidth
           margin="normal"
         />
         <TextField
-          id="dateofbirthday"
+          id="dateofbirth"
           label="Birthday"
           type="date"
           defaultValue={volunteerData.dateofbirth}
-          // className={classes.container}
+          onChange={onInputChange}
           fullWidth
           margin="normal"
           InputLabelProps={{
@@ -86,7 +87,6 @@ const VolunteerDialog = ({
           fullWidth
           margin="normal"
           defaultValue={volunteerData.latesttraining}
-          //className={classes.container}
           InputLabelProps={{
             shrink: true
           }}
