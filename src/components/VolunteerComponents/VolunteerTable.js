@@ -58,5 +58,3 @@ VolunteerTable.propTypes = {
   onEditClick: PropTypes.func.isRequired
 };
 export default VolunteerTable;
-
-// onClick={() => onEditClick(item.id)}

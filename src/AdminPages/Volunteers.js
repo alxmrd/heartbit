@@ -12,7 +12,8 @@ import {
   fetchVolunteers,
   newVolunteer,
   editVolunteer,
-  updateVolunteer
+  updateVolunteer,
+  idCleaner
 } from "../store/actions/actions";
 import Typography from "@material-ui/core/Typography";
 import VolunteerCard from "../components/VolunteerComponents/VolunteerCard";
@@ -98,6 +99,9 @@ class Volunteer extends Component {
   };
   handleCardClose = value => {
     this.setState({ openCard: false });
+
+    const id = this.props.id;
+    this.props.onCloseDialog(id);
   };
 
   handleChange = event => {
@@ -143,6 +147,8 @@ class Volunteer extends Component {
     const id = this.props.id;
     this.props.onUpdateVolunteer(id, dataPouStelnw);
 
+    this.props.onCloseDialog(id);
+
     this.setState({ open: false });
   };
   handleClickOpen = e => {
@@ -158,6 +164,9 @@ class Volunteer extends Component {
   handleClose = () => {
     this.setState({ open: false });
     this.setState({ hasChanged: false });
+
+    const id = this.props.id;
+    this.props.onCloseDialog(id);
   };
 
   componentDidMount() {
@@ -223,7 +232,8 @@ Volunteer.propTypes = {
   onNewVolunteer: PropTypes.func.isRequired,
   onEditVolunteer: PropTypes.func.isRequired,
   onUpdateVolunteer: PropTypes.func.isRequired,
-  data: PropTypes.array.isRequired
+  data: PropTypes.array.isRequired,
+  onCloseDialog: PropTypes.func.isRequired
   // id: PropTypes.array.isRequired
 };
 
@@ -242,7 +252,8 @@ const mapDispatchToProps = dispatch => ({
   onNewVolunteer: dataPouStelnw => newVolunteer(dispatch, dataPouStelnw),
   onEditVolunteer: id => dispatch(editVolunteer(id)),
   onUpdateVolunteer: (id, dataPouStelnw) =>
-    dispatch(updateVolunteer(id, dataPouStelnw))
+    dispatch(updateVolunteer(id, dataPouStelnw)),
+  onCloseDialog: id => dispatch(idCleaner(id))
 });
 
 export default connect(
