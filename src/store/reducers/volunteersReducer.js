@@ -8,16 +8,13 @@ const volunteersReducer = (state = [], action) => {
       return [action.payload];
 
     case "UPDATE":
-      return state.map((volunteers, id) => {
-        console.log(volunteers.id, "vol id");
-        console.log(id, "id");
-        console.log(action.payload.id, "action pay id");
-        if (volunteers.id !== action.payload.id) {
-          return volunteers;
+      return state.map((volunteer, index) => {
+        if (volunteer.id !== action.payload.id) {
+          return volunteer;
         }
 
         return {
-          ...volunteers,
+          ...volunteer,
           ...action.payload
         };
       });

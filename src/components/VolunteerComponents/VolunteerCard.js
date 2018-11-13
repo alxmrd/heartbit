@@ -41,7 +41,7 @@ const styles = theme => ({
   }
 });
 
-const VolunteerCard = ({ classes, props, open, onClose, volunteerData }) => (
+const VolunteerCard = ({ classes, open, onClose, volunteerData }) => (
   <Dialog
     open={open}
     onClose={onClose}
@@ -142,7 +142,10 @@ const mapStateToProps = state => ({
 });
 
 VolunteerCard.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  onClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  volunteerData: PropTypes.object.isRequired
 };
 
 export default connect(mapStateToProps)(VolunteerCardWithStyles);

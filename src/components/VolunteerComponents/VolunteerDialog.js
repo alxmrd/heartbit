@@ -9,7 +9,7 @@ import { Button, DialogActions, TextField } from "@material-ui/core";
 const VolunteerDialog = ({
   open,
   hasChanged,
-  props,
+
   onEdit,
   onClose,
   onInputChange,
@@ -191,6 +191,8 @@ const mapStateToProps = state => ({
 VolunteerDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  hasChanged: PropTypes.bool.isRequired,
+  onEdit: PropTypes.bool.isRequired,
   values: PropTypes.shape({
     username: PropTypes.string.isRequired,
     tel1: PropTypes.number,
@@ -198,7 +200,10 @@ VolunteerDialog.propTypes = {
     tel2: PropTypes.number
   }),
   onInputChange: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired
+  onSave: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
+  onNumberChange: PropTypes.func.isRequired,
+  volunteerData: PropTypes.object.isRequired
 };
 
 export default connect(mapStateToProps)(VolunteerDialog);

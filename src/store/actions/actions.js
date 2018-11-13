@@ -24,14 +24,13 @@ export const newVolunteer = (dispatch, userData) => {
   })
     .then(result => result.json())
     .then(res => {
-      console.log("res", res);
       dispatch({
         type: "NEW_VOLUNTEER",
         payload: res
       });
     })
     .catch(error => {
-      console.log(error, "error");
+      alert(error, "error");
     });
 };
 
@@ -41,7 +40,6 @@ export const editVolunteer = id => dispatch => {
     type: "EDIT",
     payload: id
   });
-  console.log("Edit Volunteer Action");
 };
 
 export const updateVolunteer = (id, userData) => dispatch => {
@@ -59,13 +57,12 @@ export const updateVolunteer = (id, userData) => dispatch => {
   })
     .then(result => result.json())
     .then(res => {
-      console.log("res", res);
       dispatch({
         type: "UPDATE",
         payload: res
       });
     })
     .catch(error => {
-      console.log(error, "error");
+      alert(error, "error");
     });
 };

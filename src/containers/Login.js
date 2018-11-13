@@ -68,7 +68,7 @@ class Login extends Component {
     PostData("login", this.state)
       .then(result => {
         let responseJson = result;
-        console.log(responseJson);
+
         if (responseJson.status === "success") {
           //alert("Logged in");
 
@@ -78,7 +78,7 @@ class Login extends Component {
           window.location.assign("/login");
         }
       })
-      .catch(error => console.log("error", error));
+      .catch(error => alert("error", error));
     //axios.post('/api/login',{user: this.state});
   };
 

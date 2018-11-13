@@ -80,7 +80,7 @@ class Volunteer extends Component {
       props.volunteerData.username !== state.username
     ) {
       return {
-        username: props.volunteerData.username,
+        username: state.username,
         email: props.volunteerData.email,
         dateofbirth: props.volunteerData.dateofbirth,
         latesttraining: props.volunteerData.latesttraining,
@@ -109,7 +109,8 @@ class Volunteer extends Component {
 
   handleNumber = event => {
     this.setState({
-      [event.target.id]: event.target.valueAsNumber
+      [event.target.id]: event.target.valueAsNumber,
+      hasChanged: true
     });
   };
 
@@ -144,7 +145,8 @@ class Volunteer extends Component {
 
     this.setState({ open: false });
   };
-  handleClickOpen = () => {
+  handleClickOpen = e => {
+    e.stopPropagation();
     this.setState({ open: true });
     this.setState({ onEdit: true });
   };
@@ -178,8 +180,8 @@ class Volunteer extends Component {
         <Paper className={classes.root}>
           <VolunteerTable
             tabledata={this.props.data}
-            onEditClick={id => {
-              this.handleClickOpen();
+            onEditClick={(e, id) => {
+              this.handleClickOpen(e);
               this.handleEdit();
               this.props.onEditVolunteer(id);
             }}
@@ -218,7 +220,11 @@ class Volunteer extends Component {
 Volunteer.propTypes = {
   classes: PropTypes.object.isRequired,
   fetchVolunteers: PropTypes.func.isRequired,
-  onNewVolunteer: PropTypes.func.isRequired
+  onNewVolunteer: PropTypes.func.isRequired,
+  onEditVolunteer: PropTypes.func.isRequired,
+  onUpdateVolunteer: PropTypes.func.isRequired,
+  data: PropTypes.array.isRequired
+  // id: PropTypes.array.isRequired
 };
 
 const VolunteerWithStyles = withStyles(styles)(Volunteer);

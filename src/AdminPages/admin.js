@@ -47,9 +47,9 @@ class admin extends Component {
   loadFromServer = () => {
     fetch(`http://localhost:8080/api/admin`)
       .then(result => result.json())
-      .then(data => this.setState({ data: data }))
-      //.then(parsedJSON => console.log("parsedJSON", parsedJSON))
-      .catch(error => console.log("error", error));
+      .then(data => this.setState({ data: data }));
+    //.then(parsedJSON => console.log("parsedJSON", parsedJSON))
+    // .catch(error => console.log("error", error));
   };
   componentDidMount() {
     // If you need to load data from a remote endpoint, this is a good place to instantiate the network request.

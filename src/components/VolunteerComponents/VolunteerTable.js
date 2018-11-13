@@ -7,6 +7,7 @@ import TableRow from "@material-ui/core/TableRow";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import { Button } from "@material-ui/core";
+import PropTypes from "prop-types";
 
 const VolunteerTable = ({ tabledata, onEditClick, onRowClick }) => (
   <Table>
@@ -27,11 +28,7 @@ const VolunteerTable = ({ tabledata, onEditClick, onRowClick }) => (
     <TableBody>
       {tabledata.map(function(item, key) {
         return (
-          <TableRow
-            key={item.id}
-            onDoubleClick={() => onRowClick(item.id)}
-            hover
-          >
+          <TableRow key={item.id} onClick={() => onRowClick(item.id)} hover>
             <TableCell>{item.username}</TableCell>
 
             <TableCell>{item.name}</TableCell>
@@ -44,7 +41,7 @@ const VolunteerTable = ({ tabledata, onEditClick, onRowClick }) => (
               <DeleteIcon />
             </TableCell>
             <TableCell>
-              <Button onClick={() => onEditClick(item.id)}>
+              <Button onClick={e => onEditClick(e, item.id)}>
                 <EditIcon />
               </Button>
             </TableCell>
@@ -54,6 +51,12 @@ const VolunteerTable = ({ tabledata, onEditClick, onRowClick }) => (
     </TableBody>
   </Table>
 );
+
+VolunteerTable.propTypes = {
+  tabledata: PropTypes.array.isRequired,
+  onRowClick: PropTypes.func.isRequired,
+  onEditClick: PropTypes.func.isRequired
+};
 export default VolunteerTable;
 
 // onClick={() => onEditClick(item.id)}

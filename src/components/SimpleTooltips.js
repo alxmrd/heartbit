@@ -34,7 +34,9 @@ function SimpleTooltips({ classes, definition, onButtonClick }) {
 }
 
 SimpleTooltips.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  definition: PropTypes.string.isRequired,
+  onButtonClick: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(SimpleTooltips);
