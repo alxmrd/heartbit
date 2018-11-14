@@ -1,8 +1,5 @@
-import React, { Component } from "react";
-import Paper from "@material-ui/core/Paper";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core";
-import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import SimpleToolips from "../components/SimpleTooltips";
 import VolunteerDialog from "../components/VolunteerComponents/VolunteerDialog";
@@ -17,45 +14,6 @@ import {
 } from "../store/actions/actions";
 import Typography from "@material-ui/core/Typography";
 import VolunteerCard from "../components/VolunteerComponents/VolunteerCard";
-
-const styles = theme => ({
-  root: {
-    width: "100%",
-    marginTop: theme.spacing.unit * 3,
-    overflowX: "auto"
-  },
-
-  table: {
-    minWidth: 700
-  },
-  fab: {
-    margin: theme.spacing.unit * 2
-  },
-
-  button: {
-    margin: theme.spacing.unit
-  },
-  extendedIcon: {
-    marginRight: theme.spacing.unit
-  },
-  container: {
-    display: "flex",
-    flexWrap: "wrap"
-  },
-
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: 200
-  },
-  AppBar: {
-    backgroundColor: "#EEEEEE",
-    color: "#FFC107",
-    borderRadius: "50px",
-    boxShadow: "5px 5px  5px grey ",
-    width: "99%"
-  }
-});
 
 class Volunteer extends Component {
   constructor(props) {
@@ -171,60 +129,53 @@ class Volunteer extends Component {
   }
 
   render() {
-    const { classes } = this.props;
-
     return (
-      <div>
-        <AppBar position="static" className={classes.AppBar}>
-          <Toolbar>
-            <Typography variant="h6" color="inherit">
-              Volunteers
-            </Typography>
-          </Toolbar>
-        </AppBar>
+      <Fragment>
+        <Toolbar>
+          <Typography variant="h6" color="inherit">
+            Volunteers
+          </Typography>
+        </Toolbar>
 
-        <Paper className={classes.root}>
-          <VolunteerTable
-            tabledata={this.props.data}
-            onEditClick={(e, id) => {
-              this.handleClickOpen(e);
-              this.handleEdit();
-              this.props.onEditVolunteer(id);
-            }}
-            onRowClick={id => {
-              this.handleCardOpen();
-              this.props.onEditVolunteer(id);
-            }}
-          />
-          <SimpleToolips
-            definition="Add Volunteer"
-            onButtonClick={e => {
-              this.handleClickOpen(e);
-            }}
-          />
-          <VolunteerDialog
-            onEdit={this.state.onEdit}
-            open={this.state.open}
-            onClose={this.handleClose}
-            onInputChange={this.handleChange}
-            onNumberChange={this.handleNumber}
-            onSave={this.handleSubmit}
-            onUpdate={this.handleUpdate}
-            hasChanged={this.state.hasChanged}
-          />
-          <VolunteerCard
-            open={this.state.openCard}
-            onClose={this.handleCardClose}
-            scroll={this.state.scroll}
-          />
-        </Paper>
-      </div>
+        <VolunteerTable
+          tabledata={this.props.data}
+          onEditClick={(e, id) => {
+            this.handleClickOpen(e);
+            this.handleEdit();
+            this.props.onEditVolunteer(id);
+          }}
+          onRowClick={id => {
+            this.handleCardOpen();
+            this.props.onEditVolunteer(id);
+          }}
+        />
+        <SimpleToolips
+          definition="Add Volunteer"
+          onButtonClick={e => {
+            this.handleClickOpen(e);
+          }}
+        />
+        <VolunteerDialog
+          onEdit={this.state.onEdit}
+          open={this.state.open}
+          onClose={this.handleClose}
+          onInputChange={this.handleChange}
+          onNumberChange={this.handleNumber}
+          onSave={this.handleSubmit}
+          onUpdate={this.handleUpdate}
+          hasChanged={this.state.hasChanged}
+        />
+        <VolunteerCard
+          open={this.state.openCard}
+          onClose={this.handleCardClose}
+          scroll={this.state.scroll}
+        />
+      </Fragment>
     );
   }
 }
 
 Volunteer.propTypes = {
-  classes: PropTypes.object.isRequired,
   fetchVolunteers: PropTypes.func.isRequired,
   onNewVolunteer: PropTypes.func.isRequired,
   onEditVolunteer: PropTypes.func.isRequired,
@@ -233,8 +184,6 @@ Volunteer.propTypes = {
   onCloseDialog: PropTypes.func.isRequired,
   id: PropTypes.string
 };
-
-const VolunteerWithStyles = withStyles(styles)(Volunteer);
 
 // Container !!
 const mapStateToProps = state => ({
@@ -256,4 +205,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(VolunteerWithStyles);
+)(Volunteer);
