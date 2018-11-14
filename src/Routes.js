@@ -9,16 +9,18 @@ import event from "./AdminPages/event.js";
 import defibrillators from "./AdminPages/defibrillators.js";
 import admin from "./AdminPages/admin.js";
 
-export default () => (
-  <Switch>
-    <Route path="/" exact component={Home} />
-    <Route path="/Volunteers" exact component={Volunteers} />
-    <Route path="/defibrillators" exact component={defibrillators} />
-    <Route path="/patients" exact component={patients} />
-    <Route path="/admin" exact component={admin} />
-    <Route path="/event" exact component={event} />
-    <Route path="/login" exact component={Login} />
+export default function route() {
+  return (
+    <Switch>
+      <Route path="/" exact component={Home} />
+      <Route path="/Volunteers" exact component={Volunteers} />
+      <Route path="/defibrillators" exact component={defibrillators} />
+      <Route path="/patients" exact component={patients} />
+      <Route path="/admin" exact component={admin} />
+      <Route path="/event" exact component={event} />
+      <Route path="/login" exact component={Login} />
 
-    <Route component={NotFound} />
-  </Switch>
-);
+      <Route component={NotFound} />
+    </Switch>
+  );
+}

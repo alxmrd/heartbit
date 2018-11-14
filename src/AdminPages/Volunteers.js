@@ -28,6 +28,9 @@ const styles = theme => ({
   table: {
     minWidth: 700
   },
+  fab: {
+    margin: theme.spacing.unit * 2
+  },
 
   button: {
     margin: theme.spacing.unit
@@ -73,13 +76,7 @@ class Volunteer extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    // Any time the current user changes,
-    // Reset any parts of state that are tied to that user.
-    // In this simple example, that's just the email.
-    if (
-      props.volunteerData.username &&
-      props.volunteerData.username !== state.username
-    ) {
+    if (props.volunteerData.username !== state.username) {
       return {
         username: state.username,
         email: props.volunteerData.email,
@@ -177,7 +174,7 @@ class Volunteer extends Component {
     const { classes } = this.props;
 
     return (
-      <div className={classes.root}>
+      <div>
         <AppBar position="static" className={classes.AppBar}>
           <Toolbar>
             <Typography variant="h6" color="inherit">
@@ -233,8 +230,8 @@ Volunteer.propTypes = {
   onEditVolunteer: PropTypes.func.isRequired,
   onUpdateVolunteer: PropTypes.func.isRequired,
   data: PropTypes.array.isRequired,
-  onCloseDialog: PropTypes.func.isRequired
-  // id: PropTypes.array.isRequired
+  onCloseDialog: PropTypes.func.isRequired,
+  id: PropTypes.string
 };
 
 const VolunteerWithStyles = withStyles(styles)(Volunteer);

@@ -56,7 +56,7 @@ const styles = theme => ({
   },
   drawerPaper: {
     height: "-webkit-fill-available",
-    position: "relative",
+    position: "sticky",
     whiteSpace: "nowrap",
     width: drawerWidth,
     transition: theme.transitions.create("width", {

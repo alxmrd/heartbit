@@ -59,4 +59,10 @@ A promise is an object that may produce a single value some time in the future
 (https://redux.js.org/api/bindactioncreators)
 
 ##Redux Compose
+
 (https://redux.js.org/api/compose)
+ 
+ ##Lifecycle Methods React
+ (https://medium.com/@baphemot/understanding-reactjs-component-life-cycle-823a640b3e8d)
+
+ (https://medium.com/@baphemot/understanding-react-react-16-3-component-life-cycle-23129bc7a705)//Update of the Previous One
