@@ -7,9 +7,7 @@ import VolunteerTable from "../components/VolunteerComponents/VolunteerTable";
 import { connect } from "react-redux";
 import {
   fetchVolunteers,
-  newVolunteer,
   editVolunteer,
-  updateVolunteer,
   idCleaner
 } from "../store/actions/actions";
 import Typography from "@material-ui/core/Typography";
@@ -21,30 +19,10 @@ class Volunteer extends Component {
     this.props = props;
     this.state = {
       open: false,
-      username: "",
-      email: "",
-      dateofbirth: "",
-      latesttraining: "",
-      tel1: "",
-      tel2: "",
       onEdit: false,
-      hasChanged: false,
+
       openCard: false
     };
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    if (props.volunteerData.username !== state.username) {
-      return {
-        username: state.username,
-        email: props.volunteerData.email,
-        dateofbirth: props.volunteerData.dateofbirth,
-        latesttraining: props.volunteerData.latesttraining,
-        tel1: props.volunteerData.tel1,
-        tel2: props.volunteerData.tel2
-      };
-    }
-    return null;
   }
 
   handleCardOpen = () => {
@@ -59,53 +37,6 @@ class Volunteer extends Component {
     this.props.onCloseDialog(id);
   };
 
-  handleChange = event => {
-    this.setState({
-      [event.target.id]: event.target.value,
-      hasChanged: true
-    });
-  };
-
-  handleNumber = event => {
-    this.setState({
-      [event.target.id]: event.target.valueAsNumber,
-      hasChanged: true
-    });
-  };
-
-  handleSubmit = event => {
-    event.preventDefault();
-    const dataPouStelnw = {
-      username: this.state.username,
-      email: this.state.email,
-      dateofbirth: this.state.dateofbirth,
-      latesttraining: this.state.latesttraining,
-      tel1: this.state.tel1,
-      tel2: this.state.tel2
-    };
-
-    this.props.onNewVolunteer(dataPouStelnw);
-
-    this.setState({ open: false });
-  };
-
-  handleUpdate = event => {
-    event.preventDefault();
-    const dataPouStelnw = {
-      username: this.state.username,
-      email: this.state.email,
-      dateofbirth: this.state.dateofbirth,
-      latesttraining: this.state.latesttraining,
-      tel1: this.state.tel1,
-      tel2: this.state.tel2
-    };
-    const id = this.props.id;
-    this.props.onUpdateVolunteer(id, dataPouStelnw);
-
-    this.props.onCloseDialog(id);
-
-    this.setState({ open: false });
-  };
   handleClickOpen = e => {
     e.stopPropagation();
     this.setState({ open: true });
@@ -118,7 +49,6 @@ class Volunteer extends Component {
 
   handleClose = () => {
     this.setState({ open: false });
-    this.setState({ hasChanged: false });
 
     const id = this.props.id;
     this.props.onCloseDialog(id);
@@ -159,11 +89,6 @@ class Volunteer extends Component {
           onEdit={this.state.onEdit}
           open={this.state.open}
           onClose={this.handleClose}
-          onInputChange={this.handleChange}
-          onNumberChange={this.handleNumber}
-          onSave={this.handleSubmit}
-          onUpdate={this.handleUpdate}
-          hasChanged={this.state.hasChanged}
         />
         <VolunteerCard
           open={this.state.openCard}
@@ -177,11 +102,9 @@ class Volunteer extends Component {
 
 Volunteer.propTypes = {
   fetchVolunteers: PropTypes.func.isRequired,
-  onNewVolunteer: PropTypes.func.isRequired,
   onEditVolunteer: PropTypes.func.isRequired,
-  onUpdateVolunteer: PropTypes.func.isRequired,
-  data: PropTypes.array.isRequired,
   onCloseDialog: PropTypes.func.isRequired,
+  data: PropTypes.array.isRequired,
   id: PropTypes.string
 };
 
@@ -195,10 +118,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchVolunteers: () => fetchVolunteers(dispatch),
-  onNewVolunteer: dataPouStelnw => newVolunteer(dispatch, dataPouStelnw),
   onEditVolunteer: id => dispatch(editVolunteer(id)),
-  onUpdateVolunteer: (id, dataPouStelnw) =>
-    dispatch(updateVolunteer(id, dataPouStelnw)),
   onCloseDialog: id => dispatch(idCleaner(id))
 });
 
