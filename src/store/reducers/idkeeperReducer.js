@@ -7,7 +7,7 @@ const idkeeperReducer = (state = "", action) => {
       return action.payload;
 
     case VOLUNTEER_DIALOG_CLOSE:
-      return null;
+      return "";
 
     default:
       return state;

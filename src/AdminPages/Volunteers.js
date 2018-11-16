@@ -2,7 +2,6 @@ import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import Toolbar from "@material-ui/core/Toolbar";
 import SimpleToolips from "../components/SimpleTooltips";
-import VolunteerDialog from "../components/VolunteerComponents/VolunteerDialog";
 import VolunteerTable from "../components/VolunteerComponents/VolunteerTable";
 import { connect } from "react-redux";
 import {
@@ -12,6 +11,7 @@ import {
 } from "../store/actions/actions";
 import Typography from "@material-ui/core/Typography";
 import VolunteerCard from "../components/VolunteerComponents/VolunteerCard";
+import VolunteerDialog from "../components/VolunteerComponents/VolunteerDialogs/VolunteerDialog";
 
 class Volunteer extends Component {
   constructor(props) {

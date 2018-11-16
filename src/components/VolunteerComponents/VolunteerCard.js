@@ -1,11 +1,8 @@
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-
 import { Button, TextField, Dialog } from "@material-ui/core";
-
 import React from "react";
 import { connect } from "react-redux";
-
 import CardHeader from "@material-ui/core/CardHeader";
 import Avatar from "@material-ui/core/Avatar";
 import Divider from "@material-ui/core/Divider";
