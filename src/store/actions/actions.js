@@ -79,3 +79,10 @@ export const idCleaner = id => dispatch => {
     payload: id
   });
 };
+
+// export const setVolunteerActivity = status => dispatch => {
+//   dispatch({
+//     type: VOLUNTEER_DIALOG_CLOSE,
+//     payload: status
+//   });
+// };

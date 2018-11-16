@@ -111,6 +111,7 @@ class VolunteerDialog extends Component {
     this.props.onUpdateVolunteer(id, dataPouStelnw);
 
     this.setState({
+      hasChanged: false,
       username: "",
       email: "",
       dateofbirth: "",

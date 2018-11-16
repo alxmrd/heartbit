@@ -51,7 +51,7 @@ function EditForm({ volunteerData, EditFormChange, EditFormChangeNumber }) {
         label="Birthday"
         type="date"
         defaultValue={volunteerData.dateofbirth}
-        onChange={EditFormChange}
+        onChange={EditFormChangeNumber}
         fullWidth
         margin="normal"
         InputLabelProps={{
@@ -64,7 +64,7 @@ function EditForm({ volunteerData, EditFormChange, EditFormChangeNumber }) {
         id="latesttraining"
         label="Latest Training"
         type="date"
-        onChange={EditFormChange}
+        onChange={EditFormChangeNumber}
         fullWidth
         margin="normal"
         defaultValue={volunteerData.latesttraining}
