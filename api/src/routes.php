@@ -236,20 +236,10 @@ $app->post('/api/editvolunteer/{id}', function (Request $request, Response $resp
     $dateofbirth = $userData->{'dateofbirth'};
     $latesttraining = $userData->{'latesttraining'};
 
-    // $username = $request->getParsedBody()['username'];
-    // $email = $request->getParsedBody()['email'];
-
-
-
     $query = "UPDATE volunteer SET username=:username, tel1=:tel1, tel2=:tel2, email=:email, dateofbirth=:dateofbirth, latesttraining=:latesttraining  WHERE id=:id";
     $result = $pdo->prepare($query);
     $result->execute(array(':username' => $username, ':tel1'=>$tel1, ':tel2'=>$tel, ':email' => $email, ':dateofbirth'=>$dateofbirth, ':latesttraining'=>$latesttraining, ':id' => $volunteers_id));
 
-    // while($r = $result->fetch(PDO::FETCH_ASSOC)) {
-    //        // $data = $r;
-    //           return json_encode($r);
-
-    // }
 
     $myObj = new stdClass();
     $myObj->id=$volunteers_id;
@@ -268,16 +258,25 @@ $app->post('/api/editvolunteer/{id}', function (Request $request, Response $resp
 
   
 
-$app->post('/api/delete', function (Request $request, Response $response, array $args) {
+$app->post('/api/deactivate/{id}', function (Request $request, Response $response, array $args) {
     global $pdo;
+    $userData = json_decode(file_get_contents('php://input'));
+    $volunteers_id =  $args['id'];
+    $status = $userData->{'status'};
+    $changestatus = !$status;
 
-    $query = ("DELETE FROM volunteer WHERE username = :username");
+    $query = ("UPDATE volunteer SET status=:status WHERE id=:id");
     $result = $pdo->prepare($query);
-    $username = $_POST['username'];
-    $result->execute(array(':username' => $username));
 
-    echo "Deleted.";
+    $result->execute(array(':status' => $changestatus, ':id' => $volunteers_id));
 
-    $result->closeCursor();
-    $pdo = null;
+
+    $myObj = new stdClass();
+    $myObj->id=$volunteers_id;
+    $myObj->status = $changestatus;
+
+   
+    $response = json_encode($myObj);
+
+    return $response;
 });

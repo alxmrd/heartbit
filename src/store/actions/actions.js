@@ -1,4 +1,7 @@
-import { VOLUNTEER_DIALOG_OPEN } from "../actions/types";
+import {
+  VOLUNTEER_DIALOG_OPEN,
+  VOLUNTEER_ACTIVITY_ON_OFF
+} from "../actions/types";
 import { VOLUNTEER_DIALOG_CLOSE } from "../actions/types";
 import { NEW_VOLUNTEER } from "../actions/types";
 import { UPDATE_VOLUNTEERS } from "../actions/types";
@@ -80,9 +83,27 @@ export const idCleaner = id => dispatch => {
   });
 };
 
-// export const setVolunteerActivity = status => dispatch => {
-//   dispatch({
-//     type: VOLUNTEER_DIALOG_CLOSE,
-//     payload: status
-//   });
-// };
+export const setVolunteerActivity = (status, id) => dispatch => {
+  fetch(`http://localhost:8080/api/deactivate/${id}`, {
+    method: "POST",
+    mode: "cors",
+    cache: "no-cache",
+
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    redirect: "follow",
+    referrer: "no-referrer",
+    body: JSON.stringify(status)
+  })
+    .then(result => result.json())
+    .then(res => {
+      dispatch({
+        type: VOLUNTEER_ACTIVITY_ON_OFF,
+        payload: res
+      });
+    })
+    .catch(error => {
+      alert(error, "error");
+    });
+};

@@ -112,6 +112,7 @@ class VolunteerDialog extends Component {
 
     this.setState({
       hasChanged: false,
+
       username: "",
       email: "",
       dateofbirth: "",

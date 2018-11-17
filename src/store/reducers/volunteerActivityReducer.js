@@ -1,6 +1,6 @@
 // import { VOLUNTEER_ACTIVITY_ON_OFF } from "../actions/types";
 
-// const setVolunteerActivity = (state = "", action) => {
+// const VolunteerActivityReducer = (state = "", action) => {
 //   switch (action.type) {
 //     case VOLUNTEER_ACTIVITY_ON_OFF:
 //       return action.payload;
@@ -10,4 +10,4 @@
 //   }
 // };
 
-// export default setVolunteerActivity;
+// export default VolunteerActivityReducer;
