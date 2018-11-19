@@ -7,8 +7,15 @@ import { NEW_VOLUNTEER } from "../actions/types";
 import { UPDATE_VOLUNTEERS } from "../actions/types";
 import { UPDATE_VOLUNTEER } from "../actions/types";
 
+const headers = {
+  Accept: "application/json",
+  "Content-Type": "application/json"
+};
+
 export const fetchVolunteers = dispatch => {
-  fetch(`http://localhost:8080/api/volunteers`)
+  fetch(`http://localhost:8080/api/volunteers`, {
+    headers
+  })
     .then(result => result.json())
     .then(volunteers =>
       dispatch({
@@ -21,12 +28,8 @@ export const fetchVolunteers = dispatch => {
 export const newVolunteer = (dispatch, userData) => {
   fetch(`http://localhost:8080/api/insertvolunteer`, {
     method: "POST",
-    mode: "cors",
     cache: "no-cache",
-
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
-    },
+    headers,
     redirect: "follow",
     referrer: "no-referrer",
     body: JSON.stringify(userData)
@@ -54,14 +57,7 @@ export const editVolunteer = id => dispatch => {
 export const updateVolunteer = (id, userData) => dispatch => {
   fetch(`http://localhost:8080/api/editvolunteer/${id}`, {
     method: "POST",
-    mode: "cors",
-    cache: "no-cache",
-
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
-    },
-    redirect: "follow",
-    referrer: "no-referrer",
+    headers,
     body: JSON.stringify(userData)
   })
     .then(result => result.json())
@@ -86,12 +82,10 @@ export const idCleaner = id => dispatch => {
 export const setVolunteerActivity = (status, id) => dispatch => {
   fetch(`http://localhost:8080/api/deactivate/${id}`, {
     method: "POST",
-    mode: "cors",
+
     cache: "no-cache",
 
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
-    },
+    headers,
     redirect: "follow",
     referrer: "no-referrer",
     body: JSON.stringify(status)
