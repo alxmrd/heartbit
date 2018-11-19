@@ -62,7 +62,7 @@ const VolunteerTable = ({ classes, tabledata, onEditClick, onRowClick }) => (
               <TableCell>{item.dateofbirth}</TableCell>
               <TableCell>{item.address}</TableCell>
 
-              <Activity volunteerid={item.id} status={item.status} />
+              <Activity volunteerid={item.id} volstatus={item.status} />
 
               <TableCell>
                 <Button onClick={e => onEditClick(e, item.id)}>

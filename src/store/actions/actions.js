@@ -79,7 +79,7 @@ export const idCleaner = id => dispatch => {
   });
 };
 
-export const setVolunteerActivity = (status, id) => dispatch => {
+export const setVolunteerActivity = (sendstatus, id) => dispatch => {
   fetch(`http://localhost:8080/api/deactivate/${id}`, {
     method: "POST",
 
@@ -88,7 +88,7 @@ export const setVolunteerActivity = (status, id) => dispatch => {
     headers,
     redirect: "follow",
     referrer: "no-referrer",
-    body: JSON.stringify(status)
+    body: JSON.stringify(sendstatus)
   })
     .then(result => result.json())
     .then(res => {

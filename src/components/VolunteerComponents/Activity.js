@@ -39,11 +39,14 @@ class Activity extends Component {
     this.props.onClose();
   };
 
-  handleActivity = (e, status) => {
+  handleActivity = (e, volstatus) => {
     e.stopPropagation();
 
     const id = this.props.id;
-    this.props.onSetVolunteerActivity(status, id);
+    const sendstatus = {
+      status: volstatus
+    };
+    this.props.onSetVolunteerActivity(sendstatus, id);
 
     this.setState({
       openSnack: false
@@ -53,11 +56,11 @@ class Activity extends Component {
 
   render() {
     const { vertical, horizontal, openSnack } = this.state;
-    const { volunteerid, status, classes } = this.props;
+    const { volunteerid, volstatus, classes } = this.props;
 
     return (
       <TableCell>
-        {status !== "0" ? (
+        {volstatus !== "0" ? (
           <Button
             onClick={e => {
               this.handleClick(e);
@@ -76,7 +79,7 @@ class Activity extends Component {
             <i className="material-icons teal600 md-36">person</i>
           </Button>
         )}
-        {status !== "0" ? (
+        {volstatus !== "0" ? (
           <Snackbar
             anchorOrigin={{ vertical, horizontal }}
             open={openSnack}
@@ -94,7 +97,7 @@ class Activity extends Component {
                 color="primary"
                 key="Deactivate"
                 size="small"
-                onClick={e => this.handleActivity(e, status)}
+                onClick={e => this.handleActivity(e, volstatus)}
               >
                 Activate
               </Button>,
@@ -127,7 +130,7 @@ class Activity extends Component {
                 key="Deactivate"
                 className={classes.deactivateButton}
                 size="small"
-                onClick={e => this.handleActivity(e, status)}
+                onClick={e => this.handleActivity(e, volstatus)}
               >
                 Deactivate
               </Button>,
@@ -149,7 +152,7 @@ class Activity extends Component {
 }
 
 Activity.propTypes = {
-  status: PropTypes.string,
+  volstatus: PropTypes.string,
   volunteerid: PropTypes.string,
   onEditVolunteer: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,

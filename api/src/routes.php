@@ -261,7 +261,7 @@ $app->post('/api/deactivate/{id}', function (Request $request, Response $respons
     $volunteers_id =  $args['id'];
     $status = $userData->{'status'};
   
-    if ($status = "1"){
+    if ($status = "0"){
        $status = "1";
     }else {
         $status = "0";
