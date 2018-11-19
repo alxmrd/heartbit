@@ -211,6 +211,14 @@ class App extends React.Component {
               </ListItem>
             </Link>
             <Divider />
+            <Link to="/AppMap" className={classes.link}>
+              <ListItem>
+                <ListItemIcon>
+                  <i className="material-icons">map</i>
+                </ListItemIcon>
+                <ListItemText primary="Χάρτης" />
+              </ListItem>
+            </Link>
           </Drawer>
           <main className={classes.content}>
             <div className={classes.toolbar} />

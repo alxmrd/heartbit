@@ -8,6 +8,7 @@ import patients from "./AdminPages/patients.js";
 import event from "./AdminPages/event.js";
 import defibrillators from "./AdminPages/defibrillators.js";
 import admin from "./AdminPages/admin.js";
+import AppMap from "./AdminPages/AppMap.js";
 
 export default function route() {
   return (
@@ -19,6 +20,7 @@ export default function route() {
       <Route path="/admin" exact component={admin} />
       <Route path="/event" exact component={event} />
       <Route path="/login" exact component={Login} />
+      <Route path="/AppMap" exact component={AppMap} />
 
       <Route component={NotFound} />
     </Switch>
