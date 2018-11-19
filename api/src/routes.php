@@ -263,17 +263,22 @@ $app->post('/api/deactivate/{id}', function (Request $request, Response $respons
     $userData = json_decode(file_get_contents('php://input'));
     $volunteers_id =  $args['id'];
     $status = $userData->{'status'};
-    $changestatus = !$status;
+  
+    if ($status = "1"){
+       $status = "1";
+    }else {
+        $status = "0";
+    }
 
     $query = ("UPDATE volunteer SET status=:status WHERE id=:id");
     $result = $pdo->prepare($query);
 
-    $result->execute(array(':status' => $changestatus, ':id' => $volunteers_id));
+    $result->execute(array(':status' => $status, ':id' => $volunteers_id));
 
 
     $myObj = new stdClass();
     $myObj->id=$volunteers_id;
-    $myObj->status = $changestatus;
+    $myObj->status = $status;
 
    
     $response = json_encode($myObj);

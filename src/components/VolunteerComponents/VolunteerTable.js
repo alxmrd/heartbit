@@ -9,7 +9,7 @@ import { Button } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import ActiveOrNot from "../ActiveOrNot";
+import Activity from "./Activity";
 
 const styles = theme => ({
   root: {
@@ -62,7 +62,7 @@ const VolunteerTable = ({ classes, tabledata, onEditClick, onRowClick }) => (
               <TableCell>{item.dateofbirth}</TableCell>
               <TableCell>{item.address}</TableCell>
 
-              <ActiveOrNot status={item.status} id={item.id} />
+              <Activity volunteerid={item.id} status={item.status} />
 
               <TableCell>
                 <Button onClick={e => onEditClick(e, item.id)}>

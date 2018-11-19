@@ -9,6 +9,7 @@ const volunteersReducer = (state = [], action) => {
       return action.payload;
     case NEW_VOLUNTEER:
       return [...state, action.payload];
+
     case VOLUNTEER_ACTIVITY_ON_OFF:
       return state.map((volunteer, index) => {
         if (volunteer.id !== action.payload.id) {
@@ -16,6 +17,7 @@ const volunteersReducer = (state = [], action) => {
         }
 
         return {
+          ...volunteer,
           ...action.payload
         };
       });
