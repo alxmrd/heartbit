@@ -34,11 +34,10 @@ $app->get('/api/volunteers', function (Request $request, Response $response, arr
     }
     // $object = (object) $data;
     //  print json_encode($data);
-    $response = json_encode($data);
-    return $response;
 
-    $result->closeCursor();
-    $pdo = null;
+    $response = new stdClass();
+    $response->data = $data;
+    return json_encode($response, JSON_NUMERIC_CHECK);
 });
 
 $app->get('/api/event', function (Request $request, Response $response, array $args) {
@@ -261,11 +260,11 @@ $app->post('/api/deactivate/{id}', function (Request $request, Response $respons
     $volunteers_id =  $args['id'];
     $status = $userData->{'status'};
  
-  if ($status == "0") {
-      $response_status = "1";
+  if ($status == 0) {
+      $response_status = 1;
     
   } else {
-      $response_status = "0" ;
+      $response_status = 0 ;
   }
 
 

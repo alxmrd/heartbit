@@ -17,10 +17,11 @@ export const fetchVolunteers = dispatch => {
     headers
   })
     .then(result => result.json())
+
     .then(volunteers =>
       dispatch({
         type: UPDATE_VOLUNTEERS,
-        payload: volunteers
+        payload: volunteers.data
       })
     );
 };

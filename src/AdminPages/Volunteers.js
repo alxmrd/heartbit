@@ -106,7 +106,7 @@ Volunteer.propTypes = {
   onEditVolunteer: PropTypes.func.isRequired,
   onCloseDialog: PropTypes.func.isRequired,
   data: PropTypes.array.isRequired,
-  id: PropTypes.string
+  id: PropTypes.number
 };
 
 // Container !!

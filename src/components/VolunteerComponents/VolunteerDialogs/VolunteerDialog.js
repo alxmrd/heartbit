@@ -184,7 +184,7 @@ VolunteerDialog.propTypes = {
   onNewVolunteer: PropTypes.func.isRequired,
   onCloseDialog: PropTypes.func.isRequired,
   onUpdateVolunteer: PropTypes.func.isRequired,
-  id: PropTypes.string
+  id: PropTypes.number
 };
 
 const mapDispatchToProps = dispatch => ({

@@ -152,12 +152,12 @@ class Activity extends Component {
 }
 
 Activity.propTypes = {
-  volstatus: PropTypes.string,
-  volunteerid: PropTypes.string,
+  volstatus: PropTypes.number.isRequired,
+  volunteerid: PropTypes.number.isRequired,
   onEditVolunteer: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   onSetVolunteerActivity: PropTypes.func.isRequired,
-  id: PropTypes.string,
+  id: PropTypes.number,
   classes: PropTypes.object.isRequired
 };
 
