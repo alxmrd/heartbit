@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import DialogContent from "@material-ui/core/DialogContent";
 import { TextField } from "@material-ui/core";
 
-function EditForm({ volunteerData, EditFormChange, EditFormChangeNumber }) {
+function EditForm({ volunteerData, onEditFormChange, onEditFormChangeNumber }) {
   return (
     <DialogContent>
       <TextField
@@ -13,7 +13,7 @@ function EditForm({ volunteerData, EditFormChange, EditFormChangeNumber }) {
         name="username"
         type="username"
         defaultValue={volunteerData.username}
-        onChange={EditFormChange}
+        onChange={onEditFormChange}
         autoFocus
         fullWidth
         margin="normal"
@@ -22,7 +22,7 @@ function EditForm({ volunteerData, EditFormChange, EditFormChangeNumber }) {
         id="tel1"
         label="Contact Number"
         defaultValue={volunteerData.tel1}
-        onChange={EditFormChangeNumber}
+        onChange={onEditFormChangeNumber}
         type="number"
         fullWidth
         margin="normal"
@@ -31,7 +31,7 @@ function EditForm({ volunteerData, EditFormChange, EditFormChangeNumber }) {
         id="tel2"
         label="Second Contact Number"
         defaultValue={volunteerData.tel2}
-        onChange={EditFormChangeNumber}
+        onChange={onEditFormChangeNumber}
         type="number"
         fullWidth
         margin="normal"
@@ -42,7 +42,7 @@ function EditForm({ volunteerData, EditFormChange, EditFormChangeNumber }) {
         type="email"
         id="email"
         defaultValue={volunteerData.email}
-        onChange={EditFormChange}
+        onChange={onEditFormChange}
         fullWidth
         margin="normal"
       />
@@ -51,7 +51,7 @@ function EditForm({ volunteerData, EditFormChange, EditFormChangeNumber }) {
         label="Birthday"
         type="date"
         defaultValue={volunteerData.dateofbirth}
-        onChange={EditFormChangeNumber}
+        onChange={onEditFormChangeNumber}
         fullWidth
         margin="normal"
         InputLabelProps={{
@@ -64,7 +64,7 @@ function EditForm({ volunteerData, EditFormChange, EditFormChangeNumber }) {
         id="latesttraining"
         label="Latest Training"
         type="date"
-        onChange={EditFormChangeNumber}
+        onChange={onEditFormChangeNumber}
         fullWidth
         margin="normal"
         defaultValue={volunteerData.latesttraining}
@@ -78,9 +78,10 @@ function EditForm({ volunteerData, EditFormChange, EditFormChangeNumber }) {
 
 EditForm.propTypes = {
   volunteerData: PropTypes.object.isRequired,
-  EditFormChange: PropTypes.func.isRequired,
-  EditFormChangeNumber: PropTypes.func.isRequired
+  onEditFormChange: PropTypes.func.isRequired,
+  onEditFormChangeNumber: PropTypes.func.isRequired
 };
+
 const mapStateToProps = state => ({
   volunteerData:
     state.volunteers.filter(volunteer => volunteer.id === state.id)[0] || {}

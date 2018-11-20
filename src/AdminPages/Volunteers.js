@@ -64,7 +64,7 @@ class Volunteer extends Component {
         <Toolbar>
           <i className="material-icons teal600 md-36">account_circle</i>
           <Typography variant="h6" color="inherit">
-            Volunteers
+            Εθελοντές
           </Typography>
         </Toolbar>
 

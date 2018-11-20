@@ -12,33 +12,30 @@ import {
 } from "../../../store/actions/actions";
 import CreateForm from "./CreateForm";
 
+const initState = {
+  username: "",
+  email: "",
+  dateofbirth: "",
+  latesttraining: "",
+  tel1: "",
+  tel2: "",
+  hasChanged: false
+};
+
 class VolunteerDialog extends Component {
   constructor(props) {
     super();
     this.props = props;
-    this.state = {
-      username: "",
-      email: "",
-      dateofbirth: "",
-      latesttraining: "",
-      tel1: "",
-      tel2: "",
-      hasChanged: false
-    };
+    this.state = initState;
   }
 
-  static getDerivedStateFromProps(props, state) {
-    if (props.volunteerData.username !== state.username && props.id !== "") {
-      return {
-        username: props.volunteerData.username,
-        email: props.volunteerData.email,
-        dateofbirth: props.volunteerData.dateofbirth,
-        latesttraining: props.volunteerData.latesttraining,
-        tel1: props.volunteerData.tel1,
-        tel2: props.volunteerData.tel2
-      };
+  componentDidUpdate(prevProps) {
+    // Typical usage (don't forget to compare props):
+    if (this.props.volunteerData !== prevProps.volunteerData) {
+      this.setState({
+        ...this.props.volunteerData
+      });
     }
-    return null;
   }
 
   handleChange = event => {
@@ -83,8 +80,6 @@ class VolunteerDialog extends Component {
     };
 
     this.props.onNewVolunteer(dataPouStelnw);
-
-    this.props.onClose();
     this.setState({
       hasChanged: false,
       username: "",
@@ -94,6 +89,7 @@ class VolunteerDialog extends Component {
       tel1: "",
       tel2: ""
     });
+    this.props.onClose();
   };
 
   handleUpdate = event => {
@@ -109,10 +105,8 @@ class VolunteerDialog extends Component {
     };
     const id = this.props.id;
     this.props.onUpdateVolunteer(id, dataPouStelnw);
-
     this.setState({
       hasChanged: false,
-
       username: "",
       email: "",
       dateofbirth: "",
@@ -134,13 +128,14 @@ class VolunteerDialog extends Component {
         )}
         {onEdit === false ? (
           <EditForm
-            EditFormChange={this.handleChange}
-            EditFormChangeNumber={this.handleNumber}
+            onEditFormChange={this.handleChange}
+            onEditFormChangeNumber={this.handleNumber}
+            onUserNameEdit={this.onUserNameEdit}
           />
         ) : (
           <CreateForm
-            CreateFormChange={this.handleChange}
-            CreateFormChangeNumber={this.handleNumber}
+            onCreateFormChange={this.handleChange}
+            onCreateFormChangeNumber={this.handleNumber}
           />
         )}
 

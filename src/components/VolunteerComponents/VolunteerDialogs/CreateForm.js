@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import DialogContent from "@material-ui/core/DialogContent";
 import { TextField } from "@material-ui/core";
 
-function EditForm({ CreateFormChange, CreateFormChangeNumber }) {
+function EditForm({ onCreateFormChange, onCreateFormChangeNumber }) {
   return (
     <DialogContent>
       <TextField
@@ -11,7 +11,7 @@ function EditForm({ CreateFormChange, CreateFormChangeNumber }) {
         label="Username"
         name="username"
         type="username"
-        onChange={CreateFormChange}
+        onChange={onCreateFormChange}
         autoFocus
         fullWidth
         margin="normal"
@@ -20,7 +20,7 @@ function EditForm({ CreateFormChange, CreateFormChangeNumber }) {
         id="tel1"
         label="Contact Number"
         // value={this.state.tel1}
-        onChange={CreateFormChangeNumber}
+        onChange={onCreateFormChangeNumber}
         type="number"
         fullWidth
         margin="normal"
@@ -29,7 +29,7 @@ function EditForm({ CreateFormChange, CreateFormChangeNumber }) {
         id="tel2"
         label="Second Contact Number"
         // value={this.state.tel2}
-        onChange={CreateFormChangeNumber}
+        onChange={onCreateFormChangeNumber}
         type="number"
         fullWidth
         margin="normal"
@@ -40,7 +40,7 @@ function EditForm({ CreateFormChange, CreateFormChangeNumber }) {
         type="email"
         id="email"
         // value={this.state.email}
-        onChange={CreateFormChange}
+        onChange={onCreateFormChange}
         fullWidth
         margin="normal"
       />
@@ -62,7 +62,7 @@ function EditForm({ CreateFormChange, CreateFormChangeNumber }) {
         id="latesttraining"
         label="Latest Training"
         type="date"
-        onChange={CreateFormChange}
+        onChange={onCreateFormChange}
         fullWidth
         margin="normal"
         // value={this.state.latesttraining}
@@ -76,8 +76,8 @@ function EditForm({ CreateFormChange, CreateFormChangeNumber }) {
 }
 
 EditForm.propTypes = {
-  CreateFormChange: PropTypes.func.isRequired,
-  CreateFormChangeNumber: PropTypes.func.isRequired
+  onCreateFormChange: PropTypes.func.isRequired,
+  onCreateFormChangeNumber: PropTypes.func.isRequired
 };
 
 export default EditForm;

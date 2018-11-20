@@ -24,17 +24,17 @@ $app->get('/api/volunteers', function (Request $request, Response $response, arr
     global $pdo;
 
     //require_once ('configuration.php');
-
-    $arr = array();
-    $response = array([]);
+  
+  
     $query = "SELECT * FROM volunteer";
     $result = $pdo->query($query);
     $data = array();
     while ($r = $result->fetch(PDO::FETCH_ASSOC)) {
         $data[] = $r;
     }
+    // $object = (object) $data;
     //  print json_encode($data);
-    $response = json_encode($data);;
+    $response = json_encode($data);
     return $response;
 
     $result->closeCursor();
@@ -260,22 +260,26 @@ $app->post('/api/deactivate/{id}', function (Request $request, Response $respons
     $userData = json_decode(file_get_contents('php://input'));
     $volunteers_id =  $args['id'];
     $status = $userData->{'status'};
-  
-    if ($status = "0"){
-       $status = "1";
-    }else {
-        $status = "0";
-    }
+ 
+  if ($status == "0") {
+      $response_status = "1";
+    
+  } else {
+      $response_status = "0" ;
+  }
 
+
+ 
     $query = ("UPDATE volunteer SET status=:status WHERE id=:id");
     $result = $pdo->prepare($query);
 
-    $result->execute(array(':status' => $status, ':id' => $volunteers_id));
+    $result->execute(array(':status' => $response_status, ':id' => $volunteers_id));
 
+    
 
     $myObj = new stdClass();
     $myObj->id=$volunteers_id;
-    $myObj->status = $status;
+    $myObj->status = $response_status;
 
    
     $response = json_encode($myObj);
