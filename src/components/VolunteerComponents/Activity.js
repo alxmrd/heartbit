@@ -60,7 +60,7 @@ class Activity extends Component {
 
     return (
       <TableCell>
-        {volstatus !== "0" ? (
+        {volstatus !== 0 ? (
           <Button
             onClick={e => {
               this.handleClick(e);
@@ -79,7 +79,7 @@ class Activity extends Component {
             <i className="material-icons teal600 md-36">person</i>
           </Button>
         )}
-        {volstatus !== "0" ? (
+        {volstatus !== 0 ? (
           <Snackbar
             anchorOrigin={{ vertical, horizontal }}
             open={openSnack}
@@ -152,7 +152,7 @@ class Activity extends Component {
 }
 
 Activity.propTypes = {
-  volstatus: PropTypes.number.isRequired,
+  volstatus: PropTypes.number,
   volunteerid: PropTypes.number.isRequired,
   onEditVolunteer: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,

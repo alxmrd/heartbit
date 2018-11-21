@@ -198,7 +198,7 @@ $app->post('/api/insertvolunteer', function (Request $request, Response $respons
     $myObj->dateofbirth = $dateofbirth;
     $myObj->latesttraining = $latesttraining;
 
-    $response = json_encode($myObj);
+    $response = json_encode($myObj,JSON_NUMERIC_CHECK);
 
     return $response;
 });
@@ -214,7 +214,7 @@ $app->get('/api/volunteers/{id}', function (Request $request, Response $response
         $data = $r;
 
     }
-    $response = json_encode($data);
+    $response = json_encode($data,JSON_NUMERIC_CHECK);
     return $response;
 
     $result->closeCursor();
@@ -247,7 +247,7 @@ $app->post('/api/editvolunteer/{id}', function (Request $request, Response $resp
     $myObj->latesttraining = $latesttraining;
 
 
-    $response = json_encode($myObj);
+    $response = json_encode($myObj,JSON_NUMERIC_CHECK);
 
     return $response;
 });
@@ -281,7 +281,7 @@ $app->post('/api/deactivate/{id}', function (Request $request, Response $respons
     $myObj->status = $response_status;
 
    
-    $response = json_encode($myObj);
+    $response = json_encode($myObj,JSON_NUMERIC_CHECK);
 
     return $response;
 });
