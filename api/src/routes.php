@@ -130,12 +130,14 @@ $app->post('/api/login', function (Request $request, Response $response, array $
     $userData = json_decode(file_get_contents('php://input'));
     $username = $userData->{'username'};
     $password = $userData->{'password'};
+    $status=0;
 
-    $query = "SELECT * FROM volunteer WHERE username=:username AND password=:password";
+    $query = "SELECT * FROM volunteer WHERE username=:username AND password=:password AND status=:status";
     $result = $pdo->prepare($query);
-    $result->execute(array(':username' => $username, ':password' => $password));
+    $result->execute(array(':username' => $username, ':password' => $password, ':status' => $status));
     $count = $result->rowCount();
     $row = $result->fetch(PDO::FETCH_BOTH);
+
     if ($count == 1 && !empty($row)) {
 
         $_SESSION['username'] = $username;
@@ -151,8 +153,8 @@ $app->post('/api/login', function (Request $request, Response $response, array $
 
     } else {
 
-        $message = "Wrong username & password compination";
-        $data = array('status' => 'error', 'data' => null, 'message' => 'Incorrect username or password', 401);
+        $message = "Wrong username & password compination or user deactivated";
+        $data = array('status' => 'error', 'data' => null, 'message' => $message, 401);
         $response = json_encode($data);
         return $response;
 

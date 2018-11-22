@@ -211,7 +211,7 @@ class App extends React.Component {
               </ListItem>
             </Link>
             <Divider />
-            <Link to="/AppMap" className={classes.link}>
+            <Link to="/AppMapContainer" className={classes.link}>
               <ListItem>
                 <ListItemIcon>
                   <i className="material-icons">map</i>

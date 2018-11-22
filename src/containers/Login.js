@@ -75,7 +75,9 @@ class Login extends Component {
           window.location.assign("/volunteers");
           //history.push('/');
         } else {
-          window.location.assign("/login");
+          alert(
+            "Wrong combination of username and password or user deactivated"
+          );
         }
       })
       .catch(error => alert("error", error));

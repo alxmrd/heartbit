@@ -1,7 +1,7 @@
 import React from "react";
 import AppMap from "./AppMap";
 
-export default class AppMapContainer extends React.Component {
+class AppMapContainer extends React.Component {
   render() {
     return (
       <AppMap
@@ -9,9 +9,11 @@ export default class AppMapContainer extends React.Component {
           process.env.REACT_APP_GOOGLE_MAPS_API_KEY
         }&v=3.exp&libraries=geometry,drawing,places`}
         loadingElement={<div style={{ height: `100%` }} />}
-        containerElement={<div style={{ height: `600px`, width: `600px` }} />}
+        containerElement={<div style={{ height: `800px`, width: `1000px` }} />}
         mapElement={<div style={{ height: `100%` }} />}
       />
     );
   }
 }
+
+export default AppMapContainer;
