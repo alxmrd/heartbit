@@ -73,9 +73,9 @@ MapContainer.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  longitude: state.event.longitude,
-  latitude: state.event.latitude,
-  address: state.event.address
+  longitude: state.selectedPlace.longitude,
+  latitude: state.selectedPlace.latitude,
+  address: state.selectedPlace.address
 });
 
 const WrappedContainer = GoogleApiWrapper({

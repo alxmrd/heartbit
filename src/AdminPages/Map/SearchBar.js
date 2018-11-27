@@ -6,7 +6,7 @@ import TextField from "@material-ui/core/TextField";
 import { Button } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import { connect } from "react-redux";
-import { searchBarClick } from "../../store/actions/actions";
+import { insertEventClick, selectPlace } from "../../store/actions/actions";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 const styles = theme => ({
@@ -48,6 +48,12 @@ class SearchBar extends React.Component {
           longitude: lng,
           isGeocoding: false
         });
+        const selectedPlace = {
+          latitude: this.state.latitude,
+          longitude: this.state.longitude,
+          address: this.state.address
+        };
+        this.props.onSelectPlace(selectedPlace);
       })
       .catch(error => {
         this.setState({ isGeocoding: false });
@@ -71,7 +77,7 @@ class SearchBar extends React.Component {
       address: this.state.address
     };
 
-    this.props.onSearchBarClick(dataPouStelnw);
+    this.props.onInsertEventClick(dataPouStelnw);
     this.setState({
       address: "",
       latitude: null,
@@ -94,7 +100,7 @@ class SearchBar extends React.Component {
       longitude,
       isGeocoding
     } = this.state;
-    const { classes, onAddressSelect } = this.props;
+    const { classes } = this.props;
 
     return (
       <React.Fragment>
@@ -171,11 +177,11 @@ class SearchBar extends React.Component {
         )}
 
         {((latitude && longitude) || isGeocoding) && <div>{""}</div>}
+
         <Button
           variant="contained"
           color="primary"
           className={classes.button}
-          onSelect={e => onAddressSelect(e)}
           onClick={this.handleInsertEvent}
         >
           ΠΡΟΣΘΗΚΗ ΠΕΡΙΣΤΑΤΙΚΟΥ
@@ -191,8 +197,10 @@ SearchBar.propTypes = {
 };
 
 const mapDispatchToProps = dispatch => ({
-  onSearchBarClick: (longitude, latitude, address) =>
-    dispatch(searchBarClick(longitude, latitude, address))
+  onInsertEventClick: (longitude, latitude, address) =>
+    dispatch(insertEventClick(longitude, latitude, address)),
+  onSelectPlace: (longitude, latitude, address) =>
+    dispatch(selectPlace(longitude, latitude, address))
 });
 
 export default connect(

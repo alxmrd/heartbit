@@ -7,6 +7,7 @@ import { NEW_VOLUNTEER } from "../actions/types";
 import { UPDATE_VOLUNTEERS } from "../actions/types";
 import { UPDATE_VOLUNTEER } from "../actions/types";
 import { INSERT_EVENT } from "../actions/types";
+import { SELECT_PLACE } from "../actions/types";
 
 const headers = {
   Accept: "application/json",
@@ -104,7 +105,7 @@ export const setVolunteerActivity = (sendstatus, id) => dispatch => {
     });
 };
 
-export const searchBarClick = datapoustelnw => dispatch => {
+export const insertEventClick = datapoustelnw => dispatch => {
   fetch(`http://localhost:8080/api/insertevent`, {
     method: "POST",
     cache: "no-cache",
@@ -123,4 +124,11 @@ export const searchBarClick = datapoustelnw => dispatch => {
     .catch(error => {
       alert(error, "error");
     });
+};
+
+export const selectPlace = datapoustelnw => dispatch => {
+  dispatch({
+    type: SELECT_PLACE,
+    payload: datapoustelnw
+  });
 };
