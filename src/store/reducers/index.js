@@ -1,10 +1,11 @@
 import { combineReducers } from "redux";
 import volunteersReducer from "./volunteersReducer";
 import idkeeperReducer from "./idkeeperReducer";
-import VolunteerActivityReducer from "./volunteerActivityReducer";
+
+import eventReducer from "./eventReducer";
 
 export default combineReducers({
   volunteers: volunteersReducer,
   id: idkeeperReducer,
-  status: VolunteerActivityReducer
+  event: eventReducer
 });

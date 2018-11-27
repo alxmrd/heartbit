@@ -114,6 +114,7 @@ class App extends React.Component {
       <Provider store={store}>
         <div className={classes.root}>
           <CssBaseline />
+          <div id="map" />
           <AppBar
             position="fixed"
             className={classNames(classes.appBar, {

@@ -6,6 +6,7 @@ import { VOLUNTEER_DIALOG_CLOSE } from "../actions/types";
 import { NEW_VOLUNTEER } from "../actions/types";
 import { UPDATE_VOLUNTEERS } from "../actions/types";
 import { UPDATE_VOLUNTEER } from "../actions/types";
+import { INSERT_EVENT } from "../actions/types";
 
 const headers = {
   Accept: "application/json",
@@ -95,6 +96,27 @@ export const setVolunteerActivity = (sendstatus, id) => dispatch => {
     .then(res => {
       dispatch({
         type: VOLUNTEER_ACTIVITY_ON_OFF,
+        payload: res
+      });
+    })
+    .catch(error => {
+      alert(error, "error");
+    });
+};
+
+export const searchBarClick = datapoustelnw => dispatch => {
+  fetch(`http://localhost:8080/api/insertevent`, {
+    method: "POST",
+    cache: "no-cache",
+    headers,
+    redirect: "follow",
+    referrer: "no-referrer",
+    body: JSON.stringify(datapoustelnw)
+  })
+    .then(result => result.json())
+    .then(res => {
+      dispatch({
+        type: INSERT_EVENT,
         payload: res
       });
     })

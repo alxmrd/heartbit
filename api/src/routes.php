@@ -173,37 +173,7 @@ $app->post('/api/logout', function (Request $request, Response $response, array 
     $pdo = null;
 });
 
-$app->post('/api/insertvolunteer', function (Request $request, Response $response, array $args) {
-    global $pdo;
 
-    $userData = json_decode(file_get_contents('php://input'));
-
-    $username = $userData->{'username'};
-    $tel1 = $userData->{'tel1'};
-    $tel2 = $userData->{'tel2'};
-    $email = $userData->{'email'};
-    $dateofbirth = $userData->{'dateofbirth'};
-    $latesttraining = $userData->{'latesttraining'};
-
-    $query = "INSERT INTO volunteer (username,tel1,tel2,email,dateofbirth,latesttraining) VALUES (:username,:tel1,:tel2,:email,:dateofbirth,:latesttraining)";
-    $result = $pdo->prepare($query);
-
-    $result->execute(array(':username' => $username, ':tel1' => $tel1, ':tel2' => $tel2, ':email' => $email, ':dateofbirth' => $dateofbirth, ':latesttraining' => $latesttraining));
-    $lastId = $pdo->lastInsertId();
-    //  $response=json_encode($lastId);
-    $myObj = new stdClass();
-    $myObj->id = $lastId;
-    $myObj->username = $username;
-    $myObj->email = $email;
-    $myObj->tel1 = $tel1;
-    $myObj->tel2 = $tel2;
-    $myObj->dateofbirth = $dateofbirth;
-    $myObj->latesttraining = $latesttraining;
-
-    $response = json_encode($myObj,JSON_NUMERIC_CHECK);
-
-    return $response;
-});
 
 $app->get('/api/volunteers/{id}', function (Request $request, Response $response, array $args) {
     global $pdo;
@@ -281,6 +251,69 @@ $app->post('/api/deactivate/{id}', function (Request $request, Response $respons
     $myObj = new stdClass();
     $myObj->id=$volunteers_id;
     $myObj->status = $response_status;
+
+   
+    $response = json_encode($myObj,JSON_NUMERIC_CHECK);
+
+    return $response;
+});
+
+$app->post('/api/insertvolunteer', function (Request $request, Response $response, array $args) {
+    global $pdo;
+
+    $userData = json_decode(file_get_contents('php://input'));
+
+    $username = $userData->{'username'};
+    $tel1 = $userData->{'tel1'};
+    $tel2 = $userData->{'tel2'};
+    $email = $userData->{'email'};
+    $dateofbirth = $userData->{'dateofbirth'};
+    $latesttraining = $userData->{'latesttraining'};
+
+    $query = "INSERT INTO volunteer (username,tel1,tel2,email,dateofbirth,latesttraining) VALUES (:username,:tel1,:tel2,:email,:dateofbirth,:latesttraining)";
+    $result = $pdo->prepare($query);
+
+    $result->execute(array(':username' => $username, ':tel1' => $tel1, ':tel2' => $tel2, ':email' => $email, ':dateofbirth' => $dateofbirth, ':latesttraining' => $latesttraining));
+    $lastId = $pdo->lastInsertId();
+    //  $response=json_encode($lastId);
+    $myObj = new stdClass();
+    $myObj->id = $lastId;
+    $myObj->username = $username;
+    $myObj->email = $email;
+    $myObj->tel1 = $tel1;
+    $myObj->tel2 = $tel2;
+    $myObj->dateofbirth = $dateofbirth;
+    $myObj->latesttraining = $latesttraining;
+
+    $response = json_encode($myObj,JSON_NUMERIC_CHECK);
+
+    return $response;
+});
+$app->post('/api/insertevent', function (Request $request, Response $response, array $args) {
+    global $pdo;
+    $userData = json_decode(file_get_contents('php://input'));
+   
+    $longitude = $userData->{'longitude'};
+    $latitude = $userData->{'latitude'};
+    $address = $userData->{'address'};
+ 
+
+
+
+ 
+    $query = "INSERT INTO peristatiko (longitude, latitude, address ) VALUES (:longitude,:latitude,:address)";
+    $result = $pdo->prepare($query);
+
+    $result->execute(array(':longitude' => $longitude, ':latitude' => $latitude, ':address' => $address));
+    $lastId = $pdo->lastInsertId();
+
+    
+
+    $myObj = new stdClass();
+    $myObj->id=$lastId;
+    $myObj->longitude = $longitude;
+    $myObj->latitude = $latitude;
+    $myObj->address = $address;
 
    
     $response = json_encode($myObj,JSON_NUMERIC_CHECK);
