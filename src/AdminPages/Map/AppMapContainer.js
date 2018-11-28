@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import SearchBar from "./SearchBar.js";
 import firstaid from "../../firstaid.png";
+import defibrillator from "../../defibrillator.png";
+import { fetchDefifrillators } from "../../store/actions/actions.js";
 
 const mapStyles = {
   width: "92%",
@@ -20,12 +22,14 @@ export class MapContainer extends Component {
     peristatikoMarker: {}
   };
 
-  onMarkerClick = (props, marker, e) =>
+  onMarkerClick = (props, marker, e) => {
+    console.log("edw");
     this.setState({
       selectedPlace: props,
       activeMarker: marker,
       showingInfoWindow: true
     });
+  };
 
   onClose = props => {
     if (this.state.showingInfoWindow) {
@@ -36,7 +40,14 @@ export class MapContainer extends Component {
     }
   };
 
+  componentDidMount() {
+    // If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
+    this.props.onfetchDefibrillators();
+  }
+
   render() {
+    const { defibrillators } = this.props;
+    const onMarkerClick = this.onMarkerClick;
     return (
       <React.Fragment>
         <SearchBar />
@@ -54,13 +65,26 @@ export class MapContainer extends Component {
             position={{ lat: this.props.latitude, lng: this.props.longitude }}
             icon={firstaid}
           />
+
+          {defibrillators.map(item => (
+            <Marker
+              key={item.id}
+              onClick={() => onMarkerClick()}
+              name={item.model}
+              position={{ lat: item.latitude, lng: item.longitude }}
+              icon={defibrillator}
+            />
+          ))}
+
           <InfoWindow
             marker={this.state.activeMarker}
             visible={this.state.showingInfoWindow}
             onClose={this.onClose}
           >
             <div>
-              <h4>{this.state.selectedPlace.name}</h4>
+              <h4>
+                {this.state.selectedPlace && this.state.selectedPlace.name}
+              </h4>
             </div>
           </InfoWindow>
         </Map>
@@ -74,17 +98,27 @@ MapContainer.propTypes = {
   onSearch: PropTypes.func,
   address: PropTypes.string,
   latitude: PropTypes.number,
-  longitude: PropTypes.number
+  longitude: PropTypes.number,
+  defibrillators: PropTypes.array.isRequired,
+  onfetchDefibrillators: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   longitude: state.selectedPlace.longitude,
   latitude: state.selectedPlace.latitude,
-  address: state.selectedPlace.address
+  address: state.selectedPlace.address,
+  defibrillators: state.defibrillators
+});
+
+const mapDispatchToProps = dispatch => ({
+  onfetchDefibrillators: () => fetchDefifrillators(dispatch)
 });
 
 const WrappedContainer = GoogleApiWrapper({
   apiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
 })(MapContainer);
 
-export default connect(mapStateToProps)(WrappedContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(WrappedContainer);

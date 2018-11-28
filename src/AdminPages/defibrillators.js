@@ -149,8 +149,8 @@ class defibrillators extends Component {
 }
 defibrillators.propTypes = {
   classes: PropTypes.object.isRequired,
-  defibrillators: PropTypes.func.isRequired,
-  onfetchDefibrillators: PropTypes.object.isRequired
+  defibrillators: PropTypes.array.isRequired,
+  onfetchDefibrillators: PropTypes.func.isRequired
 };
 const defibrillatorsWithStyles = withStyles(styles)(defibrillators);
 
@@ -159,7 +159,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onfetchDefifrillators: () => fetchDefifrillators(dispatch)
+  onfetchDefibrillators: () => fetchDefifrillators(dispatch)
 });
 
 export default connect(
