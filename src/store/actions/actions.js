@@ -8,6 +8,7 @@ import { UPDATE_VOLUNTEERS } from "../actions/types";
 import { UPDATE_VOLUNTEER } from "../actions/types";
 import { INSERT_EVENT } from "../actions/types";
 import { SELECT_PLACE } from "../actions/types";
+import { FETCH_DEFIBRILLATORS } from "../actions/types";
 
 const headers = {
   Accept: "application/json",
@@ -24,6 +25,20 @@ export const fetchVolunteers = dispatch => {
       dispatch({
         type: UPDATE_VOLUNTEERS,
         payload: volunteers.data
+      })
+    );
+};
+
+export const fetchDefifrillators = dispatch => {
+  fetch(`http://localhost:8080//api/defibrillators`, {
+    headers
+  })
+    .then(result => result.json())
+
+    .then(defibrillators =>
+      dispatch({
+        type: FETCH_DEFIBRILLATORS,
+        payload: defibrillators.data
       })
     );
 };

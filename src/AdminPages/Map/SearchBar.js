@@ -53,6 +53,8 @@ class SearchBar extends React.Component {
           longitude: this.state.longitude,
           address: this.state.address
         };
+        console.log(this.state.latitude, "latitude");
+        console.log(this.state.longitude, "longitude");
         this.props.onSelectPlace(selectedPlace);
       })
       .catch(error => {

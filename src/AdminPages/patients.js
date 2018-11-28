@@ -52,7 +52,7 @@ class patients extends Component {
   loadFromServer = () => {
     fetch(`http://localhost:8080/api/patients`)
       .then(result => result.json())
-      .then(data => this.setState({ data: data }));
+      .then(data => this.setState({ data: data.data }));
     //.then(parsedJSON => console.log("parsedJSON", parsedJSON))
     // .catch(error => console.log("error", error));
   };

@@ -45,8 +45,7 @@ $app->get('/api/event', function (Request $request, Response $response, array $a
 
     //require_once ('configuration.php');
 
-    $arr = array();
-    $response = array([]);
+   
     $query = "SELECT * FROM peristatiko";
     $result = $pdo->query($query);
     $data = array();
@@ -54,11 +53,11 @@ $app->get('/api/event', function (Request $request, Response $response, array $a
         $data[] = $r;
     }
     //  print json_encode($data);
-    $response = json_encode($data);;
-    return $response;
+    $response = new stdClass();
+    $response->data = $data;
+    return json_encode($response, JSON_NUMERIC_CHECK);
 
-    $result->closeCursor();
-    $pdo = null;
+ 
 });
 
 $app->get('/api/defibrillators', function (Request $request, Response $response, array $args) {
@@ -66,20 +65,18 @@ $app->get('/api/defibrillators', function (Request $request, Response $response,
 
     //require_once ('configuration.php');
 
-    $arr = array();
-    $response = array([]);
+   
     $query = "SELECT * FROM apinidotis";
     $result = $pdo->query($query);
     $data = array();
     while ($r = $result->fetch(PDO::FETCH_ASSOC)) {
         $data[] = $r;
     }
-    //  print json_encode($data);
-    $response = json_encode($data);;
-    return $response;
 
-    $result->closeCursor();
-    $pdo = null;
+
+    $response = new stdClass();
+    $response->data = $data;
+    return json_encode($response, JSON_NUMERIC_CHECK);
 });
 
 $app->get('/api/patients', function (Request $request, Response $response, array $args) {
@@ -87,20 +84,18 @@ $app->get('/api/patients', function (Request $request, Response $response, array
 
     //require_once ('configuration.php');
 
-    $arr = array();
-    $response = array([]);
+  
     $query = "SELECT * FROM asthenis";
     $result = $pdo->query($query);
     $data = array();
     while ($r = $result->fetch(PDO::FETCH_ASSOC)) {
         $data[] = $r;
     }
-    //  print json_encode($data);
-    $response = json_encode($data);;
-    return $response;
+    $response = new stdClass();
+    $response->data = $data;
+    return json_encode($response, JSON_NUMERIC_CHECK);
 
-    $result->closeCursor();
-    $pdo = null;
+
 });
 
 $app->get('/api/admin', function (Request $request, Response $response, array $args) {
@@ -108,20 +103,16 @@ $app->get('/api/admin', function (Request $request, Response $response, array $a
 
     //require_once ('configuration.php');
 
-    $arr = array();
-    $response = array([]);
+   
     $query = "SELECT * FROM ekab";
     $result = $pdo->query($query);
     $data = array();
     while ($r = $result->fetch(PDO::FETCH_ASSOC)) {
         $data[] = $r;
     }
-    //  print json_encode($data);
-    $response = json_encode($data);;
-    return $response;
-
-    $result->closeCursor();
-    $pdo = null;
+    $response = new stdClass();
+    $response->data = $data;
+    return json_encode($response, JSON_NUMERIC_CHECK);
 });
 
 $app->post('/api/login', function (Request $request, Response $response, array $args) {

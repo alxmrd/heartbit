@@ -14,6 +14,9 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { fetchDefifrillators } from "../store/actions/actions";
+import { connect } from "react-redux";
+
 const styles = theme => ({
   root: {
     width: "100%",
@@ -49,20 +52,15 @@ class defibrillators extends Component {
   handleClose = () => {
     this.setState({ open: false });
   };
-  loadFromServer = () => {
-    fetch(`http://localhost:8080/api/defibrillators`)
-      .then(result => result.json())
-      .then(data => this.setState({ data: data }))
-      //.then(parsedJSON => console.log("parsedJSON", parsedJSON))
-      .catch(error => console.log("error", error));
-  };
+
   componentDidMount() {
     // If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
-    this.loadFromServer();
+    this.props.onfetchDefibrillators();
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, defibrillators } = this.props;
+
     return (
       <Paper className={classes.root}>
         <Table className={classes.table}>
@@ -78,7 +76,7 @@ class defibrillators extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.state.data.map(function(item, key) {
+            {defibrillators.map(function(item, key) {
               return (
                 <TableRow key={item.id}>
                   <TableCell component="th" scope="item">
@@ -150,7 +148,21 @@ class defibrillators extends Component {
   }
 }
 defibrillators.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  defibrillators: PropTypes.func.isRequired,
+  onfetchDefibrillators: PropTypes.object.isRequired
 };
+const defibrillatorsWithStyles = withStyles(styles)(defibrillators);
 
-export default withStyles(styles)(defibrillators);
+const mapStateToProps = state => ({
+  defibrillators: state.defibrillators
+});
+
+const mapDispatchToProps = dispatch => ({
+  onfetchDefifrillators: () => fetchDefifrillators(dispatch)
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(defibrillatorsWithStyles);
