@@ -3,7 +3,8 @@ import { Map, GoogleApiWrapper } from "google-maps-react";
 import { InfoWindow, Marker } from "google-maps-react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import SearchBar from "/Users/alxmrd/projects/heartbit/src/AdminPages/Map/SearchBar.js";
+import SearchBar from "./SearchBar.js";
+import firstaid from "../../firstaid.png";
 
 const mapStyles = {
   width: "92%",
@@ -51,6 +52,7 @@ export class MapContainer extends Component {
             onClick={this.onMarkerClick}
             name={this.props.address}
             position={{ lat: this.props.latitude, lng: this.props.longitude }}
+            icon={firstaid}
           />
           <InfoWindow
             marker={this.state.activeMarker}
@@ -69,7 +71,10 @@ export class MapContainer extends Component {
 
 MapContainer.propTypes = {
   google: PropTypes.object,
-  onSearch: PropTypes.func
+  onSearch: PropTypes.func,
+  address: PropTypes.string,
+  latitude: PropTypes.number,
+  longitude: PropTypes.number
 };
 
 const mapStateToProps = state => ({
