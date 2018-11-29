@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import { insertEventClick, selectPlace } from "../../store/actions/actions";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
+import Snackbar from "@material-ui/core/Snackbar";
 const styles = theme => ({
   button: {
     margin: theme.spacing.unit
@@ -25,7 +26,10 @@ class SearchBar extends React.Component {
       errorMessage: "",
       latitude: null,
       longitude: null,
-      isGeocoding: false
+      isGeocoding: false,
+      open: false,
+      vertical: "top",
+      horizontal: "center"
     };
   }
 
@@ -63,6 +67,10 @@ class SearchBar extends React.Component {
       });
   };
 
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
   handleCloseClick = () => {
     this.setState({
       address: "",
@@ -71,7 +79,7 @@ class SearchBar extends React.Component {
     });
   };
 
-  handleInsertEvent = event => {
+  handleInsertEvent = (event, state) => {
     event.preventDefault();
     const dataPouStelnw = {
       latitude: this.state.latitude,
@@ -83,7 +91,9 @@ class SearchBar extends React.Component {
     this.setState({
       address: "",
       latitude: null,
-      longitude: null
+      longitude: null,
+      open: true,
+      ...state
     });
   };
 
@@ -95,6 +105,7 @@ class SearchBar extends React.Component {
   };
 
   render() {
+    const { vertical, horizontal, open } = this.state;
     const {
       address,
       errorMessage,
@@ -184,10 +195,24 @@ class SearchBar extends React.Component {
           variant="contained"
           color="primary"
           className={classes.button}
-          onClick={this.handleInsertEvent}
+          onClick={event =>
+            this.handleInsertEvent(event, {
+              vertical: "bottom",
+              horizontal: "left"
+            })
+          }
         >
           ΠΡΟΣΘΗΚΗ ΠΕΡΙΣΤΑΤΙΚΟΥ
         </Button>
+        <Snackbar
+          anchorOrigin={{ vertical, horizontal }}
+          open={open}
+          onClose={this.handleClose}
+          ContentProps={{
+            "aria-describedby": "message-id"
+          }}
+          message={<span id="message-id">Επιτυχής προσθήκη περιστατικού</span>}
+        />
       </React.Fragment>
     );
   }
