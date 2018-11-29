@@ -69,7 +69,8 @@ export class MapContainer extends Component {
           {defibrillators.map(item => (
             <Marker
               key={item.id}
-              onClick={() => onMarkerClick()}
+              onClick={onMarkerClick}
+              const
               name={item.model}
               position={{ lat: item.latitude, lng: item.longitude }}
               icon={defibrillator}
