@@ -20,6 +20,7 @@ import Routes from "./Routes";
 import { Provider } from "react-redux";
 import store from "./store/store";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const drawerWidth = 240;
 
@@ -172,51 +173,62 @@ class App extends React.Component {
             <Divider />
             <Link to="/" className={classes.link}>
               <ListItem>
-                <ListItemIcon>
-                  <i className="material-icons">home</i>
-                </ListItemIcon>
-                <ListItemText primary="Προφίλ" />
+                <Tooltip title="Αρχική" placement="right">
+                  <ListItemIcon>
+                    <i className="material-icons">home</i>
+                  </ListItemIcon>
+                </Tooltip>
+                <ListItemText primary="Αρχική" />
               </ListItem>
             </Link>
             <Link to="/Volunteers" className={classes.link}>
               <ListItem>
-                <ListItemIcon>
-                  <i className="material-icons">account_circle</i>
-                </ListItemIcon>
+                <Tooltip title="Εθελοντές" placement="right">
+                  <ListItemIcon>
+                    <i className="material-icons">account_circle</i>
+                  </ListItemIcon>
+                </Tooltip>
                 <ListItemText primary="Εθελοντές" />
               </ListItem>
             </Link>
             <Link to="/defibrillators" className={classes.link}>
               <ListItem>
-                <ListItemIcon>
-                  <i className="material-icons">local_hospital</i>
-                </ListItemIcon>
-
+                <Tooltip title="Απινιδωτές" placement="right">
+                  <ListItemIcon>
+                    <i className="material-icons">local_hospital</i>
+                  </ListItemIcon>
+                </Tooltip>
                 <ListItemText primary="Απινιδωτές" />
               </ListItem>
             </Link>
             <Link to="/patients" className={classes.link}>
               <ListItem>
-                <ListItemIcon>
-                  <i className="material-icons">healing</i>
-                </ListItemIcon>
+                <Tooltip title="Ασθενείς" placement="right">
+                  <ListItemIcon>
+                    <i className="material-icons">healing</i>
+                  </ListItemIcon>
+                </Tooltip>
                 <ListItemText primary="Ασθενείς" />
               </ListItem>
             </Link>
             <Link to="/event" className={classes.link}>
               <ListItem>
-                <ListItemIcon>
-                  <i className="material-icons">add_location</i>
-                </ListItemIcon>
+                <Tooltip title="Περιστατικό" placement="right">
+                  <ListItemIcon>
+                    <i className="material-icons">add_location</i>
+                  </ListItemIcon>
+                </Tooltip>
                 <ListItemText primary="Περιστατικό" />
               </ListItem>
             </Link>
             <Divider />
             <Link to="/AppMapContainer" className={classes.link}>
               <ListItem>
-                <ListItemIcon>
-                  <i className="material-icons">map</i>
-                </ListItemIcon>
+                <Tooltip title="Χάρτης" placement="right">
+                  <ListItemIcon>
+                    <i className="material-icons">map</i>
+                  </ListItemIcon>
+                </Tooltip>
                 <ListItemText primary="Χάρτης" />
               </ListItem>
             </Link>
