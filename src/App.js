@@ -143,7 +143,7 @@ class App extends React.Component {
                 href="/login"
                 className={classes.LoginButton}
               >
-                Login
+                LogOut
               </Button>
             </Toolbar>
           </AppBar>

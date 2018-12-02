@@ -1,4 +1,4 @@
-import { PostData } from "/Users/alxmrd/projects/heartbit/src/containers/PostData.js";
+import { PostData } from "./PostData.js";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Avatar from "@material-ui/core/Avatar";

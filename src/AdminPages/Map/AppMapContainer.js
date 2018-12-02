@@ -23,7 +23,6 @@ export class MapContainer extends Component {
   };
 
   onMarkerClick = (props, marker, e) => {
-    console.log("edw");
     this.setState({
       selectedPlace: props,
       activeMarker: marker,
