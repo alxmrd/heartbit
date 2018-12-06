@@ -1,5 +1,8 @@
 <?php
-session_start();
+ if(!isset($_SESSION)) 
+ { 
+     session_start(); 
+ } 
 
 require_once 'configuration.php';
 
@@ -10,10 +13,10 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 
 // Routes
-$app->get('/', function (Request $request, Response $response, array $args) {
-    $response = "It works!";
-    return $response;
-});
+// $app->get('/', function (Request $request, Response $response, array $args) {
+//     $response = "It works!";
+//     return $response;
+// });
 
 $app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
     global $pdo;

@@ -1,6 +1,7 @@
 {
   "name": "heartbit",
   "version": "0.1.0",
+  "homepage": "http://localhost:8080/heartbit",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^3.3.2",
