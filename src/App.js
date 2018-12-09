@@ -138,11 +138,23 @@ class App extends React.Component {
                   HeartBit
                 </Link>
               </Typography>
-              <Button color="inherit" className={classes.LoginButton}>
-                <Link to="/login" className={classes.link}>
-                  LOGOUT
-                </Link>
-              </Button>
+              {sessionStorage.getItem("token") ? (
+                <Button
+                  color="inherit"
+                  className={classes.LoginButton}
+                  onClick={() => sessionStorage.clear()}
+                >
+                  <Link to="/login" className={classes.link}>
+                    LOGOUT
+                  </Link>
+                </Button>
+              ) : (
+                <Button color="inherit" className={classes.LoginButton}>
+                  <Link to="/login" className={classes.link}>
+                    LOGIN
+                  </Link>
+                </Button>
+              )}
             </Toolbar>
           </AppBar>
           <Drawer

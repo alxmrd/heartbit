@@ -69,7 +69,7 @@ class Login extends Component {
     PostData("login", this.state)
       .then(result => {
         let responseJson = result;
-
+        sessionStorage.setItem("token", JSON.stringify(responseJson.token));
         if (responseJson.status === "success") {
           //alert("Logged in");
 
