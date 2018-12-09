@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
-
+import { Redirect } from "react-router-dom";
 import FormControl from "@material-ui/core/FormControl";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -50,7 +50,8 @@ class Login extends Component {
 
     this.state = {
       username: "",
-      password: ""
+      password: "",
+      redirectToReferrer: false
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -72,8 +73,7 @@ class Login extends Component {
         if (responseJson.status === "success") {
           //alert("Logged in");
 
-          window.location.assign("/volunteers");
-          //history.push('/');
+          this.setState({ redirectToReferrer: true });
         } else {
           alert(
             "Wrong combination of username and password or user deactivated"
@@ -85,6 +85,9 @@ class Login extends Component {
   };
 
   render() {
+    if (this.state.redirectToReferrer) {
+      return <Redirect to={"/"} />;
+    }
     const { classes } = this.props;
     return (
       <React.Fragment>

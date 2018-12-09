@@ -138,12 +138,10 @@ class App extends React.Component {
                   HeartBit
                 </Link>
               </Typography>
-              <Button
-                color="inherit"
-                href="/login"
-                className={classes.LoginButton}
-              >
-                LogOut
+              <Button color="inherit" className={classes.LoginButton}>
+                <Link to="/login" className={classes.link}>
+                  LOGOUT
+                </Link>
               </Button>
             </Toolbar>
           </AppBar>
