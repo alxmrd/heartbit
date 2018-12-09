@@ -1,4 +1,6 @@
 <?php
+$dotenv = new Dotenv\Dotenv(__DIR__);
+$dotenv->load();
 return [
     'settings' => [
         'displayErrorDetails' => false, // set to false in production
@@ -15,5 +17,8 @@ return [
             'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log',
             'level' => \Monolog\Logger::DEBUG,
         ],
+        "jwt" => [
+            'secret' => getenv("SECRET_KEY")
+        ]
     ],
 ];

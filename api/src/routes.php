@@ -57,6 +57,7 @@ $app->post('/api/login', function (Request $request, Response $response, array $
         $message = "successfully logged in";
 
         if (isset($_SESSION['username'])) {
+            $settings = $this->get('settings');
              $token = JWT::encode(['id' => $user->id, 'username' => $user->username], $settings['jwt']['secret'], "HS256");
             $data = array("username" => $username, 'status' => 'success', 'message' => $message,'token' => $token);
 
@@ -106,7 +107,7 @@ $app->post('/api/login', function (Request $request, Response $response, array $
 
 $app->get('/api/volunteers', function (Request $request, Response $response, array $args) {
     global $pdo;
-
+   
     //require_once ('configuration.php');
   
   

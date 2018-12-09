@@ -12,7 +12,8 @@ import { FETCH_DEFIBRILLATORS } from "../actions/types";
 
 const headers = {
   Accept: "application/json",
-  "Content-Type": "application/json"
+  "Content-Type": "application/json",
+  Authorization: "Bearer " + sessionStorage.getItem("token")
 };
 
 export const fetchVolunteers = dispatch => {

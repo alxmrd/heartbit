@@ -69,10 +69,10 @@ class Login extends Component {
     PostData("login", this.state)
       .then(result => {
         let responseJson = result;
-        sessionStorage.setItem("token", JSON.stringify(responseJson.token));
+
         if (responseJson.status === "success") {
           //alert("Logged in");
-
+          sessionStorage.setItem("token", responseJson.token);
           this.setState({ redirectToReferrer: true });
         } else {
           alert(
@@ -85,7 +85,7 @@ class Login extends Component {
   };
 
   render() {
-    if (this.state.redirectToReferrer) {
+    if (this.state.redirectToReferrer || sessionStorage.getItem("token")) {
       return <Redirect to={"/"} />;
     }
     const { classes } = this.props;
