@@ -5,20 +5,20 @@
  { 
      session_start(); 
  } 
-$dotenv = new Dotenv\Dotenv(__DIR__);
-$dotenv->load();
+
  
 
 
 
 require_once 'configuration.php';
-require_once 'middleware.php';
+// require_once 'middleware.php';
 
 //use Psr\Http\Message\ServerRequestInterface;
 //use Psr\Http\Message\ResponseInterface;
 //use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use \Firebase\JWT\JWT;
 
 // Routes
 // $app->get('/', function (Request $request, Response $response, array $args) {
@@ -34,6 +34,75 @@ $app->get('/hello/{name}', function (Request $request, Response $response, array
 
     return $response;
 });
+
+$app->post('/api/login', function (Request $request, Response $response, array $args) {
+    global $pdo;
+
+    $userData = json_decode(file_get_contents('php://input'));
+    $username = $userData->{'username'};
+    $password = $userData->{'password'};
+    $status=0;
+
+    $query = "SELECT * FROM volunteer WHERE username=:username AND password=:password AND status=:status";
+    $result = $pdo->prepare($query);
+    $result->execute(array(':username' => $username, ':password' => $password, ':status' => $status));
+    $count = $result->rowCount();
+    $user = $result->fetch(PDO::FETCH_BOTH);
+
+   
+    if ($count == 1 && !empty($user)) {
+
+        $_SESSION['username'] = $username;
+        $_SESSION['success'] = "You are now logged in";
+        $message = "successfully logged in";
+
+        if (isset($_SESSION['username'])) {
+             $token = JWT::encode(['id' => $user->id, 'username' => $user->username], $settings['jwt']['secret'], "HS256");
+            $data = array("username" => $username, 'status' => 'success', 'message' => $message,'token' => $token);
+
+            $response = json_encode($data);
+        }
+        return $response;
+
+    } else {
+
+        $message = "Wrong username & password compination or user deactivated";
+        $data = array('status' => 'error', 'data' => null, 'message' => $message, 401);
+        $response = json_encode($data);
+        return $response;
+
+    }
+
+    $result->closeCursor();
+    $pdo = null;
+});
+
+// $app->post('/api/login', function (Request $request, Response $response, array $args) {
+ 
+//     $input = $request->getParsedBody();
+//     $sql = "SELECT * FROM volunteer WHERE username= :username";
+//     $sth = $this->db->prepare($sql);
+//     $sth->bindParam("username", $input['username']);
+//     $sth->execute();
+//     $user = $sth->fetchObject();
+ 
+//     // verify username
+//     if(!$volunteer) {
+//         return $this->response->withJson(['error' => true, 'message' => 'These credentials do not match our records.']);  
+//     }
+ 
+//     // verify password.
+//     if (!password_verify($input['password'],$volunteer->password)) {
+//         return $this->response->withJson(['error' => true, 'message' => 'These credentials do not match our records.']);  
+//     }
+ 
+//     $settings = $this->get('settings'); // get settings array.
+    
+//     $token = JWT::encode(['id' => $volunteer->id, 'username' => $volunteer->username], $settings['jwt']['secret'], "HS256");
+ 
+//     return $this->response->withJson(['token' => $token]);
+ 
+// });
 
 $app->get('/api/volunteers', function (Request $request, Response $response, array $args) {
     global $pdo;
@@ -130,45 +199,7 @@ $app->get('/api/admin', function (Request $request, Response $response, array $a
     return json_encode($response, JSON_NUMERIC_CHECK);
 });
 
-$app->post('/api/login', function (Request $request, Response $response, array $args) {
-    global $pdo;
 
-    $userData = json_decode(file_get_contents('php://input'));
-    $username = $userData->{'username'};
-    $password = $userData->{'password'};
-    $status=0;
-
-    $query = "SELECT * FROM volunteer WHERE username=:username AND password=:password AND status=:status";
-    $result = $pdo->prepare($query);
-    $result->execute(array(':username' => $username, ':password' => $password, ':status' => $status));
-    $count = $result->rowCount();
-    $row = $result->fetch(PDO::FETCH_BOTH);
-
-    if ($count == 1 && !empty($row)) {
-
-        $_SESSION['username'] = $username;
-        $_SESSION['success'] = "You are now logged in";
-        $message = "successfully logged in";
-
-        if (isset($_SESSION['username'])) {
-            $data = array("username" => $username, 'status' => 'success', 'message' => $message);
-
-            $response = json_encode($data);
-        }
-        return $response;
-
-    } else {
-
-        $message = "Wrong username & password compination or user deactivated";
-        $data = array('status' => 'error', 'data' => null, 'message' => $message, 401);
-        $response = json_encode($data);
-        return $response;
-
-    }
-
-    $result->closeCursor();
-    $pdo = null;
-});
 
 $app->post('/api/logout', function (Request $request, Response $response, array $args) {
     global $pdo;
@@ -336,9 +367,9 @@ $app->add(function ($req, $res, $next) {
 });
 
 
-$app->get('/auth', function ($request, $response, $args) {
+// $app->get('/auth', function ($request, $response, $args) {
   
-	$response->getBody()->write(getenv("SECRET_KEY"));
+// 	$response->getBody()->write(getenv("SECRET_KEY"));
 
-	return $response;
-})->add($mw);
+// 	return $response;
+// })->add($Test);
