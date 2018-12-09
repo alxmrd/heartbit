@@ -1,10 +1,18 @@
 <?php
+
+
  if(!isset($_SESSION)) 
  { 
      session_start(); 
  } 
+$dotenv = new Dotenv\Dotenv(__DIR__);
+$dotenv->load();
+ 
+
+
 
 require_once 'configuration.php';
+require_once 'middleware.php';
 
 //use Psr\Http\Message\ServerRequestInterface;
 //use Psr\Http\Message\ResponseInterface;
@@ -326,3 +334,11 @@ $app->add(function ($req, $res, $next) {
             ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
             ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 });
+
+
+$app->get('/auth', function ($request, $response, $args) {
+  
+	$response->getBody()->write(getenv("SECRET_KEY"));
+
+	return $response;
+})->add($mw);

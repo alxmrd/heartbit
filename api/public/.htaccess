@@ -2,4 +2,5 @@
    RewriteEngine on
    RewriteRule ^$  http://zafora.icte.uowm.gr/~st00661    [L]
    RewriteRule (.*)  http://zafora.icte.uowm.gr/~st00661/$1 [L]
+   RewriteRule .* - [env=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 </IfModule>
