@@ -3,6 +3,7 @@ import volunteersReducer from "./volunteersReducer";
 import idkeeperReducer from "./idkeeperReducer";
 import selectedPlaceReducer from "./selectedPlaceReducer";
 import defibrillatorsReducer from "./defibrillatorsReducer";
+import patientReducer from "./patientReducer";
 
 import eventReducer from "./eventReducer";
 
@@ -11,5 +12,6 @@ export default combineReducers({
   id: idkeeperReducer,
   selectedPlace: selectedPlaceReducer,
   event: eventReducer,
-  defibrillators: defibrillatorsReducer
+  defibrillators: defibrillatorsReducer,
+  patients: patientReducer
 });

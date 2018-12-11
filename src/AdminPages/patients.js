@@ -14,6 +14,9 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { fetchPatients } from "../store/actions/actions";
+import { connect } from "react-redux";
+
 const styles = theme => ({
   root: {
     width: "100%",
@@ -49,20 +52,13 @@ class patients extends Component {
   handleClose = () => {
     this.setState({ open: false });
   };
-  loadFromServer = () => {
-    fetch(`http://localhost:8080/api/patients`)
-      .then(result => result.json())
-      .then(data => this.setState({ data: data.data }));
-    //.then(parsedJSON => console.log("parsedJSON", parsedJSON))
-    // .catch(error => console.log("error", error));
-  };
   componentDidMount() {
     // If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
-    this.loadFromServer();
+    this.props.onfetchPatients();
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, patients } = this.props;
     return (
       <Paper className={classes.root}>
         <Table className={classes.table}>
@@ -79,7 +75,7 @@ class patients extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.state.data.map(function(item, key) {
+            {patients.map(function(item, key) {
               return (
                 <TableRow key={item.id}>
                   <TableCell component="th" scope="item">
@@ -153,7 +149,22 @@ class patients extends Component {
 }
 
 patients.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  patients: PropTypes.array.isRequired,
+  onfetchPatients: PropTypes.func.isRequired
 };
 
-export default withStyles(styles)(patients);
+const patientWithStyles = withStyles(styles)(patients);
+
+const mapStateToProps = state => ({
+  patients: state.patients
+});
+
+const mapDispatchToProps = dispatch => ({
+  onfetchPatients: () => fetchPatients(dispatch)
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(patientWithStyles);

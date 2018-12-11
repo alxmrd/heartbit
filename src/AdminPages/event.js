@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import { connect } from "react-redux";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -8,6 +8,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core";
+import { fetchEvents } from "../store/actions/actions";
 
 const styles = theme => ({
   root: {
@@ -44,20 +45,14 @@ class Event extends Component {
   handleClose = () => {
     this.setState({ open: false });
   };
-  loadFromServer = () => {
-    fetch(`http://localhost:8080/api/event`)
-      .then(result => result.json())
-      .then(data => this.setState({ data: data.data }));
-    //.then(parsedJSON => console.log("parsedJSON", parsedJSON))
-    // .catch(error => console.log("error", error));
-  };
+
   componentDidMount() {
     // If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
-    this.loadFromServer();
+    this.props.onfetchEvents();
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, event } = this.props;
     return (
       <Paper className={classes.root}>
         <Table className={classes.table}>
@@ -71,7 +66,7 @@ class Event extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.state.data.map(function(item, key) {
+            {event.map(function(item, key) {
               return (
                 <TableRow key={item.id}>
                   <TableCell component="th" scope="item">
@@ -92,7 +87,22 @@ class Event extends Component {
 }
 
 Event.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  onfetchEvents: PropTypes.func.isRequired,
+  event: PropTypes.array.isRequired
 };
 
-export default withStyles(styles)(Event);
+const EventWithStyles = withStyles(styles)(Event);
+
+const mapStateToProps = state => ({
+  event: state.event
+});
+
+const mapDispatchToProps = dispatch => ({
+  onfetchEvents: () => fetchEvents(dispatch)
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(EventWithStyles);

@@ -9,6 +9,8 @@ import { UPDATE_VOLUNTEER } from "../actions/types";
 import { INSERT_EVENT } from "../actions/types";
 import { SELECT_PLACE } from "../actions/types";
 import { FETCH_DEFIBRILLATORS } from "../actions/types";
+import { FETCH_EVENTS } from "../actions/types";
+import { FETCH_PATIENTS } from "../actions/types";
 
 const headers = {
   Accept: "application/json",
@@ -40,6 +42,34 @@ export const fetchDefifrillators = dispatch => {
       dispatch({
         type: FETCH_DEFIBRILLATORS,
         payload: defibrillators.data
+      })
+    );
+};
+
+export const fetchEvents = dispatch => {
+  fetch(`http://localhost:8080//api/event`, {
+    headers
+  })
+    .then(result => result.json())
+
+    .then(events =>
+      dispatch({
+        type: FETCH_EVENTS,
+        payload: events.data
+      })
+    );
+};
+
+export const fetchPatients = dispatch => {
+  fetch(`http://localhost:8080//api/patients`, {
+    headers
+  })
+    .then(result => result.json())
+
+    .then(patients =>
+      dispatch({
+        type: FETCH_PATIENTS,
+        payload: patients.data
       })
     );
 };
