@@ -11,6 +11,7 @@ import { SELECT_PLACE } from "../actions/types";
 import { FETCH_DEFIBRILLATORS } from "../actions/types";
 import { FETCH_EVENTS } from "../actions/types";
 import { FETCH_PATIENTS } from "../actions/types";
+import history from "../../history";
 
 const headers = {
   Accept: "application/json",
@@ -32,7 +33,11 @@ export const fetchVolunteers = dispatch => {
         type: UPDATE_VOLUNTEERS,
         payload: volunteers.data
       })
-    );
+    )
+    .catch(error => {
+      console.log(error);
+      history.push("/login");
+    });
 };
 
 // export const fetchVolunteersAsync = async dispatch => {
@@ -67,7 +72,11 @@ export const fetchDefifrillators = dispatch => {
         type: FETCH_DEFIBRILLATORS,
         payload: defibrillators.data
       })
-    );
+    )
+    .catch(error => {
+      console.log(error);
+      history.push("/login");
+    });
 };
 
 export const fetchEvents = dispatch => {
@@ -84,7 +93,11 @@ export const fetchEvents = dispatch => {
         type: FETCH_EVENTS,
         payload: events.data
       })
-    );
+    )
+    .catch(error => {
+      console.log(error);
+      history.push("/login");
+    });
 };
 
 export const fetchPatients = dispatch => {
@@ -101,7 +114,11 @@ export const fetchPatients = dispatch => {
         type: FETCH_PATIENTS,
         payload: patients.data
       })
-    );
+    )
+    .catch(error => {
+      console.log(error);
+      history.push("/login");
+    });
 };
 
 export const newVolunteer = (dispatch, userData) => {

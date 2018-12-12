@@ -1,11 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router } from "react-router-dom";
+import { Router } from "react-router-dom";
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
 import { CssBaseline } from "@material-ui/core";
+import history from "./history";
 
 const theme = createMuiTheme({
   palette: {
@@ -31,7 +32,7 @@ const theme = createMuiTheme({
 });
 
 ReactDOM.render(
-  <Router>
+  <Router history={history}>
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
 

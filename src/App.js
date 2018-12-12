@@ -134,7 +134,7 @@ class App extends React.Component {
                 <MenuIcon />
               </IconButton>
               <Typography variant="h4" color="primary" className={classes.grow}>
-                <Link to="/" className={classes.link}>
+                <Link to="/home" className={classes.link}>
                   HeartBit
                 </Link>
               </Typography>
@@ -181,7 +181,7 @@ class App extends React.Component {
               </IconButton>
             </div>
             <Divider />
-            <Link to="/" className={classes.link}>
+            <Link to="/home" className={classes.link}>
               <ListItem>
                 <Tooltip title="Αρχική" placement="right">
                   <ListItemIcon>
