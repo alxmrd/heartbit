@@ -13,7 +13,7 @@ import AppMapContainer from "./AdminPages/Map/AppMapContainer";
 export default function route() {
   return (
     <Switch>
-      <Route path="/" exact component={Home} />
+      <Route path="/home" exact component={Home} />
       <Route path="/Volunteers" exact component={Volunteers} />
       <Route path="/defibrillators" exact component={defibrillators} />
       <Route path="/patients" exact component={patients} />

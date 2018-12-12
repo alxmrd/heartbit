@@ -20,7 +20,10 @@ const headers = {
 
 export const fetchVolunteers = dispatch => {
   fetch(`http://localhost:8080/api/volunteers`, {
-    headers
+    headers: {
+      ...headers,
+      Authorization: "Bearer " + sessionStorage.getItem("token")
+    }
   })
     .then(result => result.json())
 
@@ -32,9 +35,30 @@ export const fetchVolunteers = dispatch => {
     );
 };
 
+// export const fetchVolunteersAsync = async dispatch => {
+//   try {
+//     const result = await fetch(`http://localhost:8080/api/volunteers`, { TRY CATCH BLOCK
+//       headers: {
+//         ...headers,
+//         Authorization: "Bearer " + sessionStorage.getItem("token")
+//       }
+//     });
+//     const volunteers = result.json();
+//     dispatch({
+//       type: UPDATE_VOLUNTEERS,
+//       payload: volunteers.data
+//     });
+//   } catch (e) {
+//     console.error(e);
+//   }
+// };
+
 export const fetchDefifrillators = dispatch => {
   fetch(`http://localhost:8080//api/defibrillators`, {
-    headers
+    headers: {
+      ...headers,
+      Authorization: "Bearer " + sessionStorage.getItem("token")
+    }
   })
     .then(result => result.json())
 
@@ -48,7 +72,10 @@ export const fetchDefifrillators = dispatch => {
 
 export const fetchEvents = dispatch => {
   fetch(`http://localhost:8080//api/event`, {
-    headers
+    headers: {
+      ...headers,
+      Authorization: "Bearer " + sessionStorage.getItem("token")
+    }
   })
     .then(result => result.json())
 
@@ -62,7 +89,10 @@ export const fetchEvents = dispatch => {
 
 export const fetchPatients = dispatch => {
   fetch(`http://localhost:8080//api/patients`, {
-    headers
+    headers: {
+      ...headers,
+      Authorization: "Bearer " + sessionStorage.getItem("token")
+    }
   })
     .then(result => result.json())
 

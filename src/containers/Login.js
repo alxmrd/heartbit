@@ -73,6 +73,7 @@ class Login extends Component {
         if (responseJson.status === "success") {
           //alert("Logged in");
           sessionStorage.setItem("token", responseJson.token);
+
           this.setState({ redirectToReferrer: true });
         } else {
           alert(
@@ -86,7 +87,7 @@ class Login extends Component {
 
   render() {
     if (this.state.redirectToReferrer || sessionStorage.getItem("token")) {
-      return <Redirect to={"/"} />;
+      return <Redirect to={"/home"} />;
     }
     const { classes } = this.props;
     return (
