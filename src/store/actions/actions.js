@@ -35,7 +35,6 @@ export const fetchVolunteers = dispatch => {
       })
     )
     .catch(error => {
-      console.log(error);
       history.push("/login");
     });
 };
@@ -74,7 +73,6 @@ export const fetchDefifrillators = dispatch => {
       })
     )
     .catch(error => {
-      console.log(error);
       history.push("/login");
     });
 };
@@ -95,7 +93,6 @@ export const fetchEvents = dispatch => {
       })
     )
     .catch(error => {
-      console.log(error);
       history.push("/login");
     });
 };
@@ -116,7 +113,6 @@ export const fetchPatients = dispatch => {
       })
     )
     .catch(error => {
-      console.log(error);
       history.push("/login");
     });
 };
@@ -125,7 +121,10 @@ export const newVolunteer = (dispatch, userData) => {
   fetch(`http://localhost:8080/api/insertvolunteer`, {
     method: "POST",
     cache: "no-cache",
-    headers,
+    headers: {
+      ...headers,
+      Authorization: "Bearer " + sessionStorage.getItem("token")
+    },
     redirect: "follow",
     referrer: "no-referrer",
     body: JSON.stringify(userData)
@@ -153,7 +152,10 @@ export const editVolunteer = id => dispatch => {
 export const updateVolunteer = (id, userData) => dispatch => {
   fetch(`http://localhost:8080/api/editvolunteer/${id}`, {
     method: "POST",
-    headers,
+    headers: {
+      ...headers,
+      Authorization: "Bearer " + sessionStorage.getItem("token")
+    },
     body: JSON.stringify(userData)
   })
     .then(result => result.json())
@@ -181,7 +183,10 @@ export const setVolunteerActivity = (sendstatus, id) => dispatch => {
 
     cache: "no-cache",
 
-    headers,
+    headers: {
+      ...headers,
+      Authorization: "Bearer " + sessionStorage.getItem("token")
+    },
     redirect: "follow",
     referrer: "no-referrer",
     body: JSON.stringify(sendstatus)
@@ -202,7 +207,10 @@ export const insertEventClick = datapoustelnw => dispatch => {
   fetch(`http://localhost:8080/api/insertevent`, {
     method: "POST",
     cache: "no-cache",
-    headers,
+    headers: {
+      ...headers,
+      Authorization: "Bearer " + sessionStorage.getItem("token")
+    },
     redirect: "follow",
     referrer: "no-referrer",
     body: JSON.stringify(datapoustelnw)
