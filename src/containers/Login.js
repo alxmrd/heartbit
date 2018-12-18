@@ -11,6 +11,8 @@ import LockIcon from "@material-ui/icons/LockOutlined";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
+import Snackbar from "@material-ui/core/Snackbar";
+import MySnackbarContentWrapper from "../components/MySnackbarContentWrapper.js";
 
 const styles = theme => ({
   layout: {
@@ -40,8 +42,11 @@ const styles = theme => ({
     width: "100%", // Fix IE11 issue.
     marginTop: theme.spacing.unit
   },
-  submit: {
-    marginTop: theme.spacing.unit * 3
+  // submit: {
+  //   marginTop: theme.spacing.unit * 3
+  // },
+  margin: {
+    margin: theme.spacing.unit
   }
 });
 class Login extends Component {
@@ -51,7 +56,9 @@ class Login extends Component {
     this.state = {
       username: "",
       password: "",
-      redirectToReferrer: false
+      redirectToReferrer: false,
+      open: false,
+      message: ""
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -62,6 +69,13 @@ class Login extends Component {
     this.setState({
       [event.target.id]: event.target.value
     });
+  };
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    this.setState({ open: false });
   };
 
   handleSubmit = event => {
@@ -76,9 +90,7 @@ class Login extends Component {
 
           this.setState({ redirectToReferrer: true });
         } else {
-          alert(
-            "Wrong combination of username and password or user deactivated"
-          );
+          this.setState({ open: true, message: responseJson.message });
         }
       })
       .catch(error => alert("error", error));
@@ -129,10 +141,26 @@ class Login extends Component {
                 fullWidth
                 variant="contained"
                 color="primary"
-                className={classes.submit}
+                className={classes.margin}
               >
                 Login
               </Button>
+              <Snackbar
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left"
+                }}
+                open={this.state.open}
+                autoHideDuration={6000}
+                onClose={this.handleClose}
+              >
+                <MySnackbarContentWrapper
+                  onClose={this.handleClose}
+                  variant="error"
+                  className={classes.margin}
+                  message={this.state.message}
+                />
+              </Snackbar>
             </form>
           </Paper>
         </main>

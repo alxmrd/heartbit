@@ -10,12 +10,17 @@ import { insertEventClick, selectPlace } from "../../store/actions/actions";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import Snackbar from "@material-ui/core/Snackbar";
+import MySnackbarContentWrapper from "../../components/MySnackbarContentWrapper";
+
 const styles = theme => ({
   button: {
     margin: theme.spacing.unit
   },
   input: {
     display: "none"
+  },
+  margin: {
+    margin: theme.spacing.unit
   }
 });
 class SearchBar extends React.Component {
@@ -210,8 +215,16 @@ class SearchBar extends React.Component {
           ContentProps={{
             "aria-describedby": "message-id"
           }}
-          message={<span id="message-id">Επιτυχής προσθήκη περιστατικού</span>}
-        />
+        >
+          <MySnackbarContentWrapper
+            onClose={this.handleClose}
+            variant="success"
+            className={classes.margin}
+            message={
+              <span id="message-id">Επιτυχής προσθήκη περιστατικού</span>
+            }
+          />
+        </Snackbar>
       </React.Fragment>
     );
   }
