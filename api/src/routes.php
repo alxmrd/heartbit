@@ -1,14 +1,8 @@
 <?php
 
-
- if(!isset($_SESSION)) 
- { 
-     session_start(); 
- } 
-
- 
-
-
+if (!isset($_SESSION)) {
+    session_start();
+}
 
 require_once 'configuration.php';
 // require_once 'middleware.php';
@@ -41,33 +35,47 @@ $app->post('/api/login', function (Request $request, Response $response, array $
     $userData = json_decode(file_get_contents('php://input'));
     $username = $userData->{'username'};
     $password = $userData->{'password'};
-    $status=0;
+    $status = 0;
 
-    $query = "SELECT * FROM volunteer WHERE username=:username AND password=:password AND status=:status";
+    $query = "SELECT * FROM volunteer WHERE username=:username";
     $result = $pdo->prepare($query);
-    $result->execute(array(':username' => $username, ':password' => $password, ':status' => $status));
+    $result->execute(array(':username' => $username));
     $count = $result->rowCount();
     $user = $result->fetch(PDO::FETCH_BOTH);
 
-   
     if ($count == 1 && !empty($user)) {
 
-        $_SESSION['username'] = $username;
-        $_SESSION['success'] = "You are now logged in";
-        $message = "successfully logged in";
+        if ($password == $user[password]) {
 
-        if (isset($_SESSION['username'])) {
-            $settings = $this->get('settings');
-             $token = JWT::encode(['id' => $user->id, 'username' => $user->username], $settings['jwt']['secret'], "HS256");
-            $data = array("username" => $username, 'status' => 'success', 'message' => $message,'token' => $token);
+            if ($status == $user[status]) {
 
+                $_SESSION['username'] = $username;
+                $_SESSION['success'] = "You are now logged in";
+                $message = "successfully logged in";
+
+                if (isset($_SESSION['username'])) {
+                    $settings = $this->get('settings');
+                    $token = JWT::encode(['id' => $user->id, 'username' => $user->username], $settings['jwt']['secret'], "HS256");
+                    $data = array("username" => $username, 'status' => 'success', 'message' => $message, 'token' => $token);
+
+                    $response = json_encode($data);
+                }
+                return $response;
+            } else {
+                $message = "O Χρήστης είναι απενεργοποιημένος";
+                $data = array('status' => 'error', 'data' => null, 'message' => $message, 401, 'statsusus' => $status);
+                $response = json_encode($data);
+                return $response;
+            }
+        } else {
+            $message = "Πληκτρολογήσατε λάθος κωδικό";
+            $data = array('status' => 'error', 'data' => null, 'message' => $message, 401);
             $response = json_encode($data);
+            return $response;
         }
-        return $response;
-
     } else {
 
-        $message = "Wrong username & password compination or user deactivated";
+        $message = "Ο χρήστης δεν βρέθηκε";
         $data = array('status' => 'error', 'data' => null, 'message' => $message, 401);
         $response = json_encode($data);
         return $response;
@@ -79,38 +87,37 @@ $app->post('/api/login', function (Request $request, Response $response, array $
 });
 
 // $app->post('/api/login', function (Request $request, Response $response, array $args) {
- 
+
 //     $input = $request->getParsedBody();
 //     $sql = "SELECT * FROM volunteer WHERE username= :username";
 //     $sth = $this->db->prepare($sql);
 //     $sth->bindParam("username", $input['username']);
 //     $sth->execute();
 //     $user = $sth->fetchObject();
- 
+
 //     // verify username
 //     if(!$volunteer) {
-//         return $this->response->withJson(['error' => true, 'message' => 'These credentials do not match our records.']);  
+//         return $this->response->withJson(['error' => true, 'message' => 'These credentials do not match our records.']);
 //     }
- 
+
 //     // verify password.
 //     if (!password_verify($input['password'],$volunteer->password)) {
-//         return $this->response->withJson(['error' => true, 'message' => 'These credentials do not match our records.']);  
+//         return $this->response->withJson(['error' => true, 'message' => 'These credentials do not match our records.']);
 //     }
- 
+
 //     $settings = $this->get('settings'); // get settings array.
-    
+
 //     $token = JWT::encode(['id' => $volunteer->id, 'username' => $volunteer->username], $settings['jwt']['secret'], "HS256");
- 
+
 //     return $this->response->withJson(['token' => $token]);
- 
+
 // });
 
 $app->get('/api/volunteers', function (Request $request, Response $response, array $args) {
     global $pdo;
-   
+
     //require_once ('configuration.php');
-  
-  
+
     $query = "SELECT * FROM volunteer";
     $result = $pdo->query($query);
     $data = array();
@@ -130,7 +137,6 @@ $app->get('/api/event', function (Request $request, Response $response, array $a
 
     //require_once ('configuration.php');
 
-   
     $query = "SELECT * FROM peristatiko";
     $result = $pdo->query($query);
     $data = array();
@@ -142,7 +148,6 @@ $app->get('/api/event', function (Request $request, Response $response, array $a
     $response->data = $data;
     return json_encode($response, JSON_NUMERIC_CHECK);
 
- 
 });
 
 $app->get('/api/defibrillators', function (Request $request, Response $response, array $args) {
@@ -150,14 +155,12 @@ $app->get('/api/defibrillators', function (Request $request, Response $response,
 
     //require_once ('configuration.php');
 
-   
     $query = "SELECT * FROM apinidotis";
     $result = $pdo->query($query);
     $data = array();
     while ($r = $result->fetch(PDO::FETCH_ASSOC)) {
         $data[] = $r;
     }
-
 
     $response = new stdClass();
     $response->data = $data;
@@ -169,7 +172,6 @@ $app->get('/api/patients', function (Request $request, Response $response, array
 
     //require_once ('configuration.php');
 
-  
     $query = "SELECT * FROM asthenis";
     $result = $pdo->query($query);
     $data = array();
@@ -180,7 +182,6 @@ $app->get('/api/patients', function (Request $request, Response $response, array
     $response->data = $data;
     return json_encode($response, JSON_NUMERIC_CHECK);
 
-
 });
 
 $app->get('/api/admin', function (Request $request, Response $response, array $args) {
@@ -188,7 +189,6 @@ $app->get('/api/admin', function (Request $request, Response $response, array $a
 
     //require_once ('configuration.php');
 
-   
     $query = "SELECT * FROM ekab";
     $result = $pdo->query($query);
     $data = array();
@@ -200,8 +200,6 @@ $app->get('/api/admin', function (Request $request, Response $response, array $a
     return json_encode($response, JSON_NUMERIC_CHECK);
 });
 
-
-
 $app->post('/api/logout', function (Request $request, Response $response, array $args) {
     global $pdo;
 
@@ -210,8 +208,6 @@ $app->post('/api/logout', function (Request $request, Response $response, array 
     $result->closeCursor();
     $pdo = null;
 });
-
-
 
 $app->get('/api/volunteers/{id}', function (Request $request, Response $response, array $args) {
     global $pdo;
@@ -224,7 +220,7 @@ $app->get('/api/volunteers/{id}', function (Request $request, Response $response
         $data = $r;
 
     }
-    $response = json_encode($data,JSON_NUMERIC_CHECK);
+    $response = json_encode($data, JSON_NUMERIC_CHECK);
     return $response;
 
     $result->closeCursor();
@@ -234,7 +230,7 @@ $app->get('/api/volunteers/{id}', function (Request $request, Response $response
 $app->post('/api/editvolunteer/{id}', function (Request $request, Response $response, array $args) {
     global $pdo;
     $userData = json_decode(file_get_contents('php://input'));
-    $volunteers_id =  $args['id'];
+    $volunteers_id = $args['id'];
     $username = $userData->{'username'};
     $tel1 = $userData->{'tel1'};
     $tel2 = $userData->{'tel2'};
@@ -244,11 +240,10 @@ $app->post('/api/editvolunteer/{id}', function (Request $request, Response $resp
 
     $query = "UPDATE volunteer SET username=:username, tel1=:tel1, tel2=:tel2, email=:email, dateofbirth=:dateofbirth, latesttraining=:latesttraining  WHERE id=:id";
     $result = $pdo->prepare($query);
-    $result->execute(array(':username' => $username, ':tel1'=>$tel1, ':tel2'=>$tel, ':email' => $email, ':dateofbirth'=>$dateofbirth, ':latesttraining'=>$latesttraining, ':id' => $volunteers_id));
-
+    $result->execute(array(':username' => $username, ':tel1' => $tel1, ':tel2' => $tel, ':email' => $email, ':dateofbirth' => $dateofbirth, ':latesttraining' => $latesttraining, ':id' => $volunteers_id));
 
     $myObj = new stdClass();
-    $myObj->id=$volunteers_id;
+    $myObj->id = $volunteers_id;
     $myObj->username = $username;
     $myObj->email = $email;
     $myObj->tel1 = $tel1;
@@ -256,42 +251,34 @@ $app->post('/api/editvolunteer/{id}', function (Request $request, Response $resp
     $myObj->dateofbirth = $dateofbirth;
     $myObj->latesttraining = $latesttraining;
 
-
-    $response = json_encode($myObj,JSON_NUMERIC_CHECK);
+    $response = json_encode($myObj, JSON_NUMERIC_CHECK);
 
     return $response;
 });
 
-  
-
 $app->post('/api/deactivate/{id}', function (Request $request, Response $response, array $args) {
     global $pdo;
     $userData = json_decode(file_get_contents('php://input'));
-    $volunteers_id =  $args['id'];
+    $volunteers_id = $args['id'];
     $status = $userData->{'status'};
- 
-  if ($status == 0) {
-      $response_status = 1;
-    
-  } else {
-      $response_status = 0 ;
-  }
 
+    if ($status == 0) {
+        $response_status = 1;
 
- 
+    } else {
+        $response_status = 0;
+    }
+
     $query = ("UPDATE volunteer SET status=:status WHERE id=:id");
     $result = $pdo->prepare($query);
 
     $result->execute(array(':status' => $response_status, ':id' => $volunteers_id));
 
-    
-
     $myObj = new stdClass();
-    $myObj->id=$volunteers_id;
+    $myObj->id = $volunteers_id;
     $myObj->status = $response_status;
 
-   
-    $response = json_encode($myObj,JSON_NUMERIC_CHECK);
+    $response = json_encode($myObj, JSON_NUMERIC_CHECK);
 
     return $response;
 });
@@ -323,38 +310,31 @@ $app->post('/api/insertvolunteer', function (Request $request, Response $respons
     $myObj->dateofbirth = $dateofbirth;
     $myObj->latesttraining = $latesttraining;
 
-    $response = json_encode($myObj,JSON_NUMERIC_CHECK);
+    $response = json_encode($myObj, JSON_NUMERIC_CHECK);
 
     return $response;
 });
 $app->post('/api/insertevent', function (Request $request, Response $response, array $args) {
     global $pdo;
     $userData = json_decode(file_get_contents('php://input'));
-   
+
     $longitude = $userData->{'longitude'};
     $latitude = $userData->{'latitude'};
     $address = $userData->{'address'};
- 
 
-
-
- 
     $query = "INSERT INTO peristatiko (longitude, latitude, address ) VALUES (:longitude,:latitude,:address)";
     $result = $pdo->prepare($query);
 
     $result->execute(array(':longitude' => $longitude, ':latitude' => $latitude, ':address' => $address));
     $lastId = $pdo->lastInsertId();
 
-    
-
     $myObj = new stdClass();
-    $myObj->id=$lastId;
+    $myObj->id = $lastId;
     $myObj->longitude = $longitude;
     $myObj->latitude = $latitude;
     $myObj->address = $address;
 
-   
-    $response = json_encode($myObj,JSON_NUMERIC_CHECK);
+    $response = json_encode($myObj, JSON_NUMERIC_CHECK);
 
     return $response;
 });
@@ -362,15 +342,14 @@ $app->post('/api/insertevent', function (Request $request, Response $response, a
 $app->add(function ($req, $res, $next) {
     $response = $next($req, $res);
     return $response
-            ->withHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
-            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+        ->withHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
+        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 });
 
-
 // $app->get('/auth', function ($request, $response, $args) {
-  
-// 	$response->getBody()->write(getenv("SECRET_KEY"));
 
-// 	return $response;
+//     $response->getBody()->write(getenv("SECRET_KEY"));
+
+//     return $response;
 // })->add($Test);
