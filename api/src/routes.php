@@ -61,7 +61,8 @@ $app->post('/api/login', function (Request $request, Response $response, array $
             // if ($status == $user[status]) {
 
             //     $_SESSION['username'] = $username;
-            //     $_SESSION['success'] = "You are now logged in";
+            //     $_SESSION['success'] = "You are now logged in"; //ONLY FOR VOLUNTEER LOGIN FOR MOBILE APPS
+            
             //     $message = "successfully logged in";
 
             //     if (isset($_SESSION['username'])) {

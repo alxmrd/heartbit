@@ -8,6 +8,8 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core";
+import { fetchAdmin } from "../store/actions/actions";
+import { connect } from "react-redux";
 
 const styles = theme => ({
   root: {
@@ -44,20 +46,14 @@ class admin extends Component {
   handleClose = () => {
     this.setState({ open: false });
   };
-  loadFromServer = () => {
-    fetch(`http://localhost:8080/api/admin`)
-      .then(result => result.json())
-      .then(data => this.setState({ data: data }));
-    //.then(parsedJSON => console.log("parsedJSON", parsedJSON))
-    // .catch(error => console.log("error", error));
-  };
+
   componentDidMount() {
     // If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
-    this.loadFromServer();
+    this.props.onfetchAdmin();
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, admin } = this.props;
     return (
       <Paper className={classes.root}>
         <Table className={classes.table}>
@@ -74,7 +70,7 @@ class admin extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.state.data.map(function(item, key) {
+            {admin.map(function(item, key) {
               return (
                 <TableRow key={item.id}>
                   <TableCell component="th" scope="item">
@@ -98,7 +94,20 @@ class admin extends Component {
   }
 }
 admin.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  onfetchAdmin: PropTypes.func.isRequired,
+  admin: PropTypes.array.isRequired
 };
+const adminWithStyles = withStyles(styles)(admin);
+const mapStateToProps = state => ({
+  admin: state.admin
+});
 
-export default withStyles(styles)(admin);
+const mapDispatchToProps = dispatch => ({
+  onfetchAdmin: () => fetchAdmin(dispatch)
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(adminWithStyles);

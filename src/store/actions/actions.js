@@ -11,6 +11,7 @@ import { SELECT_PLACE } from "../actions/types";
 import { FETCH_DEFIBRILLATORS } from "../actions/types";
 import { FETCH_EVENTS } from "../actions/types";
 import { FETCH_PATIENTS } from "../actions/types";
+import { FETCH_ADMIN } from "../actions/types";
 import history from "../../history";
 
 const headers = {
@@ -71,6 +72,27 @@ export const fetchDefifrillators = dispatch => {
       dispatch({
         type: FETCH_DEFIBRILLATORS,
         payload: defibrillators.data
+      })
+    )
+    .catch(error => {
+      alert("Απαιτείται σύνδεση");
+      history.push("/login");
+    });
+};
+
+export const fetchAdmin = dispatch => {
+  fetch(`http://localhost:8080//api/admin`, {
+    headers: {
+      ...headers,
+      Authorization: "Bearer " + sessionStorage.getItem("token")
+    }
+  })
+    .then(result => result.json())
+
+    .then(admin =>
+      dispatch({
+        type: FETCH_ADMIN,
+        payload: admin.data
       })
     )
     .catch(error => {
