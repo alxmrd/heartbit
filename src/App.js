@@ -116,137 +116,150 @@ class App extends React.Component {
         <div className={classes.root}>
           <CssBaseline />
           <div id="map" />
-          <AppBar
-            position="fixed"
-            className={classNames(classes.appBar, {
-              [classes.appBarShift]: this.state.open
-            })}
-          >
-            <Toolbar disableGutters={!this.state.open}>
-              <IconButton
-                color="inherit"
-                aria-label="Open drawer"
-                onClick={this.handleDrawerOpen}
-                className={classNames(classes.menuButton, {
-                  [classes.hide]: this.state.open
+          {sessionStorage.getItem("token") ? (
+            <React.Fragment>
+              <AppBar
+                position="fixed"
+                className={classNames(classes.appBar, {
+                  [classes.appBarShift]: this.state.open
                 })}
               >
-                <MenuIcon />
-              </IconButton>
-              <Typography variant="h4" color="primary" className={classes.grow}>
+                <Toolbar disableGutters={!this.state.open}>
+                  <IconButton
+                    color="inherit"
+                    aria-label="Open drawer"
+                    onClick={this.handleDrawerOpen}
+                    className={classNames(classes.menuButton, {
+                      [classes.hide]: this.state.open
+                    })}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                  <Typography
+                    variant="h4"
+                    color="primary"
+                    className={classes.grow}
+                  >
+                    <Link to="/home" className={classes.link}>
+                      HeartBit
+                    </Link>
+                  </Typography>
+                  {sessionStorage.getItem("token") ? (
+                    <Button
+                      color="inherit"
+                      className={classes.LoginButton}
+                      onClick={() => sessionStorage.clear()}
+                    >
+                      <Link to="/login" className={classes.link}>
+                        LOGOUT
+                      </Link>
+                    </Button>
+                  ) : (
+                    <Button color="inherit" className={classes.LoginButton}>
+                      <Link to="/login" className={classes.link}>
+                        LOGIN
+                      </Link>
+                    </Button>
+                  )}
+                </Toolbar>
+              </AppBar>
+              <Drawer
+                variant="permanent"
+                className={classNames(classes.drawer, {
+                  [classes.drawerOpen]: this.state.open,
+                  [classes.drawerClose]: !this.state.open
+                })}
+                classes={{
+                  paper: classNames({
+                    [classes.drawerOpen]: this.state.open,
+                    [classes.drawerClose]: !this.state.open
+                  })
+                }}
+                open={this.state.open}
+              >
+                <div className={classes.toolbar}>
+                  <IconButton onClick={this.handleDrawerClose}>
+                    {theme.direction === "rtl" ? (
+                      <ChevronRightIcon />
+                    ) : (
+                      <ChevronLeftIcon />
+                    )}
+                  </IconButton>
+                </div>
+                <Divider />
                 <Link to="/home" className={classes.link}>
-                  HeartBit
+                  <ListItem>
+                    <Tooltip title="Αρχική" placement="right">
+                      <ListItemIcon>
+                        <i className="material-icons">home</i>
+                      </ListItemIcon>
+                    </Tooltip>
+                    <ListItemText primary="Αρχική" />
+                  </ListItem>
                 </Link>
-              </Typography>
-              {sessionStorage.getItem("token") ? (
-                <Button
-                  color="inherit"
-                  className={classes.LoginButton}
-                  onClick={() => sessionStorage.clear()}
-                >
-                  <Link to="/login" className={classes.link}>
-                    LOGOUT
-                  </Link>
-                </Button>
-              ) : (
-                <Button color="inherit" className={classes.LoginButton}>
-                  <Link to="/login" className={classes.link}>
-                    LOGIN
-                  </Link>
-                </Button>
-              )}
-            </Toolbar>
-          </AppBar>
-          <Drawer
-            variant="permanent"
-            className={classNames(classes.drawer, {
-              [classes.drawerOpen]: this.state.open,
-              [classes.drawerClose]: !this.state.open
-            })}
-            classes={{
-              paper: classNames({
-                [classes.drawerOpen]: this.state.open,
-                [classes.drawerClose]: !this.state.open
-              })
-            }}
-            open={this.state.open}
-          >
-            <div className={classes.toolbar}>
-              <IconButton onClick={this.handleDrawerClose}>
-                {theme.direction === "rtl" ? (
-                  <ChevronRightIcon />
-                ) : (
-                  <ChevronLeftIcon />
-                )}
-              </IconButton>
-            </div>
-            <Divider />
-            <Link to="/home" className={classes.link}>
-              <ListItem>
-                <Tooltip title="Αρχική" placement="right">
-                  <ListItemIcon>
-                    <i className="material-icons">home</i>
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText primary="Αρχική" />
-              </ListItem>
-            </Link>
-            <Link to="/Volunteers" className={classes.link}>
-              <ListItem>
-                <Tooltip title="Εθελοντές" placement="right">
-                  <ListItemIcon>
-                    <i className="material-icons">account_circle</i>
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText primary="Εθελοντές" />
-              </ListItem>
-            </Link>
-            <Link to="/defibrillators" className={classes.link}>
-              <ListItem>
-                <Tooltip title="Απινιδωτές" placement="right">
-                  <ListItemIcon>
-                    <i className="material-icons">local_hospital</i>
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText primary="Απινιδωτές" />
-              </ListItem>
-            </Link>
-            <Link to="/patients" className={classes.link}>
-              <ListItem>
-                <Tooltip title="Ασθενείς" placement="right">
-                  <ListItemIcon>
-                    <i className="material-icons">healing</i>
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText primary="Ασθενείς" />
-              </ListItem>
-            </Link>
-            <Link to="/event" className={classes.link}>
-              <ListItem>
-                <Tooltip title="Περιστατικό" placement="right">
-                  <ListItemIcon>
-                    <i className="material-icons">add_location</i>
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText primary="Περιστατικό" />
-              </ListItem>
-            </Link>
-            <Divider />
-            <Link to="/AppMapContainer" className={classes.link}>
-              <ListItem>
-                <Tooltip title="Χάρτης" placement="right">
-                  <ListItemIcon>
-                    <i className="material-icons">map</i>
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText primary="Χάρτης" />
-              </ListItem>
-            </Link>
-          </Drawer>
-          <main className={classes.content}>
-            <div className={classes.toolbar} />
-            <Routes />
-          </main>
+                <Link to="/Volunteers" className={classes.link}>
+                  <ListItem>
+                    <Tooltip title="Εθελοντές" placement="right">
+                      <ListItemIcon>
+                        <i className="material-icons">account_circle</i>
+                      </ListItemIcon>
+                    </Tooltip>
+                    <ListItemText primary="Εθελοντές" />
+                  </ListItem>
+                </Link>
+                <Link to="/defibrillators" className={classes.link}>
+                  <ListItem>
+                    <Tooltip title="Απινιδωτές" placement="right">
+                      <ListItemIcon>
+                        <i className="material-icons">local_hospital</i>
+                      </ListItemIcon>
+                    </Tooltip>
+                    <ListItemText primary="Απινιδωτές" />
+                  </ListItem>
+                </Link>
+                <Link to="/patients" className={classes.link}>
+                  <ListItem>
+                    <Tooltip title="Ασθενείς" placement="right">
+                      <ListItemIcon>
+                        <i className="material-icons">healing</i>
+                      </ListItemIcon>
+                    </Tooltip>
+                    <ListItemText primary="Ασθενείς" />
+                  </ListItem>
+                </Link>
+                <Link to="/event" className={classes.link}>
+                  <ListItem>
+                    <Tooltip title="Περιστατικό" placement="right">
+                      <ListItemIcon>
+                        <i className="material-icons">add_location</i>
+                      </ListItemIcon>
+                    </Tooltip>
+                    <ListItemText primary="Περιστατικό" />
+                  </ListItem>
+                </Link>
+                <Divider />
+                <Link to="/AppMapContainer" className={classes.link}>
+                  <ListItem>
+                    <Tooltip title="Χάρτης" placement="right">
+                      <ListItemIcon>
+                        <i className="material-icons">map</i>
+                      </ListItemIcon>
+                    </Tooltip>
+                    <ListItemText primary="Χάρτης" />
+                  </ListItem>
+                </Link>
+              </Drawer>
+              <main className={classes.content}>
+                <div className={classes.toolbar} />
+                <Routes />
+              </main>
+            </React.Fragment>
+          ) : (
+            <main className={classes.content}>
+              <div className={classes.toolbar} />
+              <Routes />
+            </main>
+          )}
         </div>
       </Provider>
     );
