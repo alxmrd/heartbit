@@ -35,6 +35,7 @@ export const fetchVolunteers = dispatch => {
       })
     )
     .catch(error => {
+      alert("Απαιτείται σύνδεση");
       history.push("/login");
     });
 };
@@ -73,6 +74,7 @@ export const fetchDefifrillators = dispatch => {
       })
     )
     .catch(error => {
+      alert("Απαιτείται σύνδεση");
       history.push("/login");
     });
 };
@@ -93,6 +95,7 @@ export const fetchEvents = dispatch => {
       })
     )
     .catch(error => {
+      alert("Απαιτείται σύνδεση");
       history.push("/login");
     });
 };
@@ -113,6 +116,7 @@ export const fetchPatients = dispatch => {
       })
     )
     .catch(error => {
+      alert("Απαιτείται σύνδεση");
       history.push("/login");
     });
 };
@@ -137,6 +141,7 @@ export const newVolunteer = (dispatch, userData) => {
       });
     })
     .catch(error => {
+      alert("Απαιτείται σύνδεση");
       alert(error, "error");
     });
 };
@@ -166,6 +171,7 @@ export const updateVolunteer = (id, userData) => dispatch => {
       });
     })
     .catch(error => {
+      alert("Απαιτείται σύνδεση");
       alert(error, "error");
     });
 };
@@ -199,6 +205,7 @@ export const setVolunteerActivity = (sendstatus, id) => dispatch => {
       });
     })
     .catch(error => {
+      alert("Απαιτείται σύνδεση");
       alert(error, "error");
     });
 };
@@ -223,6 +230,7 @@ export const insertEventClick = datapoustelnw => dispatch => {
       });
     })
     .catch(error => {
+      alert("Απαιτείται σύνδεση");
       alert(error, "error");
     });
 };

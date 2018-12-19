@@ -99,7 +99,7 @@ class Login extends Component {
 
   render() {
     if (this.state.redirectToReferrer || sessionStorage.getItem("token")) {
-      return <Redirect to={"/home"} />;
+      return <Redirect to={"/AppMapContainer"} />;
     }
     const { classes } = this.props;
     return (
