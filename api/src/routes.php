@@ -35,9 +35,9 @@ $app->post('/api/login', function (Request $request, Response $response, array $
     $userData = json_decode(file_get_contents('php://input'));
     $username = $userData->{'username'};
     $password = $userData->{'password'};
-    $status = 0;
+    // $status = 0;
 
-    $query = "SELECT * FROM volunteer WHERE username=:username";
+    $query = "SELECT * FROM ekab WHERE username=:username";
     $result = $pdo->prepare($query);
     $result->execute(array(':username' => $username));
     $count = $result->rowCount();
@@ -46,27 +46,38 @@ $app->post('/api/login', function (Request $request, Response $response, array $
     if ($count == 1 && !empty($user)) {
 
         if ($password == $user[password]) {
-
-            if ($status == $user[status]) {
-
-                $_SESSION['username'] = $username;
+            $_SESSION['username'] = $username;
                 $_SESSION['success'] = "You are now logged in";
                 $message = "successfully logged in";
+            if (isset($_SESSION['username'])) {
+                        $settings = $this->get('settings');
+                        $token = JWT::encode(['id' => $user->id, 'username' => $user->username], $settings['jwt']['secret'], "HS256");
+                        $data = array("username" => $username, 'status' => 'success', 'message' => $message, 'token' => $token);
+    
+                        $response = json_encode($data);
+                    }
+                    return $response;
 
-                if (isset($_SESSION['username'])) {
-                    $settings = $this->get('settings');
-                    $token = JWT::encode(['id' => $user->id, 'username' => $user->username], $settings['jwt']['secret'], "HS256");
-                    $data = array("username" => $username, 'status' => 'success', 'message' => $message, 'token' => $token);
+            // if ($status == $user[status]) {
 
-                    $response = json_encode($data);
-                }
-                return $response;
-            } else {
-                $message = "O Χρήστης είναι απενεργοποιημένος";
-                $data = array('status' => 'error', 'data' => null, 'message' => $message, 401, 'statsusus' => $status);
-                $response = json_encode($data);
-                return $response;
-            }
+            //     $_SESSION['username'] = $username;
+            //     $_SESSION['success'] = "You are now logged in";
+            //     $message = "successfully logged in";
+
+            //     if (isset($_SESSION['username'])) {
+            //         $settings = $this->get('settings');
+            //         $token = JWT::encode(['id' => $user->id, 'username' => $user->username], $settings['jwt']['secret'], "HS256");
+            //         $data = array("username" => $username, 'status' => 'success', 'message' => $message, 'token' => $token);
+
+            //         $response = json_encode($data);
+            //     }
+            //     return $response;
+            // } else {
+            //     $message = "O Χρήστης είναι απενεργοποιημένος";
+            //     $data = array('status' => 'error', 'data' => null, 'message' => $message, 401, 'statsusus' => $status);
+            //     $response = json_encode($data);
+            //     return $response;
+            // }
         } else {
             $message = "Πληκτρολογήσατε λάθος κωδικό";
             $data = array('status' => 'error', 'data' => null, 'message' => $message, 401);
