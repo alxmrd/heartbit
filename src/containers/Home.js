@@ -12,6 +12,9 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ambulance3 from "../ambulance3.png";
+import { connect } from "react-redux";
+import { fetchAdmin } from "../store/actions/actions";
+import { TextField } from "@material-ui/core";
 
 const styles = theme => ({
   card: {
@@ -52,29 +55,38 @@ class Home extends React.Component {
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
   };
-
+  componentDidMount() {
+    this.props.onfetchAdmin();
+  }
   render() {
-    const { classes } = this.props;
+    const { classes, admin } = this.props;
 
     return (
       <Card className={classes.card}>
-        <CardHeader
-          avatar={
-            <Avatar
-              aria-label="Recipe"
-              className={classes.avatar}
-              src={ambulance3}
-            />
-          }
-          title="Shrimp and Chorizo Paella"
-          subheader="September 14, 2016"
-        />
+        {admin.map(item => (
+          <CardHeader
+            key={item.id}
+            avatar={
+              <Avatar
+                aria-label="Recipe"
+                className={classes.avatar}
+                src={ambulance3}
+              />
+            }
+            title={
+              <Typography component="h5" variant="h4" color="primary">
+                {item.name} {item.surname}
+              </Typography>
+            }
+            subheader={item.type}
+          />
+        ))}
 
         <CardContent>
           <Typography component="p">
-            This impressive paella is a perfect party dish and a fun meal to
-            cook together with your guests. Add 1 cup of frozen peas along with
-            the mussels, if you like.
+            ΕΚΑΒ - Παράρτημα Κοζάνης <br /> Διεύθυνση: Ξηρολίμνης 20, <br />
+            Κοζάνη 501 00 <br />
+            Τηλέφωνο: 2461 029166 <br />
           </Typography>
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
@@ -91,34 +103,55 @@ class Home extends React.Component {
         </CardActions>
         <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph>Method:</Typography>
-            <Typography paragraph>
-              Heat 1/2 cup of the broth in a pot until simmering, add saffron
-              and set aside for 10 minutes.
-            </Typography>
-            <Typography paragraph>
-              Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet
-              over medium-high heat. Add chicken, shrimp and chorizo, and cook,
-              stirring occasionally until lightly browned, 6 to 8 minutes.
-              Transfer shrimp to a large plate and set aside, leaving chicken
-              and chorizo in the pan. Add pimentón, bay leaves, garlic,
-              tomatoes, onion, salt and pepper, and cook, stirring often until
-              thickened and fragrant, about 10 minutes. Add saffron broth and
-              remaining 4 1/2 cups chicken broth; bring to a boil.
-            </Typography>
-            <Typography paragraph>
-              Add rice and stir very gently to distribute. Top with artichokes
-              and peppers, and cook without stirring, until most of the liquid
-              is absorbed, 15 to 18 minutes. Reduce heat to medium-low, add
-              reserved shrimp and mussels, tucking them down into the rice, and
-              cook again without stirring, until mussels have opened and rice is
-              just tender, 5 to 7 minutes more. (Discard any mussels that don’t
-              open.)
-            </Typography>
-            <Typography>
-              Set aside off of the heat to let rest for 10 minutes, and then
-              serve.
-            </Typography>
+            <Typography paragraph>Στοιχεία Διαχειριστή:</Typography>
+            {admin.map(item => (
+              <TextField
+                key={item.id}
+                id="tel"
+                type="number"
+                label="Τηλέφωνο επικοινωνίας"
+                defaultValue={item.tel}
+                className={classes.textField}
+                fullWidth
+                margin="normal"
+                InputProps={{
+                  readOnly: true
+                }}
+                variant="outlined"
+              />
+            ))}
+            {admin.map(item => (
+              <TextField
+                key={item.id}
+                id="email"
+                type="email"
+                label="email"
+                defaultValue={item.email}
+                className={classes.textField}
+                fullWidth
+                margin="normal"
+                InputProps={{
+                  readOnly: true
+                }}
+                variant="outlined"
+              />
+            ))}
+            {admin.map(item => (
+              <TextField
+                key={item.id}
+                id="address"
+                type="address"
+                label="Διεύθυνση"
+                defaultValue={item.address}
+                className={classes.textField}
+                fullWidth
+                margin="normal"
+                InputProps={{
+                  readOnly: true
+                }}
+                variant="outlined"
+              />
+            ))}
           </CardContent>
         </Collapse>
       </Card>
@@ -127,7 +160,21 @@ class Home extends React.Component {
 }
 
 Home.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  onfetchAdmin: PropTypes.func.isRequired,
+  admin: PropTypes.array.isRequired
 };
+const HomeWithStyles = withStyles(styles)(Home);
 
-export default withStyles(styles)(Home);
+const mapStateToProps = state => ({
+  admin: state.admin
+});
+
+const mapDispatchToProps = dispatch => ({
+  onfetchAdmin: () => fetchAdmin(dispatch)
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HomeWithStyles);
