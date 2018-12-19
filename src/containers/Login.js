@@ -46,7 +46,7 @@ const styles = theme => ({
   //   marginTop: theme.spacing.unit * 3
   // },
   margin: {
-    margin: theme.spacing.unit
+    marginTop: theme.spacing.unit * 3
   }
 });
 class Login extends Component {
@@ -106,9 +106,13 @@ class Login extends Component {
       <React.Fragment>
         <main className={classes.layout}>
           <Paper className={classes.paper}>
+            <Typography component="h6" variant="h2" color="primary">
+              Heartbit
+            </Typography>
             <Avatar className={classes.avatar}>
               <LockIcon />
             </Avatar>
+
             <Typography component="h1" variant="h5">
               Login
             </Typography>

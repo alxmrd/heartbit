@@ -89,6 +89,14 @@ const styles = theme => ({
     flexGrow: 1,
     padding: theme.spacing.unit * 3
   },
+  login: {
+    flexGrow: 1,
+    padding: theme.spacing.unit * 3,
+    background:
+      "linear-gradient(right top, #46929a, #68a89a, #94bd9a,#c5cea1 ,#f5deb3 )",
+    height: "-webkit-fill-available"
+  },
+
   link: {
     color: "wheat",
     textDecoration: "none"
@@ -255,7 +263,7 @@ class App extends React.Component {
               </main>
             </React.Fragment>
           ) : (
-            <main className={classes.content}>
+            <main className={classes.login}>
               <div className={classes.toolbar} />
               <Routes />
             </main>
