@@ -35,6 +35,20 @@ const styles = theme => ({
   },
   avatar: {
     backgroundColor: "#4e878c"
+  },
+  container: {
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit
+  },
+  dense: {
+    marginTop: 16
+  },
+  menu: {
+    width: 200
   }
 });
 
@@ -61,42 +75,49 @@ const VolunteerCard = ({ classes, open, onClose, volunteerData }) => (
     <DialogContent>
       <TextField
         id="tel1"
-        label="Contact Number"
-        defaultValue={volunteerData.tel1}
         type="number"
+        label="Τηλέφωνο επικοινωνίας"
+        defaultValue={volunteerData.tel1}
+        className={classes.textField}
         fullWidth
         margin="normal"
         InputProps={{
           readOnly: true
         }}
+        variant="outlined"
       />
       <TextField
         id="tel2"
-        label="Second Contact Number"
-        defaultValue={volunteerData.tel2}
         type="number"
+        label="Εναλλακτικό Τηλέφωνο επικοινωνίας"
+        defaultValue={volunteerData.tel2}
+        className={classes.textField}
         fullWidth
         margin="normal"
         InputProps={{
           readOnly: true
         }}
+        variant="outlined"
       />
       <TextField
-        name="email"
-        label="email"
-        type="email"
         id="email"
+        type="email"
+        label="email"
+        name="email"
+        className={classes.textField}
         defaultValue={volunteerData.email}
         fullWidth
         margin="normal"
         InputProps={{
           readOnly: true
         }}
+        variant="outlined"
       />
       <TextField
         id="dateofbirth"
         label="Birthday"
         type="date"
+        className={classes.textField}
         defaultValue={volunteerData.dateofbirth}
         fullWidth
         margin="normal"
@@ -106,6 +127,7 @@ const VolunteerCard = ({ classes, open, onClose, volunteerData }) => (
         InputLabelProps={{
           shrink: true
         }}
+        variant="outlined"
       />
 
       <TextField
@@ -115,6 +137,7 @@ const VolunteerCard = ({ classes, open, onClose, volunteerData }) => (
         type="date"
         fullWidth
         margin="normal"
+        className={classes.textField}
         defaultValue={volunteerData.latesttraining}
         InputProps={{
           readOnly: true
@@ -122,6 +145,7 @@ const VolunteerCard = ({ classes, open, onClose, volunteerData }) => (
         InputLabelProps={{
           shrink: true
         }}
+        variant="outlined"
       />
     </DialogContent>
 
