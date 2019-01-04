@@ -1,13 +1,13 @@
 {
-  "main.css": "/heartbit/static/css/main.a6253f80.chunk.css",
-  "main.js": "/heartbit/static/js/main.68b177c4.chunk.js",
-  "main.js.map": "/heartbit/static/js/main.68b177c4.chunk.js.map",
-  "static/js/1.b3d176d6.chunk.js": "/heartbit/static/js/1.b3d176d6.chunk.js",
-  "static/js/1.b3d176d6.chunk.js.map": "/heartbit/static/js/1.b3d176d6.chunk.js.map",
-  "runtime~main.js": "/heartbit/static/js/runtime~main.6c05cb0f.js",
-  "runtime~main.js.map": "/heartbit/static/js/runtime~main.6c05cb0f.js.map",
-  "static/css/main.a6253f80.chunk.css.map": "/heartbit/static/css/main.a6253f80.chunk.css.map",
-  "index.html": "/heartbit/index.html",
-  "precache-manifest.2c6eff2bc3b7e6cf6958ba7cc8830edc.js": "/heartbit/precache-manifest.2c6eff2bc3b7e6cf6958ba7cc8830edc.js",
-  "service-worker.js": "/heartbit/service-worker.js"
+  "main.css": "/~ictest00661/api/public/heartbit/static/css/main.b490930d.chunk.css",
+  "main.js": "/~ictest00661/api/public/heartbit/static/js/main.6cafc6e3.chunk.js",
+  "main.js.map": "/~ictest00661/api/public/heartbit/static/js/main.6cafc6e3.chunk.js.map",
+  "static/js/1.1a2f8a0d.chunk.js": "/~ictest00661/api/public/heartbit/static/js/1.1a2f8a0d.chunk.js",
+  "static/js/1.1a2f8a0d.chunk.js.map": "/~ictest00661/api/public/heartbit/static/js/1.1a2f8a0d.chunk.js.map",
+  "runtime~main.js": "/~ictest00661/api/public/heartbit/static/js/runtime~main.296f9030.js",
+  "runtime~main.js.map": "/~ictest00661/api/public/heartbit/static/js/runtime~main.296f9030.js.map",
+  "static/css/main.b490930d.chunk.css.map": "/~ictest00661/api/public/heartbit/static/css/main.b490930d.chunk.css.map",
+  "index.html": "/~ictest00661/api/public/heartbit/index.html",
+  "precache-manifest.46d7ca1bb459a982a38f5cb3b7a9ad67.js": "/~ictest00661/api/public/heartbit/precache-manifest.46d7ca1bb459a982a38f5cb3b7a9ad67.js",
+  "service-worker.js": "/~ictest00661/api/public/heartbit/service-worker.js"
 }

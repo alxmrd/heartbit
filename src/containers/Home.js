@@ -14,7 +14,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ambulance3 from "../ambulance3.png";
 import { connect } from "react-redux";
 import { fetchAdmin } from "../store/actions/actions";
-import { TextField } from "@material-ui/core";
+import { TextField, Divider } from "@material-ui/core";
 
 const styles = theme => ({
   card: {
@@ -89,6 +89,7 @@ class Home extends React.Component {
             Τηλέφωνο: 2461 029166 <br />
           </Typography>
         </CardContent>
+        <Divider />
         <CardActions className={classes.actions} disableActionSpacing>
           <IconButton
             className={classnames(classes.expand, {
@@ -101,6 +102,7 @@ class Home extends React.Component {
             <ExpandMoreIcon />
           </IconButton>
         </CardActions>
+
         <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <Typography paragraph>Στοιχεία Διαχειριστή:</Typography>

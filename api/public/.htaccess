@@ -1,6 +1,6 @@
 <IfModule mod_rewrite.c>
    RewriteEngine on
-   RewriteRule ^$  http://zafora.icte.uowm.gr/~st00661    [L]
-   RewriteRule (.*)  http://zafora.icte.uowm.gr/~st00661/$1 [L]
+   RewriteRule ^$  public_html/     [L]
+   RewriteRule (.*) public_html/$1 [L]
    RewriteRule .* - [env=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 </IfModule>

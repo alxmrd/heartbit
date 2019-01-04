@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/heartbit/precache-manifest.2c6eff2bc3b7e6cf6958ba7cc8830edc.js"
+  "/~ictest00661/api/public/heartbit/precache-manifest.46d7ca1bb459a982a38f5cb3b7a9ad67.js"
 );
 
 workbox.clientsClaim();
@@ -28,7 +28,7 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("/heartbit/index.html", {
+workbox.routing.registerNavigationRoute("/~ictest00661/api/public/heartbit/index.html", {
   
   blacklist: [/^\/_/,/\/[^\/]+\.[^\/]+$/],
 });
