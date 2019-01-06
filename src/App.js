@@ -195,21 +195,32 @@ class App extends React.Component {
                   </IconButton>
                 </div>
                 <Divider />
+                <Link to="/AppMapContainer" className={classes.link}>
+                  <ListItem>
+                    <Tooltip title="Χάρτης" placement="right">
+                      <ListItemIcon>
+                        <i className="material-icons">map</i>
+                      </ListItemIcon>
+                    </Tooltip>
+                    <ListItemText primary="Χάρτης" />
+                  </ListItem>
+                </Link>
                 <Link to="/home" className={classes.link}>
                   <ListItem>
                     <Tooltip title="Αρχική" placement="right">
                       <ListItemIcon>
-                        <i className="material-icons">home</i>
+                        <i className="material-icons">account_circle</i>
                       </ListItemIcon>
                     </Tooltip>
-                    <ListItemText primary="Αρχική" />
+                    <ListItemText primary="Προφίλ Διαχειριστή" />
                   </ListItem>
                 </Link>
+                <Divider />
                 <Link to="/Volunteers" className={classes.link}>
                   <ListItem>
                     <Tooltip title="Εθελοντές" placement="right">
                       <ListItemIcon>
-                        <i className="material-icons">account_circle</i>
+                        <i className="material-icons">supervised_user_circle</i>
                       </ListItemIcon>
                     </Tooltip>
                     <ListItemText primary="Εθελοντές" />
@@ -246,16 +257,6 @@ class App extends React.Component {
                   </ListItem>
                 </Link>
                 <Divider />
-                <Link to="/AppMapContainer" className={classes.link}>
-                  <ListItem>
-                    <Tooltip title="Χάρτης" placement="right">
-                      <ListItemIcon>
-                        <i className="material-icons">map</i>
-                      </ListItemIcon>
-                    </Tooltip>
-                    <ListItemText primary="Χάρτης" />
-                  </ListItem>
-                </Link>
               </Drawer>
               <main className={classes.content}>
                 <div className={classes.toolbar} />

@@ -154,6 +154,16 @@ class Home extends React.Component {
                 variant="outlined"
               />
             ))}
+            <TextField
+              id="outlined-textarea"
+              label="Πληκτρολογείστε Μύνημα"
+              placeholder=""
+              multiline
+              className={classes.textField}
+              margin="normal"
+              variant="outlined"
+              fullWidth
+            />
           </CardContent>
         </Collapse>
       </Card>
