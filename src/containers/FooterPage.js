@@ -11,6 +11,7 @@ const styles = theme => ({
     left: "0px",
     bottom: "0px",
     width: "100%",
+
     position: "fixed"
   }
 });
@@ -26,7 +27,7 @@ class FooterPage extends React.Component {
             <i> Minas Dasygenis</i>
           </Typography>
           <Typography
-            variant="subtitle2"
+            variant="caption"
             align="center"
             color="textSecondary"
             component="p"
