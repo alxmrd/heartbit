@@ -22,7 +22,8 @@ class FooterPage extends React.Component {
         <CssBaseline />
         <footer className={classes.footer}>
           <Typography variant="caption" align="center" gutterBottom>
-            © Developed by Mironidis Alexandros. Supervised by Minas Dasygenis
+            © Developed by <i>Mironidis Alexandros</i>. Supervised by
+            <i> Minas Dasygenis</i>
           </Typography>
           <Typography
             variant="subtitle2"

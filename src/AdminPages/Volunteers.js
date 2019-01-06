@@ -62,7 +62,7 @@ class Volunteer extends Component {
     return (
       <Fragment>
         <Toolbar>
-          <i className="material-icons teal600 md-36">supervised_user_circle</i>
+          <i className="material-icons teal600 md-36">account_circle</i>
           <Typography variant="h6" color="inherit">
             Εθελοντές
           </Typography>

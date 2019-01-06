@@ -164,6 +164,7 @@ class Home extends React.Component {
               variant="outlined"
               fullWidth
             />
+            {/* <i className="material-icons">send</i> */}
           </CardContent>
         </Collapse>
       </Card>

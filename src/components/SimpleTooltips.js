@@ -12,7 +12,7 @@ const styles = theme => ({
   },
   absolute: {
     position: "fixed",
-    bottom: theme.spacing.unit * 2,
+    bottom: theme.spacing.unit * 6.5,
     right: theme.spacing.unit * 3,
     boxShadow: "5px 5px  5px grey "
   }
