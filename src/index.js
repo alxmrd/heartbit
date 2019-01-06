@@ -4,7 +4,7 @@ import { Router } from "react-router-dom";
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-
+import FooterPage from "./containers/FooterPage.js";
 import { CssBaseline } from "@material-ui/core";
 import history from "./history";
 
@@ -37,6 +37,7 @@ ReactDOM.render(
       <CssBaseline />
 
       <App />
+      <FooterPage />
     </MuiThemeProvider>
   </Router>,
   document.getElementById("root")
