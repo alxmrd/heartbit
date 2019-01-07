@@ -63,22 +63,27 @@ class Event extends Component {
               <TableCell>address</TableCell>
               <TableCell>latitude</TableCell>
               <TableCell>longitude</TableCell>
+              <TableCell>timestamp</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {event.map(function(item, key) {
-              return (
-                <TableRow key={item.id}>
-                  <TableCell component="th" scope="item">
-                    {item.id}
-                  </TableCell>
-                  <TableCell>{item.correspondence}</TableCell>
-                  <TableCell>{item.address}</TableCell>
-                  <TableCell>{item.latitude}</TableCell>
-                  <TableCell>{item.longitude}</TableCell>
-                </TableRow>
-              );
-            })}
+            {event
+              .slice(0)
+              .reverse()
+              .map(function(item, key) {
+                return (
+                  <TableRow key={item.id}>
+                    <TableCell component="th" scope="item">
+                      {item.id}
+                    </TableCell>
+                    <TableCell>{item.correspondence}</TableCell>
+                    <TableCell>{item.address}</TableCell>
+                    <TableCell>{item.latitude}</TableCell>
+                    <TableCell>{item.longitude}</TableCell>
+                    <TableCell>{item.datetime}</TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </Paper>
