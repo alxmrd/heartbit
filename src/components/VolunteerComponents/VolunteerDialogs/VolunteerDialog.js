@@ -3,8 +3,9 @@ import PropTypes from "prop-types";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { connect } from "react-redux";
-import { Button, DialogActions } from "@material-ui/core";
+
 import EditForm from "./EditForm";
+import DialogContent from "@material-ui/core/DialogContent";
 import {
   newVolunteer,
   idCleaner,
@@ -126,38 +127,25 @@ class VolunteerDialog extends Component {
         ) : (
           <DialogTitle id="form-dialog-title">New Volunteer</DialogTitle>
         )}
-        {onEdit === false ? (
-          <EditForm
-            onEditFormChange={this.handleChange}
-            onEditFormChangeNumber={this.handleNumber}
-            onUserNameEdit={this.onUserNameEdit}
-          />
-        ) : (
-          <CreateForm
-            onCreateFormChange={this.handleChange}
-            onCreateFormChangeNumber={this.handleNumber}
-          />
-        )}
-
-        <DialogActions>
-          <Button onClick={this.handleDialogClose} color="primary">
-            Cancel
-          </Button>
+        <DialogContent>
           {onEdit === false ? (
-            <Button
-              onClick={this.handleUpdate}
-              type="submit"
-              color="primary"
+            <EditForm
+              onEditFormChange={this.handleChange}
+              onEditFormChangeNumber={this.handleNumber}
+              onUserNameEdit={this.onUserNameEdit}
+              onClose={this.handleDialogClose}
               disabled={!this.state.hasChanged}
-            >
-              Update
-            </Button>
+              onUpdate={this.handleUpdate}
+            />
           ) : (
-            <Button onClick={this.handleSubmit} type="submit" color="primary">
-              Insert
-            </Button>
+            <CreateForm
+              onCreateFormChange={this.handleChange}
+              onCreateFormChangeNumber={this.handleNumber}
+              onCreate={this.handleSubmit}
+              onClose={this.handleDialogClose}
+            />
           )}
-        </DialogActions>
+        </DialogContent>
       </Dialog>
     );
   }
