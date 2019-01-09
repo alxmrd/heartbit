@@ -14,6 +14,7 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use \Firebase\JWT\JWT;
 
+use Respect\Validation\Validator as v;
 // Routes
 // $app->get('/', function (Request $request, Response $response, array $args) {
 //     $response = "It works!";
@@ -24,9 +25,15 @@ $app->get('/hello/{name}', function (Request $request, Response $response, array
     global $pdo;
 
     $name = $args['name'];
+    $nameValidator = v::alnum()->noWhitespace()->length(1, 15);
+    if ($nameValidator->validate($name)){
     $response->getBody()->write("Hello, $name");
 
     return $response;
+    } else {
+        $response->getBody()->write("error");
+
+    }
 });
 
 $app->post('/api/login', function (Request $request, Response $response, array $args) {
@@ -58,36 +65,16 @@ $app->post('/api/login', function (Request $request, Response $response, array $
                     }
                     return $response;
 
-            // if ($status == $user[status]) {
-
-            //     $_SESSION['username'] = $username;
-            //     $_SESSION['success'] = "You are now logged in"; //ONLY FOR VOLUNTEER LOGIN FOR MOBILE APPS
-            
-            //     $message = "successfully logged in";
-
-            //     if (isset($_SESSION['username'])) {
-            //         $settings = $this->get('settings');
-            //         $token = JWT::encode(['id' => $user->id, 'username' => $user->username], $settings['jwt']['secret'], "HS256");
-            //         $data = array("username" => $username, 'status' => 'success', 'message' => $message, 'token' => $token);
-
-            //         $response = json_encode($data);
-            //     }
-            //     return $response;
-            // } else {
-            //     $message = "O Χρήστης είναι απενεργοποιημένος";
-            //     $data = array('status' => 'error', 'data' => null, 'message' => $message, 401, 'statsusus' => $status);
-            //     $response = json_encode($data);
-            //     return $response;
-            // }
+           
         } else {
-            $message = "Πληκτρολογήσατε λάθος κωδικό";
+            $message = "Kάτι πήγε στραβα. Προσπαθήστε ξανά!";
             $data = array('status' => 'error', 'data' => null, 'message' => $message, 401);
             $response = json_encode($data);
             return $response;
         }
     } else {
 
-        $message = "Ο χρήστης δεν βρέθηκε";
+        $message = "Kάτι πήγε στραβα. Προσπαθήστε ξανά!";
         $data = array('status' => 'error', 'data' => null, 'message' => $message, 401);
         $response = json_encode($data);
         return $response;
@@ -313,36 +300,63 @@ $app->post('/api/insertvolunteer', function (Request $request, Response $respons
     $name = $userData->{'name'};
     $surname = $userData->{'surname'};
     $password = $userData->{'password'};
-    
-    $tel1 = $userData->{'tel1'};
+     $tel1 = $userData->{'tel1'};
     $tel2 = $userData->{'tel2'};
     $email = $userData->{'email'};
     $dateofbirth = $userData->{'dateofbirth'};
     $latesttraining = $userData->{'latesttraining'};
     $address = $userData->{'address'};
 
-    $query = "INSERT INTO volunteer (username,name,surname,password,tel1,tel2,email,dateofbirth,latesttraining,address) VALUES (:username,:name,:surname,:password,:tel1,:tel2,:email,:dateofbirth,:latesttraining,:address)";
+    $query = "SELECT * FROM volunteer WHERE username=:username";
     $result = $pdo->prepare($query);
+    $result->execute(array(':username' => $username));
+    $count = $result->rowCount();
+    $user = $result->fetch(PDO::FETCH_BOTH);
 
-    $result->execute(array(':username' => $username, ':name'=>$name, ':surname'=>$surname, ':password'=>$password, ':tel1' => $tel1, ':tel2' => $tel, ':email' => $email, ':dateofbirth' => $dateofbirth, ':latesttraining' => $latesttraining, ':address' => $address));
-    $lastId = $pdo->lastInsertId();
-    //  $response=json_encode($lastId);
-    $myObj = new stdClass();
-    $myObj->id = $lastId;
-    $myObj->username = $username;
-    $myObj->name = $name;
-    $myObj->surname = $surname;
-    $myObj->password = $password;
-    $myObj->email = $email;
-    $myObj->tel1 = $tel1;
-    $myObj->tel2 = $tel2;
-    $myObj->dateofbirth = $dateofbirth;
-    $myObj->latesttraining = $latesttraining;
-    $myObj->address = $address;
+    if ($count == 1 && !empty($user)) {
+        $message = "Υπάρχει ήδη εθελοντής με αυτο το Όνομα Χρήστη";
+        $data = array('status' => 'error', 'data' => null, 'message' => $message, 409);
+        $response = json_encode($data)->withStatus(409);
+        return $response;
+    } else {
+        $query = "SELECT * FROM volunteer WHERE email=:email";
+        $result = $pdo->prepare($query);
+        $result->execute(array(':email' => $email));
+        $count = $result->rowCount();
+        $user = $result->fetch(PDO::FETCH_BOTH);
+        if ($count == 1 && !empty($user)) {
+            $message = "Υπάρχει ήδη εθελοντής με αυτο το E-mail";
+            $data = array('status' => 'error', 'data' => null, 'message' => $message, 409);
+            $response = json_encode($data)->withStatus(409);;
+            return $response;
+        } else {
+            $query = "INSERT INTO volunteer (username,name,surname,password,tel1,tel2,email,dateofbirth,latesttraining,address) VALUES (:username,:name,:surname,:password,:tel1,:tel2,:email,:dateofbirth,:latesttraining,:address)";
+            $result = $pdo->prepare($query);
+        
+            $result->execute(array(':username' => $username, ':name'=>$name, ':surname'=>$surname, ':password'=>$password, ':tel1' => $tel1, ':tel2' => $tel, ':email' => $email, ':dateofbirth' => $dateofbirth, ':latesttraining' => $latesttraining, ':address' => $address));
+            $lastId = $pdo->lastInsertId();
+            //  $response=json_encode($lastId);
+            $myObj = new stdClass();
+            $myObj->id = $lastId;
+            $myObj->username = $username;
+            $myObj->name = $name;
+            $myObj->surname = $surname;
+            $myObj->password = $password;
+            $myObj->email = $email;
+            $myObj->tel1 = $tel1;
+            $myObj->tel2 = $tel2;
+            $myObj->dateofbirth = $dateofbirth;
+            $myObj->latesttraining = $latesttraining;
+            $myObj->address = $address;
+        
+            $response = json_encode($myObj, JSON_NUMERIC_CHECK);
+        
+            return $response;
+    
+        }
+    } 
 
-    $response = json_encode($myObj, JSON_NUMERIC_CHECK);
-
-    return $response;
+   
 });
 $app->post('/api/insertevent', function (Request $request, Response $response, array $args) {
     global $pdo;
