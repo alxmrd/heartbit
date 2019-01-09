@@ -14,13 +14,17 @@ import {
 import CreateForm from "./CreateForm";
 
 const initState = {
+  hasChanged: false,
   username: "",
+  name: "",
+  surname: "",
+  password: "",
   email: "",
   dateofbirth: "",
   latesttraining: "",
   tel1: "",
   tel2: "",
-  hasChanged: false
+  address: ""
 };
 
 class VolunteerDialog extends Component {
@@ -61,11 +65,15 @@ class VolunteerDialog extends Component {
     this.setState({
       hasChanged: false,
       username: "",
+      name: "",
+      surname: "",
+      password: "",
       email: "",
       dateofbirth: "",
       latesttraining: "",
       tel1: "",
-      tel2: ""
+      tel2: "",
+      address: ""
     });
   };
 
@@ -77,18 +85,26 @@ class VolunteerDialog extends Component {
       dateofbirth: this.state.dateofbirth,
       latesttraining: this.state.latesttraining,
       tel1: this.state.tel1,
-      tel2: this.state.tel2
+      tel2: this.state.tel2,
+      password: this.state.password,
+      name: this.state.name,
+      surname: this.state.surname,
+      address: this.state.address
     };
 
     this.props.onNewVolunteer(dataPouStelnw);
     this.setState({
       hasChanged: false,
       username: "",
+      name: "",
+      surname: "",
+      password: "",
       email: "",
       dateofbirth: "",
       latesttraining: "",
       tel1: "",
-      tel2: ""
+      tel2: "",
+      address: ""
     });
     this.props.onClose();
   };
@@ -102,18 +118,26 @@ class VolunteerDialog extends Component {
       dateofbirth: this.state.dateofbirth,
       latesttraining: this.state.latesttraining,
       tel1: this.state.tel1,
-      tel2: this.state.tel2
+      tel2: this.state.tel2,
+      password: this.state.password,
+      name: this.state.name,
+      surname: this.state.surname,
+      address: this.state.address
     };
     const id = this.props.id;
     this.props.onUpdateVolunteer(id, dataPouStelnw);
     this.setState({
       hasChanged: false,
       username: "",
+      name: "",
+      surname: "",
+      password: "",
       email: "",
       dateofbirth: "",
       latesttraining: "",
       tel1: "",
-      tel2: ""
+      tel2: "",
+      address: ""
     });
     this.props.onClose();
   };

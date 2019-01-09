@@ -163,7 +163,7 @@ export const newVolunteer = (dispatch, userData) => {
       });
     })
     .catch(error => {
-      alert("Απαιτείται σύνδεση");
+      alert("error");
       alert(error, "error");
     });
 };
@@ -193,7 +193,7 @@ export const updateVolunteer = (id, userData) => dispatch => {
       });
     })
     .catch(error => {
-      alert("Απαιτείται σύνδεση");
+      alert("error");
       alert(error, "error");
     });
 };

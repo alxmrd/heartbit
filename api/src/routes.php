@@ -244,24 +244,33 @@ $app->post('/api/editvolunteer/{id}', function (Request $request, Response $resp
     $userData = json_decode(file_get_contents('php://input'));
     $volunteers_id = $args['id'];
     $username = $userData->{'username'};
+    $name = $userData->{'name'};
+    $surname = $userData->{'surname'};
+    $password = $userData->{'password'};
+    
     $tel1 = $userData->{'tel1'};
     $tel2 = $userData->{'tel2'};
     $email = $userData->{'email'};
     $dateofbirth = $userData->{'dateofbirth'};
     $latesttraining = $userData->{'latesttraining'};
+    $address = $userData->{'address'};
 
-    $query = "UPDATE volunteer SET username=:username, tel1=:tel1, tel2=:tel2, email=:email, dateofbirth=:dateofbirth, latesttraining=:latesttraining  WHERE id=:id";
+    $query = "UPDATE volunteer SET username=:username, name=:name,  surname=:surname, password=:password, tel1=:tel1, tel2=:tel2, email=:email, dateofbirth=:dateofbirth, latesttraining=:latesttraining, address=:address  WHERE id=:id";
     $result = $pdo->prepare($query);
-    $result->execute(array(':username' => $username, ':tel1' => $tel1, ':tel2' => $tel, ':email' => $email, ':dateofbirth' => $dateofbirth, ':latesttraining' => $latesttraining, ':id' => $volunteers_id));
+    $result->execute(array(':username' => $username, ':name'=>$name, ':surname'=>$surname, ':password'=>$password, ':tel1' => $tel1, ':tel2' => $tel, ':email' => $email, ':dateofbirth' => $dateofbirth, ':latesttraining' => $latesttraining, ':address' => $address, ':id' => $volunteers_id));
 
     $myObj = new stdClass();
     $myObj->id = $volunteers_id;
     $myObj->username = $username;
+    $myObj->name = $name;
+    $myObj->surname = $surname;
+    $myObj->password = $password;
     $myObj->email = $email;
     $myObj->tel1 = $tel1;
     $myObj->tel2 = $tel2;
     $myObj->dateofbirth = $dateofbirth;
     $myObj->latesttraining = $latesttraining;
+    $myObj->address = $address;
 
     $response = json_encode($myObj, JSON_NUMERIC_CHECK);
 
@@ -301,26 +310,35 @@ $app->post('/api/insertvolunteer', function (Request $request, Response $respons
     $userData = json_decode(file_get_contents('php://input'));
 
     $username = $userData->{'username'};
+    $name = $userData->{'name'};
+    $surname = $userData->{'surname'};
+    $password = $userData->{'password'};
+    
     $tel1 = $userData->{'tel1'};
     $tel2 = $userData->{'tel2'};
     $email = $userData->{'email'};
     $dateofbirth = $userData->{'dateofbirth'};
     $latesttraining = $userData->{'latesttraining'};
+    $address = $userData->{'address'};
 
-    $query = "INSERT INTO volunteer (username,tel1,tel2,email,dateofbirth,latesttraining) VALUES (:username,:tel1,:tel2,:email,:dateofbirth,:latesttraining)";
+    $query = "INSERT INTO volunteer (username,name,surname,password,tel1,tel2,email,dateofbirth,latesttraining,address) VALUES (:username,:name,:surname,:password,:tel1,:tel2,:email,:dateofbirth,:latesttraining,:address)";
     $result = $pdo->prepare($query);
 
-    $result->execute(array(':username' => $username, ':tel1' => $tel1, ':tel2' => $tel2, ':email' => $email, ':dateofbirth' => $dateofbirth, ':latesttraining' => $latesttraining));
+    $result->execute(array(':username' => $username, ':name'=>$name, ':surname'=>$surname, ':password'=>$password, ':tel1' => $tel1, ':tel2' => $tel, ':email' => $email, ':dateofbirth' => $dateofbirth, ':latesttraining' => $latesttraining, ':address' => $address));
     $lastId = $pdo->lastInsertId();
     //  $response=json_encode($lastId);
     $myObj = new stdClass();
     $myObj->id = $lastId;
     $myObj->username = $username;
+    $myObj->name = $name;
+    $myObj->surname = $surname;
+    $myObj->password = $password;
     $myObj->email = $email;
     $myObj->tel1 = $tel1;
     $myObj->tel2 = $tel2;
     $myObj->dateofbirth = $dateofbirth;
     $myObj->latesttraining = $latesttraining;
+    $myObj->address = $address;
 
     $response = json_encode($myObj, JSON_NUMERIC_CHECK);
 
