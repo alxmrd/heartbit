@@ -3,15 +3,24 @@ import PropTypes from "prop-types";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { connect } from "react-redux";
-
 import EditForm from "./EditForm";
 import DialogContent from "@material-ui/core/DialogContent";
 import {
   newVolunteer,
   idCleaner,
-  updateVolunteer
+  updateVolunteer,
+  errorMessageCleaner
 } from "../../../store/actions/actions";
 import CreateForm from "./CreateForm";
+import MySnackbarContentWrapper from "../../MySnackbarContentWrapper";
+import Snackbar from "@material-ui/core/Snackbar";
+import withStyles from "@material-ui/core/styles/withStyles";
+
+const styles = theme => ({
+  margin: {
+    marginTop: theme.spacing.unit * 3
+  }
+});
 
 const initState = {
   hasChanged: false,
@@ -79,6 +88,7 @@ class VolunteerDialog extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
+
     const dataPouStelnw = {
       username: this.state.username,
       email: this.state.email,
@@ -93,20 +103,8 @@ class VolunteerDialog extends Component {
     };
 
     this.props.onNewVolunteer(dataPouStelnw);
-    this.setState({
-      hasChanged: false,
-      username: "",
-      name: "",
-      surname: "",
-      password: "",
-      email: "",
-      dateofbirth: "",
-      latesttraining: "",
-      tel1: "",
-      tel2: "",
-      address: ""
-    });
-    this.props.onClose();
+
+    this.handleDialogClose();
   };
 
   handleUpdate = event => {
@@ -126,6 +124,7 @@ class VolunteerDialog extends Component {
     };
     const id = this.props.id;
     this.props.onUpdateVolunteer(id, dataPouStelnw);
+
     this.setState({
       hasChanged: false,
       username: "",
@@ -142,14 +141,18 @@ class VolunteerDialog extends Component {
     this.props.onClose();
   };
 
+  handleSnackbarClose = errormessage => {
+    this.props.onErrorMessageCleaner(errormessage);
+  };
+
   render() {
-    const { open, onEdit, onClose } = this.props;
+    const { classes, open, onEdit, onClose, errormessage } = this.props;
     return (
       <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
         {onEdit === false ? (
-          <DialogTitle id="form-dialog-title">Edit Volunteer</DialogTitle>
+          <DialogTitle id="form-dialog-title">Επεξεργασία Εθελοντή</DialogTitle>
         ) : (
-          <DialogTitle id="form-dialog-title">New Volunteer</DialogTitle>
+          <DialogTitle id="form-dialog-title">Εισαγωγή Εθελοντή</DialogTitle>
         )}
         <DialogContent>
           {onEdit === false ? (
@@ -170,6 +173,22 @@ class VolunteerDialog extends Component {
             />
           )}
         </DialogContent>
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left"
+          }}
+          open={errormessage ? true : false}
+          autoHideDuration={6000}
+          onClose={errormessage => this.handleSnackbarClose(errormessage)}
+        >
+          <MySnackbarContentWrapper
+            onClose={errormessage => this.handleSnackbarClose(errormessage)}
+            variant="error"
+            className={classes.margin}
+            message={errormessage}
+          />
+        </Snackbar>
       </Dialog>
     );
   }
@@ -178,7 +197,9 @@ class VolunteerDialog extends Component {
 const mapStateToProps = state => ({
   volunteerData:
     state.volunteers.filter(volunteer => volunteer.id === state.id)[0] || {},
-  id: state.id
+  id: state.id,
+  errormessage: state.error.message,
+  errorcode: state.error.httpstatus
 });
 
 VolunteerDialog.propTypes = {
@@ -196,17 +217,24 @@ VolunteerDialog.propTypes = {
   onNewVolunteer: PropTypes.func.isRequired,
   onCloseDialog: PropTypes.func.isRequired,
   onUpdateVolunteer: PropTypes.func.isRequired,
-  id: PropTypes.number
+  onErrorMessageCleaner: PropTypes.func.isRequired,
+  id: PropTypes.number,
+  classes: PropTypes.object.isRequired,
+  errormessage: PropTypes.string,
+  errorcode: PropTypes.string
 };
 
 const mapDispatchToProps = dispatch => ({
   onNewVolunteer: dataPouStelnw => newVolunteer(dispatch, dataPouStelnw),
   onUpdateVolunteer: (id, dataPouStelnw) =>
     dispatch(updateVolunteer(id, dataPouStelnw)),
-  onCloseDialog: id => dispatch(idCleaner(id))
+  onCloseDialog: id => dispatch(idCleaner(id)),
+  onErrorMessageCleaner: errormessage =>
+    dispatch(errorMessageCleaner(errormessage))
 });
+const VolunteerDialogWithStyles = withStyles(styles)(VolunteerDialog);
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(VolunteerDialog);
+)(VolunteerDialogWithStyles);

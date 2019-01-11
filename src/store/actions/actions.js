@@ -12,6 +12,8 @@ import { FETCH_DEFIBRILLATORS } from "../actions/types";
 import { FETCH_EVENTS } from "../actions/types";
 import { FETCH_PATIENTS } from "../actions/types";
 import { FETCH_ADMIN } from "../actions/types";
+import { ISINVALID } from "../actions/types";
+import { CLEAR_ISINVALID } from "../actions/types";
 import history from "../../history";
 
 const headers = {
@@ -157,15 +159,26 @@ export const newVolunteer = (dispatch, userData) => {
   })
     .then(result => result.json())
     .then(res => {
-      dispatch({
-        type: NEW_VOLUNTEER,
-        payload: res
-      });
+      res.httpstatus === "error"
+        ? dispatch({
+            type: ISINVALID,
+            payload: res
+          })
+        : dispatch({
+            type: NEW_VOLUNTEER,
+            payload: res
+          });
     })
     .catch(error => {
-      alert("error");
-      alert(error, "error");
+      alert(error, "SERVER error 500 ");
     });
+};
+
+export const errorMessageCleaner = errormessage => dispatch => {
+  dispatch({
+    type: CLEAR_ISINVALID,
+    payload: errormessage
+  });
 };
 
 export const editVolunteer = id => dispatch => {
@@ -193,8 +206,7 @@ export const updateVolunteer = (id, userData) => dispatch => {
       });
     })
     .catch(error => {
-      alert("error");
-      alert(error, "error");
+      alert(error, "SERVER error 500 ");
     });
 };
 
@@ -251,9 +263,9 @@ export const insertEventClick = datapoustelnw => dispatch => {
         payload: res
       });
     })
+    .catch(error => error.json())
     .catch(error => {
-      alert("Απαιτείται σύνδεση");
-      alert(error, "error");
+      alert(error, "SERVER error 500 ");
     });
 };
 

@@ -7,9 +7,9 @@ if (!isset($_SESSION)) {
 require_once 'configuration.php';
 // require_once 'middleware.php';
 
-//use Psr\Http\Message\ServerRequestInterface;
-//use Psr\Http\Message\ResponseInterface;
-//use Slim\Container;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use \Firebase\JWT\JWT;
@@ -291,7 +291,7 @@ $app->post('/api/deactivate/{id}', function (Request $request, Response $respons
     return $response;
 });
 
-$app->post('/api/insertvolunteer', function (Request $request, Response $response, array $args) {
+$app->post('/api/insertvolunteer', function (ServerRequestInterface $request, ResponseInterface $response, array $args) {
     global $pdo;
 
     $userData = json_decode(file_get_contents('php://input'));
@@ -306,6 +306,7 @@ $app->post('/api/insertvolunteer', function (Request $request, Response $respons
     $dateofbirth = $userData->{'dateofbirth'};
     $latesttraining = $userData->{'latesttraining'};
     $address = $userData->{'address'};
+    
 
     $query = "SELECT * FROM volunteer WHERE username=:username";
     $result = $pdo->prepare($query);
@@ -315,8 +316,13 @@ $app->post('/api/insertvolunteer', function (Request $request, Response $respons
 
     if ($count == 1 && !empty($user)) {
         $message = "Υπάρχει ήδη εθελοντής με αυτο το Όνομα Χρήστη";
-        $data = array('status' => 'error', 'data' => null, 'message' => $message, 409);
-        $response = json_encode($data)->withStatus(409);
+        $httpstatus= "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->message = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+      
         return $response;
     } else {
         $query = "SELECT * FROM volunteer WHERE email=:email";
@@ -326,8 +332,13 @@ $app->post('/api/insertvolunteer', function (Request $request, Response $respons
         $user = $result->fetch(PDO::FETCH_BOTH);
         if ($count == 1 && !empty($user)) {
             $message = "Υπάρχει ήδη εθελοντής με αυτο το E-mail";
-            $data = array('status' => 'error', 'data' => null, 'message' => $message, 409);
-            $response = json_encode($data)->withStatus(409);;
+            $httpstatus= "error";
+            $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message, 409);
+            $myObj = new stdClass();
+            $myObj->message = $message;
+            $myObj->httpstatus = $httpstatus;
+            $response = $response->withJson($myObj, 409);
+          
             return $response;
         } else {
             $query = "INSERT INTO volunteer (username,name,surname,password,tel1,tel2,email,dateofbirth,latesttraining,address) VALUES (:username,:name,:surname,:password,:tel1,:tel2,:email,:dateofbirth,:latesttraining,:address)";
@@ -335,6 +346,7 @@ $app->post('/api/insertvolunteer', function (Request $request, Response $respons
         
             $result->execute(array(':username' => $username, ':name'=>$name, ':surname'=>$surname, ':password'=>$password, ':tel1' => $tel1, ':tel2' => $tel, ':email' => $email, ':dateofbirth' => $dateofbirth, ':latesttraining' => $latesttraining, ':address' => $address));
             $lastId = $pdo->lastInsertId();
+        
             //  $response=json_encode($lastId);
             $myObj = new stdClass();
             $myObj->id = $lastId;
@@ -348,6 +360,7 @@ $app->post('/api/insertvolunteer', function (Request $request, Response $respons
             $myObj->dateofbirth = $dateofbirth;
             $myObj->latesttraining = $latesttraining;
             $myObj->address = $address;
+            
         
             $response = json_encode($myObj, JSON_NUMERIC_CHECK);
         

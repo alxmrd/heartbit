@@ -6,6 +6,7 @@ import defibrillatorsReducer from "./defibrillatorsReducer";
 import patientReducer from "./patientReducer";
 import adminReducer from "./adminReducer";
 import eventReducer from "./eventReducer";
+import httpStatusMessageReducer from "./httpStatusMessageReducer";
 
 export default combineReducers({
   volunteers: volunteersReducer,
@@ -14,5 +15,6 @@ export default combineReducers({
   event: eventReducer,
   defibrillators: defibrillatorsReducer,
   patients: patientReducer,
-  admin: adminReducer
+  admin: adminReducer,
+  error: httpStatusMessageReducer
 });
