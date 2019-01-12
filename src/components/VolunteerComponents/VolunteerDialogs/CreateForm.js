@@ -5,12 +5,14 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import { DialogActions } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
+import NativeSelect from "@material-ui/core/NativeSelect";
 
 function EditForm({
   onCreateFormChange,
   onCreateFormChangeNumber,
   onCreate,
-  onClose
+  onClose,
+  classes
 }) {
   return (
     <form onSubmit={onCreate}>
@@ -157,6 +159,32 @@ function EditForm({
           }}
         />
       </FormControl>
+
+      <FormControl required margin="dense" fullWidth>
+        <InputLabel htmlFor="location">Περιφέρεια</InputLabel>
+        <NativeSelect
+          // value={this.state.age}
+          onChange={onCreateFormChange}
+          input={<Input name="location" id="location" />}
+        >
+          <option value="" />
+          <option value="Ανατολική Μακεδονία και Θράκη">
+            Ανατολική Μακεδονία και Θράκη
+          </option>
+          <option value="Κεντρική Μακεδονία">Κεντρική Μακεδονία</option>
+          <option value="Δυτική Μακεδονία">Δυτική Μακεδονία</option>
+          <option value="Ήπειρος">Ήπειρος</option>
+          <option value="Θεσσαλία">Θεσσαλία</option>
+          <option value="Ιόνιοι Νήσοι">Ιόνιοι Νήσοι</option>
+          <option value="Δυτική Ελλάδα">Δυτική Ελλάδα</option>
+          <option value="Στερεά Ελλάδα">Στερεά Ελλάδα</option>
+          <option value="Αττική">Αττική</option>
+          <option value="Πελοπόννησος">Πελοπόννησος</option>
+          <option value="Βόρειο Αιγαίο">Βόρειο Αιγαίο</option>
+          <option value="Νότιο Αιγαίο"> Νότιο Αιγαίο</option>
+          <option value="Κρήτη">Κρήτη</option>
+        </NativeSelect>
+      </FormControl>
       <DialogActions>
         <Button onClick={onClose} color="primary">
           Aκυρωση
@@ -173,7 +201,8 @@ EditForm.propTypes = {
   onCreateFormChange: PropTypes.func.isRequired,
   onCreateFormChangeNumber: PropTypes.func.isRequired,
   onCreate: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default EditForm;

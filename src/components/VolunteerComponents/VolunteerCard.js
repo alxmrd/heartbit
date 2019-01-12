@@ -178,11 +178,25 @@ const VolunteerCard = ({ classes, open, onClose, volunteerData }) => (
       />
       <TextField
         id="address"
-        type="Διεύθυνση"
-        label="address"
+        type="address"
+        label="Διεύθυνση"
         name="address"
         className={classes.textField}
         defaultValue={volunteerData.address}
+        fullWidth
+        margin="normal"
+        InputProps={{
+          readOnly: true
+        }}
+        variant="outlined"
+      />
+      <TextField
+        id="location"
+        type="location "
+        label="Περιφέρεια"
+        name="location"
+        className={classes.textField}
+        defaultValue={volunteerData.location}
         fullWidth
         margin="normal"
         InputProps={{

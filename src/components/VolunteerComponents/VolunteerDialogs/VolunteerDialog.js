@@ -19,6 +19,10 @@ import withStyles from "@material-ui/core/styles/withStyles";
 const styles = theme => ({
   margin: {
     marginTop: theme.spacing.unit * 3
+  },
+  root: {
+    display: "flex",
+    flexWrap: "wrap"
   }
 });
 
@@ -33,7 +37,8 @@ const initState = {
   latesttraining: "",
   tel1: "",
   tel2: "",
-  address: ""
+  address: "",
+  location: ""
 };
 
 class VolunteerDialog extends Component {
@@ -88,7 +93,8 @@ class VolunteerDialog extends Component {
       latesttraining: "",
       tel1: "",
       tel2: "",
-      address: ""
+      address: "",
+      location: ""
     });
   };
 
@@ -105,7 +111,8 @@ class VolunteerDialog extends Component {
       password: this.state.password,
       name: this.state.name,
       surname: this.state.surname,
-      address: this.state.address
+      address: this.state.address,
+      location: this.state.location
     };
 
     this.props.onNewVolunteer(dataPouStelnw);
@@ -124,7 +131,8 @@ class VolunteerDialog extends Component {
       password: this.state.password,
       name: this.state.name,
       surname: this.state.surname,
-      address: this.state.address
+      address: this.state.address,
+      location: this.state.location
     };
     const id = this.props.id;
     this.props.onUpdateVolunteer(id, dataPouStelnw);
@@ -140,7 +148,8 @@ class VolunteerDialog extends Component {
       latesttraining: "",
       tel1: "",
       tel2: "",
-      address: ""
+      address: "",
+      location: ""
     });
     this.props.onClose();
   };
