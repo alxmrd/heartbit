@@ -346,7 +346,7 @@ $app->post('/api/insertvolunteer', function (ServerRequestInterface $request, Re
         
             $result->execute(array(':username' => $username, ':name'=>$name, ':surname'=>$surname, ':password'=>$password, ':tel1' => $tel1, ':tel2' => $tel, ':email' => $email, ':dateofbirth' => $dateofbirth, ':latesttraining' => $latesttraining, ':address' => $address));
             $lastId = $pdo->lastInsertId();
-        
+            $success= "success";
             //  $response=json_encode($lastId);
             $myObj = new stdClass();
             $myObj->id = $lastId;
@@ -360,6 +360,7 @@ $app->post('/api/insertvolunteer', function (ServerRequestInterface $request, Re
             $myObj->dateofbirth = $dateofbirth;
             $myObj->latesttraining = $latesttraining;
             $myObj->address = $address;
+            $myObj->success = $success;
             
         
             $response = json_encode($myObj, JSON_NUMERIC_CHECK);

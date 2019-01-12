@@ -50,6 +50,12 @@ class VolunteerDialog extends Component {
         ...this.props.volunteerData
       });
     }
+    if (
+      this.props.newVolunteer.success !== prevProps.newVolunteer.success &&
+      this.props.newVolunteer.success === "success"
+    ) {
+      this.handleDialogClose();
+    }
   }
 
   handleChange = event => {
@@ -103,8 +109,6 @@ class VolunteerDialog extends Component {
     };
 
     this.props.onNewVolunteer(dataPouStelnw);
-
-    this.handleDialogClose();
   };
 
   handleUpdate = event => {
@@ -139,10 +143,6 @@ class VolunteerDialog extends Component {
       address: ""
     });
     this.props.onClose();
-  };
-
-  handleSnackbarClose = errormessage => {
-    this.props.onErrorMessageCleaner(errormessage);
   };
 
   render() {
@@ -180,10 +180,14 @@ class VolunteerDialog extends Component {
           }}
           open={errormessage ? true : false}
           autoHideDuration={6000}
-          onClose={errormessage => this.handleSnackbarClose(errormessage)}
+          onClose={errormessage =>
+            this.props.onErrorMessageCleaner(errormessage)
+          }
         >
           <MySnackbarContentWrapper
-            onClose={errormessage => this.handleSnackbarClose(errormessage)}
+            onClose={errormessage =>
+              this.props.onErrorMessageCleaner(errormessage)
+            }
             variant="error"
             className={classes.margin}
             message={errormessage}
@@ -199,7 +203,8 @@ const mapStateToProps = state => ({
     state.volunteers.filter(volunteer => volunteer.id === state.id)[0] || {},
   id: state.id,
   errormessage: state.error.message,
-  errorcode: state.error.httpstatus
+  errorcode: state.error.httpstatus,
+  newVolunteer: state.volunteerSuccessData
 });
 
 VolunteerDialog.propTypes = {
@@ -221,7 +226,8 @@ VolunteerDialog.propTypes = {
   id: PropTypes.number,
   classes: PropTypes.object.isRequired,
   errormessage: PropTypes.string,
-  errorcode: PropTypes.string
+  errorcode: PropTypes.string,
+  newVolunteer: PropTypes.object
 };
 
 const mapDispatchToProps = dispatch => ({

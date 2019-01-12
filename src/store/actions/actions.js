@@ -14,6 +14,7 @@ import { FETCH_PATIENTS } from "../actions/types";
 import { FETCH_ADMIN } from "../actions/types";
 import { ISINVALID } from "../actions/types";
 import { CLEAR_ISINVALID } from "../actions/types";
+
 import history from "../../history";
 
 const headers = {
@@ -169,6 +170,7 @@ export const newVolunteer = (dispatch, userData) => {
             payload: res
           });
     })
+
     .catch(error => {
       alert(error, "SERVER error 500 ");
     });
