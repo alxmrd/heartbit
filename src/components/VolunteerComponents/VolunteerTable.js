@@ -145,16 +145,15 @@ class VolunteerTable extends React.Component {
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
-                <TableCell>username</TableCell>
+                <TableCell>Όνομα Χρήστη</TableCell>
+                <TableCell>Όνομα</TableCell>
+                <TableCell>Επώνυμο</TableCell>
+                <TableCell>Εmail</TableCell>
+                <TableCell>Ημερομηνία Γέννησης</TableCell>
+                {/* <TableCell>Περιφέρεια</TableCell> */}
 
-                <TableCell>name</TableCell>
-                <TableCell>surname</TableCell>
-                <TableCell>email</TableCell>
-                <TableCell>Birthday</TableCell>
-
-                <TableCell>address</TableCell>
-                <TableCell>Activate/Deactivate Volunteer</TableCell>
-                <TableCell>Edit Volunteer</TableCell>
+                <TableCell>Κατάσταση Δραστηριότητας</TableCell>
+                <TableCell>Επεξεργασία</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -175,7 +174,6 @@ class VolunteerTable extends React.Component {
                       <TableCell>{row.email}</TableCell>
 
                       <TableCell>{row.dateofbirth}</TableCell>
-                      <TableCell>{row.address}</TableCell>
 
                       <Activity volunteerid={row.id} volstatus={row.status} />
 

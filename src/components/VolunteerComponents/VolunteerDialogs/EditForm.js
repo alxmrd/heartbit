@@ -49,7 +49,7 @@ function EditForm({
         />
         <TextField
           id="surname"
-          label="Eπίθετο*"
+          label="Επώνυμο*"
           name="surname"
           type="surname"
           defaultValue={volunteerData.surname}
@@ -59,7 +59,7 @@ function EditForm({
           margin="normal"
           required
           inputProps={{
-            title: "Eισάγετε Επίθετο"
+            title: "Eισάγετε Επώνυμο"
           }}
         />
         <TextField

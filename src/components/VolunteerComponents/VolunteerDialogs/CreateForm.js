@@ -41,7 +41,7 @@ function EditForm({
         />
       </FormControl>
       <FormControl margin="dense" required fullWidth>
-        <InputLabel htmlFor="surname">Επίθετο*</InputLabel>
+        <InputLabel htmlFor="surname">Επώνυμο*</InputLabel>
         <Input
           id="surname"
           name="surname"
@@ -159,10 +159,10 @@ function EditForm({
       </FormControl>
       <DialogActions>
         <Button onClick={onClose} color="primary">
-          Cancel
+          Aκυρωση
         </Button>
         <Button type="submit" color="primary">
-          Insert
+          Εισαγωγη
         </Button>
       </DialogActions>
     </form>

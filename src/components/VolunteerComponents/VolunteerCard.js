@@ -66,13 +66,55 @@ const VolunteerCard = ({ classes, open, onClose, volunteerData }) => (
           <i className="material-icons">account_circle</i>
         </Avatar>
       }
+      subheader="Όνομα Χρήστη"
       title={volunteerData.username}
-      subheader="Username"
     />
 
     <Divider />
 
     <DialogContent>
+      <TextField
+        id="name"
+        type="name"
+        label="Όνομα"
+        name="name"
+        className={classes.textField}
+        defaultValue={volunteerData.name}
+        fullWidth
+        margin="normal"
+        InputProps={{
+          readOnly: true
+        }}
+        variant="outlined"
+      />
+      <TextField
+        id="surname"
+        type="surname"
+        label="Επίθετο"
+        name="surname"
+        className={classes.textField}
+        defaultValue={volunteerData.surname}
+        fullWidth
+        margin="normal"
+        InputProps={{
+          readOnly: true
+        }}
+        variant="outlined"
+      />
+      <TextField
+        id="email"
+        type="email"
+        label="Εmail"
+        name="email"
+        className={classes.textField}
+        defaultValue={volunteerData.email}
+        fullWidth
+        margin="normal"
+        InputProps={{
+          readOnly: true
+        }}
+        variant="outlined"
+      />
       <TextField
         id="tel1"
         type="number"
@@ -99,23 +141,10 @@ const VolunteerCard = ({ classes, open, onClose, volunteerData }) => (
         }}
         variant="outlined"
       />
-      <TextField
-        id="email"
-        type="email"
-        label="email"
-        name="email"
-        className={classes.textField}
-        defaultValue={volunteerData.email}
-        fullWidth
-        margin="normal"
-        InputProps={{
-          readOnly: true
-        }}
-        variant="outlined"
-      />
+
       <TextField
         id="dateofbirth"
-        label="Birthday"
+        label="Ημερομηνία Γέννησης"
         type="date"
         className={classes.textField}
         defaultValue={volunteerData.dateofbirth}
@@ -133,7 +162,7 @@ const VolunteerCard = ({ classes, open, onClose, volunteerData }) => (
       <TextField
         noValidate
         id="latesttraining"
-        label="Latest Training"
+        label="Ημερομηνία Τελευταίας Εκπαίδευσης"
         type="date"
         fullWidth
         margin="normal"
@@ -144,6 +173,20 @@ const VolunteerCard = ({ classes, open, onClose, volunteerData }) => (
         }}
         InputLabelProps={{
           shrink: true
+        }}
+        variant="outlined"
+      />
+      <TextField
+        id="address"
+        type="Διεύθυνση"
+        label="address"
+        name="address"
+        className={classes.textField}
+        defaultValue={volunteerData.address}
+        fullWidth
+        margin="normal"
+        InputProps={{
+          readOnly: true
         }}
         variant="outlined"
       />
