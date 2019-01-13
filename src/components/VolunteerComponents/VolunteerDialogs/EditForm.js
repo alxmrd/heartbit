@@ -10,6 +10,8 @@ import NativeSelect from "@material-ui/core/NativeSelect";
 import FormControl from "@material-ui/core/FormControl";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
 function EditForm({
   volunteerData,
@@ -19,7 +21,9 @@ function EditForm({
   onUpdate,
   onClose,
   Generate,
-  password
+  password,
+  onPasswordVisibility,
+  visibility
 }) {
   return (
     <form onSubmit={onUpdate}>
@@ -85,7 +89,7 @@ function EditForm({
           <Input
             id="password"
             name="password"
-            type="password"
+            type={visibility ? "text" : "password"}
             // defaultValue={volunteerData.password}
 
             value={password}
@@ -97,6 +101,13 @@ function EditForm({
               <InputAdornment position="end">
                 <IconButton onClick={Generate}>
                   <i className="material-icons">cached</i>
+                </IconButton>
+
+                <IconButton
+                  aria-label="Toggle password visibility"
+                  onClick={onPasswordVisibility}
+                >
+                  {visibility ? <Visibility /> : <VisibilityOff />}
                 </IconButton>
               </InputAdornment>
             }
@@ -235,7 +246,9 @@ EditForm.propTypes = {
   onClose: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
   Generate: PropTypes.func,
-  password: PropTypes.string
+  password: PropTypes.string,
+  visibility: PropTypes.bool,
+  onPasswordVisibility: PropTypes.func
 };
 
 const mapStateToProps = state => ({

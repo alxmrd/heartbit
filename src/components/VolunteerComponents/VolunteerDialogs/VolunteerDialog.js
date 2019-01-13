@@ -15,6 +15,8 @@ import CreateForm from "./CreateForm";
 import MySnackbarContentWrapper from "../../MySnackbarContentWrapper";
 import Snackbar from "@material-ui/core/Snackbar";
 import withStyles from "@material-ui/core/styles/withStyles";
+import IconButton from "@material-ui/core/IconButton";
+import ReactToPrint from "react-to-print";
 
 const styles = theme => ({
   margin: {
@@ -38,7 +40,8 @@ const initState = {
   tel1: "",
   tel2: "",
   address: "",
-  location: ""
+  location: "",
+  showPassword: false
 };
 
 class VolunteerDialog extends Component {
@@ -62,6 +65,9 @@ class VolunteerDialog extends Component {
       this.handleDialogClose();
     }
   }
+  handleClickShowPassword = () => {
+    this.setState(state => ({ showPassword: !state.showPassword }));
+  };
 
   handleChange = event => {
     this.setState({
@@ -176,11 +182,31 @@ class VolunteerDialog extends Component {
     return (
       <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
         {onEdit === false ? (
-          <DialogTitle id="form-dialog-title">Επεξεργασία Εθελοντή</DialogTitle>
+          <DialogTitle id="form-dialog-title">
+            Επεξεργασία Εθελοντή
+            <ReactToPrint
+              trigger={() => (
+                <IconButton>
+                  <i className="material-icons">print</i>
+                </IconButton>
+              )}
+              content={() => this.componentRef}
+            />
+          </DialogTitle>
         ) : (
-          <DialogTitle id="form-dialog-title">Εισαγωγή Εθελοντή</DialogTitle>
+          <DialogTitle id="form-dialog-title">
+            Εισαγωγή Εθελοντή
+            <ReactToPrint
+              trigger={() => (
+                <IconButton>
+                  <i className="material-icons">print</i>
+                </IconButton>
+              )}
+              content={() => this.componentRef}
+            />
+          </DialogTitle>
         )}
-        <DialogContent>
+        <DialogContent ref={el => (this.componentRef = el)}>
           {onEdit === false ? (
             <EditForm
               onEditFormChange={this.handleChange}
@@ -191,6 +217,8 @@ class VolunteerDialog extends Component {
               onUpdate={this.handleUpdate}
               Generate={this.onGenerate}
               password={this.state.password}
+              onPasswordVisibility={this.handleClickShowPassword}
+              visibility={this.state.showPassword}
             />
           ) : (
             <CreateForm
@@ -200,6 +228,8 @@ class VolunteerDialog extends Component {
               onClose={this.handleDialogClose}
               Generate={this.onGenerate}
               password={this.state.password}
+              onPasswordVisibility={this.handleClickShowPassword}
+              visibility={this.state.showPassword}
             />
           )}
         </DialogContent>

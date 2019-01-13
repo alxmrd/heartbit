@@ -8,6 +8,8 @@ import Button from "@material-ui/core/Button";
 import NativeSelect from "@material-ui/core/NativeSelect";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
 function EditForm({
   onCreateFormChange,
@@ -15,7 +17,9 @@ function EditForm({
   onCreate,
   onClose,
   Generate,
-  password
+  password,
+  onPasswordVisibility,
+  visibility
 }) {
   return (
     <form onSubmit={onCreate}>
@@ -76,7 +80,7 @@ function EditForm({
           id="password"
           name="password"
           value={password}
-          type="password"
+          type={visibility ? "text" : "password"}
           onChange={onCreateFormChange}
           inputProps={{
             title: "Eισάγετε Κωδικό"
@@ -85,6 +89,13 @@ function EditForm({
             <InputAdornment position="end">
               <IconButton onClick={Generate}>
                 <i className="material-icons">cached</i>
+              </IconButton>
+
+              <IconButton
+                aria-label="Toggle password visibility"
+                onClick={onPasswordVisibility}
+              >
+                {visibility ? <Visibility /> : <VisibilityOff />}
               </IconButton>
             </InputAdornment>
           }
@@ -214,7 +225,9 @@ EditForm.propTypes = {
   onCreate: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   Generate: PropTypes.func,
-  password: PropTypes.string.isRequired
+  password: PropTypes.string.isRequired,
+  visibility: PropTypes.bool,
+  onPasswordVisibility: PropTypes.func
 };
 
 export default EditForm;
