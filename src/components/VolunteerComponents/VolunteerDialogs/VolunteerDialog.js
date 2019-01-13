@@ -105,8 +105,7 @@ class VolunteerDialog extends Component {
       tel1: "",
       tel2: "",
       address: "",
-      location: "",
-      showPassword: false
+      location: ""
     });
   };
 

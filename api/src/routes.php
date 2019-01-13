@@ -309,6 +309,7 @@ $app->post('/api/insertvolunteer', function (ServerRequestInterface $request, Re
     $latesttraining = $userData->{'latesttraining'};
     $address = $userData->{'address'};
      $location = $userData->{'location'};
+     $status = $userData->{'status'};
     
 
     $query = "SELECT * FROM volunteer WHERE username=:username";
@@ -344,12 +345,14 @@ $app->post('/api/insertvolunteer', function (ServerRequestInterface $request, Re
           
             return $response;
         } else {
-            $query = "INSERT INTO volunteer (username,name,surname,password,tel1,tel2,email,dateofbirth,latesttraining,address,location) VALUES (:username,:name,:surname,:password,:tel1,:tel2,:email,:dateofbirth,:latesttraining,:address,:location)";
+            $status="0";
+            $query = "INSERT INTO volunteer (username,name,surname,password,tel1,tel2,email,dateofbirth,latesttraining,address,location,status) VALUES (:username,:name,:surname,:password,:tel1,:tel2,:email,:dateofbirth,:latesttraining,:address,:location,:status)";
             $result = $pdo->prepare($query);
         
-            $result->execute(array(':username' => $username, ':name'=>$name, ':surname'=>$surname, ':password'=>$password, ':tel1' => $tel1, ':tel2' => $tel, ':email' => $email, ':dateofbirth' => $dateofbirth, ':latesttraining' => $latesttraining, ':address' => $address,':location'=>$location));
+            $result->execute(array(':username' => $username, ':name'=>$name, ':surname'=>$surname, ':password'=>$password, ':tel1' => $tel1, ':tel2' => $tel, ':email' => $email, ':dateofbirth' => $dateofbirth, ':latesttraining' => $latesttraining, ':address' => $address,':location'=>$location,':status'=>$status));
             $lastId = $pdo->lastInsertId();
             $success= "success";
+         
             //  $response=json_encode($lastId);
             $myObj = new stdClass();
             $myObj->id = $lastId;
@@ -364,6 +367,7 @@ $app->post('/api/insertvolunteer', function (ServerRequestInterface $request, Re
             $myObj->latesttraining = $latesttraining;
             $myObj->address = $address;
              $myObj->location = $location;
+             $myObj->status = $status;
             $myObj->success = $success;
             
         
