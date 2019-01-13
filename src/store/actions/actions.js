@@ -14,6 +14,7 @@ import { FETCH_PATIENTS } from "../actions/types";
 import { FETCH_ADMIN } from "../actions/types";
 import { ISINVALID } from "../actions/types";
 import { CLEAR_ISINVALID } from "../actions/types";
+import { CLEAN_VOLUNTEER_DATA } from "../actions/types";
 
 import history from "../../history";
 
@@ -180,6 +181,12 @@ export const errorMessageCleaner = errormessage => dispatch => {
   dispatch({
     type: CLEAR_ISINVALID,
     payload: errormessage
+  });
+};
+export const clearVolunteerData = volunteerData => dispatch => {
+  dispatch({
+    type: CLEAN_VOLUNTEER_DATA,
+    payload: volunteerData
   });
 };
 

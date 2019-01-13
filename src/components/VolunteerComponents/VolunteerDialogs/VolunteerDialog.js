@@ -9,7 +9,8 @@ import {
   newVolunteer,
   idCleaner,
   updateVolunteer,
-  errorMessageCleaner
+  errorMessageCleaner,
+  clearVolunteerData
 } from "../../../store/actions/actions";
 import CreateForm from "./CreateForm";
 import MySnackbarContentWrapper from "../../MySnackbarContentWrapper";
@@ -63,6 +64,10 @@ class VolunteerDialog extends Component {
       this.props.newVolunteer.success === "success"
     ) {
       this.handleDialogClose();
+
+      const newVolunteerData = this.props.newVolunteer;
+
+      this.props.onClearVolunteerData(newVolunteerData);
     }
   }
   handleClickShowPassword = () => {
@@ -100,7 +105,8 @@ class VolunteerDialog extends Component {
       tel1: "",
       tel2: "",
       address: "",
-      location: ""
+      location: "",
+      showPassword: false
     });
   };
 
@@ -172,7 +178,8 @@ class VolunteerDialog extends Component {
       tel1: "",
       tel2: "",
       address: "",
-      location: ""
+      location: "",
+      showPassword: false
     });
     this.props.onClose();
   };
@@ -280,6 +287,7 @@ VolunteerDialog.propTypes = {
 
   volunteerData: PropTypes.object.isRequired,
   onNewVolunteer: PropTypes.func.isRequired,
+  onClearVolunteerData: PropTypes.func.isRequired,
   onCloseDialog: PropTypes.func.isRequired,
   onUpdateVolunteer: PropTypes.func.isRequired,
   onErrorMessageCleaner: PropTypes.func.isRequired,
@@ -296,7 +304,9 @@ const mapDispatchToProps = dispatch => ({
     dispatch(updateVolunteer(id, dataPouStelnw)),
   onCloseDialog: id => dispatch(idCleaner(id)),
   onErrorMessageCleaner: errormessage =>
-    dispatch(errorMessageCleaner(errormessage))
+    dispatch(errorMessageCleaner(errormessage)),
+  onClearVolunteerData: newVolunteer =>
+    dispatch(clearVolunteerData(newVolunteer))
 });
 const VolunteerDialogWithStyles = withStyles(styles)(VolunteerDialog);
 

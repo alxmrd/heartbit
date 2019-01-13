@@ -2,8 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
-import Button from "@material-ui/core/Button";
-
+import Fab from "@material-ui/core/Fab";
 import Tooltip from "@material-ui/core/Tooltip";
 
 const styles = theme => ({
@@ -21,14 +20,13 @@ const styles = theme => ({
 function SimpleTooltips({ classes, definition, onButtonClick }) {
   return (
     <Tooltip title={definition}>
-      <Button
-        variant="fab"
+      <Fab
         color="secondary"
         className={classes.absolute}
         onClick={onButtonClick}
       >
         <AddIcon />
-      </Button>
+      </Fab>
     </Tooltip>
   );
 }

@@ -43,7 +43,7 @@ function EditForm({
           />
         </FormControl>
         <FormControl margin="dense" required fullWidth>
-          <InputLabel htmlFor="name">Όνομα*</InputLabel>
+          <InputLabel htmlFor="name">Όνομα</InputLabel>
           <Input
             id="name"
             name="name"
@@ -58,7 +58,7 @@ function EditForm({
         </FormControl>
 
         <FormControl margin="dense" required fullWidth>
-          <InputLabel htmlFor="surname">Επώνυμο*</InputLabel>
+          <InputLabel htmlFor="surname">Επώνυμο</InputLabel>
           <Input
             id="surname"
             name="surname"
@@ -72,7 +72,7 @@ function EditForm({
           />
         </FormControl>
         <FormControl margin="dense" required fullWidth>
-          <InputLabel htmlFor="email">E-mail*</InputLabel>
+          <InputLabel htmlFor="email">E-mail</InputLabel>
           <Input
             id="email"
             name="email"
@@ -85,7 +85,7 @@ function EditForm({
           />
         </FormControl>
         <FormControl margin="dense" required fullWidth>
-          <InputLabel htmlFor="email">Kωδικός*</InputLabel>
+          <InputLabel htmlFor="email">Kωδικός</InputLabel>
           <Input
             id="password"
             name="password"
@@ -114,7 +114,7 @@ function EditForm({
           />
         </FormControl>
         <FormControl margin="dense" required fullWidth>
-          <InputLabel htmlFor="tel1">Τηλέφωνο*</InputLabel>
+          <InputLabel htmlFor="tel1">Τηλέφωνο</InputLabel>
           <Input
             id="tel1"
             name="tel1"
@@ -147,7 +147,7 @@ function EditForm({
         </FormControl>
         <FormControl margin="dense" required fullWidth>
           <InputLabel shrink={true} htmlFor="tel2">
-            Ημερομηνία Γέννησης*
+            Ημερομηνία Γέννησης
           </InputLabel>
 
           <Input

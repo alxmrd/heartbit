@@ -308,7 +308,7 @@ $app->post('/api/insertvolunteer', function (ServerRequestInterface $request, Re
     $dateofbirth = $userData->{'dateofbirth'};
     $latesttraining = $userData->{'latesttraining'};
     $address = $userData->{'address'};
-    $location = $userData->{'location'};
+     $location = $userData->{'location'};
     
 
     $query = "SELECT * FROM volunteer WHERE username=:username";
@@ -344,7 +344,7 @@ $app->post('/api/insertvolunteer', function (ServerRequestInterface $request, Re
           
             return $response;
         } else {
-            $query = "INSERT INTO volunteer (username,name,surname,password,tel1,tel2,email,dateofbirth,latesttraining,address) VALUES (:username,:name,:surname,:password,:tel1,:tel2,:email,:dateofbirth,:latesttraining,:address,:location)";
+            $query = "INSERT INTO volunteer (username,name,surname,password,tel1,tel2,email,dateofbirth,latesttraining,address,location) VALUES (:username,:name,:surname,:password,:tel1,:tel2,:email,:dateofbirth,:latesttraining,:address,:location)";
             $result = $pdo->prepare($query);
         
             $result->execute(array(':username' => $username, ':name'=>$name, ':surname'=>$surname, ':password'=>$password, ':tel1' => $tel1, ':tel2' => $tel, ':email' => $email, ':dateofbirth' => $dateofbirth, ':latesttraining' => $latesttraining, ':address' => $address,':location'=>$location));
@@ -363,7 +363,7 @@ $app->post('/api/insertvolunteer', function (ServerRequestInterface $request, Re
             $myObj->dateofbirth = $dateofbirth;
             $myObj->latesttraining = $latesttraining;
             $myObj->address = $address;
-            $myObj->location = $location;
+             $myObj->location = $location;
             $myObj->success = $success;
             
         
