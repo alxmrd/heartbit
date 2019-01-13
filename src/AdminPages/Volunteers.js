@@ -12,7 +12,7 @@ import {
 import Typography from "@material-ui/core/Typography";
 import VolunteerCard from "../components/VolunteerComponents/VolunteerCard";
 import VolunteerDialog from "../components/VolunteerComponents/VolunteerDialogs/VolunteerDialog";
-
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 class Volunteer extends Component {
   constructor(props) {
     super();
@@ -54,6 +54,13 @@ class Volunteer extends Component {
     this.props.onCloseDialog(id);
   };
 
+  handleClickAway = () => {
+    this.setState({
+      open: false
+    });
+    console.log("ok");
+  };
+
   componentDidMount() {
     this.props.fetchVolunteers();
   }
@@ -86,11 +93,13 @@ class Volunteer extends Component {
             this.handleClickOpen(e);
           }}
         />
-        <VolunteerDialog
-          onEdit={this.state.onEdit}
-          open={this.state.open}
-          onClose={this.handleClose}
-        />
+        <ClickAwayListener onClickAway={this.handleClickAway}>
+          <VolunteerDialog
+            onEdit={this.state.onEdit}
+            open={this.state.open}
+            onClose={this.handleClose}
+          />
+        </ClickAwayListener>
         <VolunteerCard
           open={this.state.openCard}
           onClose={this.handleCardClose}

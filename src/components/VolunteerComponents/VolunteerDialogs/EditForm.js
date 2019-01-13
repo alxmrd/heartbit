@@ -2,7 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import DialogContent from "@material-ui/core/DialogContent";
-
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
 import { DialogActions } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import NativeSelect from "@material-ui/core/NativeSelect";
@@ -17,7 +18,8 @@ function EditForm({
   disabled,
   onUpdate,
   onClose,
-  classes
+  Generate,
+  password
 }) {
   return (
     <form onSubmit={onUpdate}>
@@ -84,11 +86,20 @@ function EditForm({
             id="password"
             name="password"
             type="password"
-            defaultValue={volunteerData.password}
+            // defaultValue={volunteerData.password}
+
+            value={password}
             onChange={onEditFormChange}
             inputProps={{
               title: "Eισάγετε Κωδικό"
             }}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton onClick={Generate}>
+                  <i className="material-icons">cached</i>
+                </IconButton>
+              </InputAdornment>
+            }
           />
         </FormControl>
         <FormControl margin="dense" required fullWidth>
@@ -223,7 +234,8 @@ EditForm.propTypes = {
   onUpdate: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
-  classes: PropTypes.object.isRequired
+  Generate: PropTypes.func,
+  password: PropTypes.string
 };
 
 const mapStateToProps = state => ({

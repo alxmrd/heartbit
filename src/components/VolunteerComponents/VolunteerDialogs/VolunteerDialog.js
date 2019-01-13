@@ -118,6 +118,23 @@ class VolunteerDialog extends Component {
     this.props.onNewVolunteer(dataPouStelnw);
   };
 
+  onGenerate = event => {
+    event.preventDefault();
+
+    var generator = require("generate-password");
+
+    var password = generator.generate({
+      length: 10,
+      numbers: true
+    });
+
+    // 'uEyMTw32v9'
+    this.setState({
+      password: password,
+      hasChanged: true
+    });
+  };
+
   handleUpdate = event => {
     event.preventDefault();
 
@@ -172,6 +189,8 @@ class VolunteerDialog extends Component {
               onClose={this.handleDialogClose}
               disabled={!this.state.hasChanged}
               onUpdate={this.handleUpdate}
+              Generate={this.onGenerate}
+              password={this.state.password}
             />
           ) : (
             <CreateForm
@@ -179,6 +198,8 @@ class VolunteerDialog extends Component {
               onCreateFormChangeNumber={this.handleNumber}
               onCreate={this.handleSubmit}
               onClose={this.handleDialogClose}
+              Generate={this.onGenerate}
+              password={this.state.password}
             />
           )}
         </DialogContent>

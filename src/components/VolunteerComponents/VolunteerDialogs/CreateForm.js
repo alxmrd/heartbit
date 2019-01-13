@@ -6,13 +6,16 @@ import InputLabel from "@material-ui/core/InputLabel";
 import { DialogActions } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import NativeSelect from "@material-ui/core/NativeSelect";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
 
 function EditForm({
   onCreateFormChange,
   onCreateFormChangeNumber,
   onCreate,
   onClose,
-  classes
+  Generate,
+  password
 }) {
   return (
     <form onSubmit={onCreate}>
@@ -72,11 +75,19 @@ function EditForm({
         <Input
           id="password"
           name="password"
+          value={password}
           type="password"
           onChange={onCreateFormChange}
           inputProps={{
             title: "Eισάγετε Κωδικό"
           }}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton onClick={Generate}>
+                <i className="material-icons">cached</i>
+              </IconButton>
+            </InputAdornment>
+          }
         />
       </FormControl>
       <FormControl margin="dense" required fullWidth>
@@ -202,7 +213,8 @@ EditForm.propTypes = {
   onCreateFormChangeNumber: PropTypes.func.isRequired,
   onCreate: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
-  classes: PropTypes.object.isRequired
+  Generate: PropTypes.func,
+  password: PropTypes.string.isRequired
 };
 
 export default EditForm;
