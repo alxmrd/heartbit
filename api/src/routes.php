@@ -8,29 +8,26 @@ require_once 'configuration.php';
 
 // require_once 'middleware.php';
 
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Slim\Container;
+use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use \Firebase\JWT\JWT;
-
-use Respect\Validation\Validator as v;
 // Routes
 // $app->get('/', function (Request $request, Response $response, array $args) {
 //     $response = "It works!";
 //     return $response;
 // });
 
-$app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
+$app->get('/hello', function (Request $request, Response $response, array $args) {
     global $pdo;
     require_once 'validation/validationRules.php';
-    $name = $args['name'];
+    $name = null ;
     //  $usernameValidator = v::alnum()->noWhitespace()->length(1, 15);
-    if ($usernameValidator->validate($name)){
-    $response->getBody()->write("Hello,", $name);
+    if ($trainingDateValidator->validate($name)) {
+        $response->getBody()->write("Hello,", $name);
 
-    return $response;
+        return $response;
     } else {
         $response->getBody()->write("error");
 
@@ -55,18 +52,17 @@ $app->post('/api/login', function (Request $request, Response $response, array $
 
         if ($password == $user[password]) {
             $_SESSION['username'] = $username;
-                $_SESSION['success'] = "You are now logged in";
-                $message = "successfully logged in";
+            $_SESSION['success'] = "You are now logged in";
+            $message = "successfully logged in";
             if (isset($_SESSION['username'])) {
-                        $settings = $this->get('settings');
-                        $token = JWT::encode(['id' => $user->id, 'username' => $user->username], $settings['jwt']['secret'], "HS256");
-                        $data = array("username" => $username, 'status' => 'success', 'message' => $message, 'token' => $token);
-    
-                        $response = json_encode($data);
-                    }
-                    return $response;
+                $settings = $this->get('settings');
+                $token = JWT::encode(['id' => $user->id, 'username' => $user->username], $settings['jwt']['secret'], "HS256");
+                $data = array("username" => $username, 'status' => 'success', 'message' => $message, 'token' => $token);
 
-           
+                $response = json_encode($data);
+            }
+            return $response;
+
         } else {
             $message = "Kάτι πήγε στραβα. Προσπαθήστε ξανά!";
             $data = array('status' => 'error', 'data' => null, 'message' => $message, 401);
@@ -229,6 +225,7 @@ $app->get('/api/volunteers/{id}', function (Request $request, Response $response
 
 $app->post('/api/editvolunteer/{id}', function (Request $request, Response $response, array $args) {
     global $pdo;
+    require_once 'validation/validationRules.php';
     $userData = json_decode(file_get_contents('php://input'));
     $volunteers_id = $args['id'];
     $username = $userData->{'username'};
@@ -242,29 +239,188 @@ $app->post('/api/editvolunteer/{id}', function (Request $request, Response $resp
     $latesttraining = $userData->{'latesttraining'};
     $address = $userData->{'address'};
     $location = $userData->{'location'};
-    
 
-    $query = "UPDATE volunteer SET username=:username, name=:name,  surname=:surname, password=:password, tel1=:tel1, tel2=:tel2, email=:email, dateofbirth=:dateofbirth, latesttraining=:latesttraining, address=:address,location=:location  WHERE id=:id";
+    if (!$usernameValidator->validate($username)) {
+        $message = "Πληκτρολογήσατε μη αποδεκτό Όνομα Χρήστη.";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->message = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+    if (!$nameValidator->validate($name)) {
+        $message = "Πληκτρολογήσατε μη αποδεκτό Όνομα.";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->message = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+    if (!$surnameValidator->validate($surname)) {
+        $message = "Πληκτρολογήσατε μη αποδεκτό Επώνυμο.";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->message = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+    if (!$emailValidator->validate($email)) {
+        $message = "Μη αποδεκτή μορφή E-mail.";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->message = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+    if (!$passwordValidator->validate($password)) {
+        $message = "Ο κωδικός πρέπει να είναι 10 ψηφία. ";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->message = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+    if (!$mobileNumberValidator->validate($tel1)) {
+        $message = "Mη αποδεκτή μορφή αριθμού κινητού τηλεφώνου. ";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->message = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+    if (!$mobile2NumberValidator->validate($tel2)) {
+        $message = "Mη αποδεκτή μορφή αριθμού κινητού τηλεφώνου. ";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->message = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+    if (!$dateValidator->validate($dateofbirth)) {
+        $message = "Οι ημερομηνίες πρέπει να είναι της μορφής 'ΕΕΕΕ-ΜΜ-ΗΗ'.";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->message = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+    if (!$trainingDateValidator->validate($latesttraining)) {
+        $message = "Οι ημερομηνίες πρέπει να είναι της μορφής 'ΕΕΕΕ-ΜΜ-ΗΗ'! ";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->message = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+    if (!$addressValidator->validate($address)) {
+        $message = "Mη αποδεκτή μορφή Διεύθυνσης. ";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->message = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+    if (!$locationValidator->validate($location)) {
+        $message = "Mη αποδεκτή μορφή Περιφέρειας. ";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->message = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+
+    $query = "SELECT * FROM volunteer WHERE username=:username  AND id<>:id";
     $result = $pdo->prepare($query);
-    $result->execute(array(':username' => $username, ':name'=>$name, ':surname'=>$surname, ':password'=>$password, ':tel1' => $tel1, ':tel2' => $tel, ':email' => $email, ':dateofbirth' => $dateofbirth, ':latesttraining' => $latesttraining, ':address' => $address,':location'=>$location, ':id' => $volunteers_id));
+    $result->execute(array(':username' => $username,'id' => $volunteers_id));
+    $count = $result->rowCount();
+    $user = $result->fetch(PDO::FETCH_BOTH);
 
-    $myObj = new stdClass();
-    $myObj->id = $volunteers_id;
-    $myObj->username = $username;
-    $myObj->name = $name;
-    $myObj->surname = $surname;
-    $myObj->password = $password;
-    $myObj->email = $email;
-    $myObj->tel1 = $tel1;
-    $myObj->tel2 = $tel2;
-    $myObj->dateofbirth = $dateofbirth;
-    $myObj->latesttraining = $latesttraining;
-    $myObj->location = $location;
-    $myObj->address = $address;
+    if ($count == 1 && !empty($user)) {
+        $message = "Υπάρχει ήδη εθελοντής με αυτο το Όνομα Χρήστη";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->message = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
 
-    $response = json_encode($myObj, JSON_NUMERIC_CHECK);
+        return $response;
+    } else {
+        $query = "SELECT * FROM volunteer WHERE email=:email AND id<>:id";
+        $result = $pdo->prepare($query);
+        $result->execute(array(':email' => $email,'id' => $volunteers_id));
+        $count = $result->rowCount();
+        $user = $result->fetch(PDO::FETCH_BOTH);
+        if ($count == 1 && !empty($user)) {
+            $message = "Υπάρχει ήδη εθελοντής με αυτο το E-mail";
+            $httpstatus = "error";
+            $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message, 409);
+            $myObj = new stdClass();
+            $myObj->message = $message;
+            $myObj->httpstatus = $httpstatus;
+            $response = $response->withJson($myObj, 409);
 
-    return $response;
+            return $response;
+        } else {
+            $query = "UPDATE volunteer SET username=:username, name=:name,  surname=:surname, password=:password, tel1=:tel1, tel2=:tel2, email=:email, dateofbirth=:dateofbirth, latesttraining=:latesttraining, address=:address,location=:location  WHERE id=:id";
+            $result = $pdo->prepare($query);
+            $result->execute(array(':username' => $username, ':name' => $name, ':surname' => $surname, ':password' => $password, ':tel1' => $tel1, ':tel2' => $tel, ':email' => $email, ':dateofbirth' => $dateofbirth, ':latesttraining' => $latesttraining, ':address' => $address, ':location' => $location, ':id' => $volunteers_id));
+            $message = "success";
+            
+            $myObj = new stdClass();
+            $myObj->id = $volunteers_id;
+            $myObj->username = $username;
+            $myObj->name = $name;
+            $myObj->surname = $surname;
+            $myObj->password = $password;
+            $myObj->email = $email;
+            $myObj->tel1 = $tel1;
+            $myObj->tel2 = $tel2;
+            $myObj->dateofbirth = $dateofbirth;
+            $myObj->latesttraining = $latesttraining;
+            $myObj->location = $location;
+            $myObj->address = $address;
+            $myObj->message = $message;
+
+            $response = json_encode($myObj, JSON_NUMERIC_CHECK);
+
+            return $response;
+        }
+    }
+
 });
 
 $app->post('/api/deactivate/{id}', function (Request $request, Response $response, array $args) {
@@ -303,142 +459,136 @@ $app->post('/api/insertvolunteer', function (ServerRequestInterface $request, Re
     $name = $userData->{'name'};
     $surname = $userData->{'surname'};
     $password = $userData->{'password'};
-     $tel1 = $userData->{'tel1'};
+    $tel1 = $userData->{'tel1'};
     $tel2 = $userData->{'tel2'};
     $email = $userData->{'email'};
     $dateofbirth = $userData->{'dateofbirth'};
     $latesttraining = $userData->{'latesttraining'};
     $address = $userData->{'address'};
-     $location = $userData->{'location'};
-     $status = $userData->{'status'};
-     
-     if (!$usernameValidator->validate($username)){
+    $location = $userData->{'location'};
+    $status = $userData->{'status'};
+
+    if (!$usernameValidator->validate($username)) {
         $message = "Πληκτρολογήσατε μη αποδεκτό Όνομα Χρήστη.";
-        $httpstatus= "error";
+        $httpstatus = "error";
         $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
         $myObj = new stdClass();
         $myObj->message = $message;
         $myObj->httpstatus = $httpstatus;
         $response = $response->withJson($myObj, 409);
-      
+
         return $response;
-     }
-     if (!$nameValidator->validate($name)){
+    }
+    if (!$nameValidator->validate($name)) {
         $message = "Πληκτρολογήσατε μη αποδεκτό Όνομα.";
-        $httpstatus= "error";
+        $httpstatus = "error";
         $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
         $myObj = new stdClass();
         $myObj->message = $message;
         $myObj->httpstatus = $httpstatus;
         $response = $response->withJson($myObj, 409);
-      
+
         return $response;
-     }
-     if (!$surnameValidator->validate($surname)){
+    }
+    if (!$surnameValidator->validate($surname)) {
         $message = "Πληκτρολογήσατε μη αποδεκτό Επώνυμο.";
-        $httpstatus= "error";
+        $httpstatus = "error";
         $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
         $myObj = new stdClass();
         $myObj->message = $message;
         $myObj->httpstatus = $httpstatus;
         $response = $response->withJson($myObj, 409);
-      
+
         return $response;
-     }
-     if (!$emailValidator->validate($email)){
+    }
+    if (!$emailValidator->validate($email)) {
         $message = "Μη αποδεκτή μορφή E-mail.";
-        $httpstatus= "error";
+        $httpstatus = "error";
         $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
         $myObj = new stdClass();
         $myObj->message = $message;
         $myObj->httpstatus = $httpstatus;
         $response = $response->withJson($myObj, 409);
-      
+
         return $response;
-     }
-     if (!$passwordValidator->validate($password)){
+    }
+    if (!$passwordValidator->validate($password)) {
         $message = "Ο κωδικός πρέπει να είναι 10 ψηφία. ";
-        $httpstatus= "error";
+        $httpstatus = "error";
         $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
         $myObj = new stdClass();
         $myObj->message = $message;
         $myObj->httpstatus = $httpstatus;
         $response = $response->withJson($myObj, 409);
-      
+
         return $response;
-     }
-     if (!$mobileNumberValidator->validate($tel1)){
+    }
+    if (!$mobileNumberValidator->validate($tel1)) {
         $message = "Mη αποδεκτή μορφή αριθμού κινητού τηλεφώνου. ";
-        $httpstatus= "error";
+        $httpstatus = "error";
         $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
         $myObj = new stdClass();
         $myObj->message = $message;
         $myObj->httpstatus = $httpstatus;
         $response = $response->withJson($myObj, 409);
-      
+
         return $response;
-     }
-     if (!$mobile2NumberValidator->validate($tel2)){
+    }
+    if (!$mobile2NumberValidator->validate($tel2)) {
         $message = "Mη αποδεκτή μορφή αριθμού κινητού τηλεφώνου. ";
-        $httpstatus= "error";
+        $httpstatus = "error";
         $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
         $myObj = new stdClass();
         $myObj->message = $message;
         $myObj->httpstatus = $httpstatus;
         $response = $response->withJson($myObj, 409);
-      
+
         return $response;
-     }
-     if (!$dateValidator->validate($dateofbirth)){
+    }
+    if (!$dateValidator->validate($dateofbirth)) {
         $message = "Οι ημερομηνίες πρέπει να είναι της μορφής 'ΕΕΕΕ-ΜΜ-ΗΗ'.";
-        $httpstatus= "error";
+        $httpstatus = "error";
         $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
         $myObj = new stdClass();
         $myObj->message = $message;
         $myObj->httpstatus = $httpstatus;
         $response = $response->withJson($myObj, 409);
-      
+
         return $response;
-     }
-     if (!$trainingDateValidator->validate($latesttraining)){
+    }
+    if (!$trainingDateValidator->validate($latesttraining)) {
         $message = "Οι ημερομηνίες πρέπει να είναι της μορφής 'ΕΕΕΕ-ΜΜ-ΗΗ'. ";
-        $httpstatus= "error";
+        $httpstatus = "error";
         $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
         $myObj = new stdClass();
         $myObj->message = $message;
         $myObj->httpstatus = $httpstatus;
         $response = $response->withJson($myObj, 409);
-      
+
         return $response;
-     }
-     if (!$addressValidator->validate($address)){
+    }
+    if (!$addressValidator->validate($address)) {
         $message = "Mη αποδεκτή μορφή Διεύθυνσης. ";
-        $httpstatus= "error";
+        $httpstatus = "error";
         $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
         $myObj = new stdClass();
         $myObj->message = $message;
         $myObj->httpstatus = $httpstatus;
         $response = $response->withJson($myObj, 409);
-      
+
         return $response;
-     }
-     if (!$locationValidator->validate($location)){
+    }
+    if (!$locationValidator->validate($location)) {
         $message = "Mη αποδεκτή μορφή Περιφέρειας. ";
-        $httpstatus= "error";
+        $httpstatus = "error";
         $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
         $myObj = new stdClass();
         $myObj->message = $message;
         $myObj->httpstatus = $httpstatus;
         $response = $response->withJson($myObj, 409);
-      
+
         return $response;
-     }
-     
-  
-         
-           
-    
-        
+    }
 
     $query = "SELECT * FROM volunteer WHERE username=:username";
     $result = $pdo->prepare($query);
@@ -448,13 +598,13 @@ $app->post('/api/insertvolunteer', function (ServerRequestInterface $request, Re
 
     if ($count == 1 && !empty($user)) {
         $message = "Υπάρχει ήδη εθελοντής με αυτο το Όνομα Χρήστη";
-        $httpstatus= "error";
+        $httpstatus = "error";
         $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
         $myObj = new stdClass();
         $myObj->message = $message;
         $myObj->httpstatus = $httpstatus;
         $response = $response->withJson($myObj, 409);
-      
+
         return $response;
     } else {
         $query = "SELECT * FROM volunteer WHERE email=:email";
@@ -464,24 +614,23 @@ $app->post('/api/insertvolunteer', function (ServerRequestInterface $request, Re
         $user = $result->fetch(PDO::FETCH_BOTH);
         if ($count == 1 && !empty($user)) {
             $message = "Υπάρχει ήδη εθελοντής με αυτο το E-mail";
-            $httpstatus= "error";
+            $httpstatus = "error";
             $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message, 409);
             $myObj = new stdClass();
             $myObj->message = $message;
             $myObj->httpstatus = $httpstatus;
             $response = $response->withJson($myObj, 409);
-          
+
             return $response;
         } else {
-            $status="0";
+            $status = "0";
             $query = "INSERT INTO volunteer (username,name,surname,password,tel1,tel2,email,dateofbirth,latesttraining,address,location,status) VALUES (:username,:name,:surname,:password,:tel1,:tel2,:email,:dateofbirth,:latesttraining,:address,:location,:status)";
             $result = $pdo->prepare($query);
-        
-            $result->execute(array(':username' => $username, ':name'=>$name, ':surname'=>$surname, ':password'=>$password, ':tel1' => $tel1, ':tel2' => $tel, ':email' => $email, ':dateofbirth' => $dateofbirth, ':latesttraining' => $latesttraining, ':address' => $address,':location'=>$location,':status'=>$status));
+
+            $result->execute(array(':username' => $username, ':name' => $name, ':surname' => $surname, ':password' => $password, ':tel1' => $tel1, ':tel2' => $tel, ':email' => $email, ':dateofbirth' => $dateofbirth, ':latesttraining' => $latesttraining, ':address' => $address, ':location' => $location, ':status' => $status));
             $lastId = $pdo->lastInsertId();
-            $message= "success";
-            
-         
+          
+            $message = "success";
             //  $response=json_encode($lastId);
             $myObj = new stdClass();
             $myObj->id = $lastId;
@@ -495,20 +644,19 @@ $app->post('/api/insertvolunteer', function (ServerRequestInterface $request, Re
             $myObj->dateofbirth = $dateofbirth;
             $myObj->latesttraining = $latesttraining;
             $myObj->address = $address;
-             $myObj->location = $location;
-             $myObj->status = $status;
-            $myObj->message = $message;
+            $myObj->location = $location;
+            $myObj->status = $status;
             
-        
+            $myObj->message = $message;
+           
+
             $response = json_encode($myObj, JSON_NUMERIC_CHECK);
-        
+
             return $response;
-    
+
         }
-    } 
+    }
 
-
-   
 });
 $app->post('/api/insertevent', function (Request $request, Response $response, array $args) {
     global $pdo;

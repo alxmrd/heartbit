@@ -1,9 +1,13 @@
 export const NEW_VOLUNTEER = "NEW_VOLUNTEER";
 export const CLEAN_VOLUNTEER_DATA = "CLEAN_VOLUNTEER_DATA";
+export const UPDATE_VOLUNTEER = "UPDATE_VOLUNTEER";
 
-const CreateVolunteerSuccessReducer = (state = {}, action) => {
+const VolunteerSuccessReducer = (state = {}, action) => {
   switch (action.type) {
     case NEW_VOLUNTEER:
+      return action.payload;
+
+    case UPDATE_VOLUNTEER:
       return action.payload;
 
     case CLEAN_VOLUNTEER_DATA:
@@ -14,4 +18,4 @@ const CreateVolunteerSuccessReducer = (state = {}, action) => {
   }
 };
 
-export default CreateVolunteerSuccessReducer;
+export default VolunteerSuccessReducer;

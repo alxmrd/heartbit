@@ -60,8 +60,8 @@ class VolunteerDialog extends Component {
       });
     }
     if (
-      this.props.newVolunteer.success !== prevProps.newVolunteer.success &&
-      this.props.newVolunteer.success === "success"
+      this.props.newVolunteer.message !== prevProps.newVolunteer.message &&
+      this.props.newVolunteer.message === "success"
     ) {
       this.handleDialogClose();
 
@@ -165,22 +165,22 @@ class VolunteerDialog extends Component {
     const id = this.props.id;
     this.props.onUpdateVolunteer(id, dataPouStelnw);
 
-    this.setState({
-      hasChanged: false,
-      username: "",
-      name: "",
-      surname: "",
-      password: "",
-      email: "",
-      dateofbirth: "",
-      latesttraining: "",
-      tel1: "",
-      tel2: "",
-      address: "",
-      location: "",
-      showPassword: false
-    });
-    this.props.onClose();
+    // this.setState({
+    //   hasChanged: false,
+    //   username: "",
+    //   name: "",
+    //   surname: "",
+    //   password: "",
+    //   email: "",
+    //   dateofbirth: "",
+    //   latesttraining: "",
+    //   tel1: "",
+    //   tel2: "",
+    //   address: "",
+    //   location: "",
+    //   showPassword: false
+    // });
+    // this.props.onClose();
   };
 
   render() {

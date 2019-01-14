@@ -7,7 +7,7 @@ import patientReducer from "./patientReducer";
 import adminReducer from "./adminReducer";
 import eventReducer from "./eventReducer";
 import httpStatusMessageReducer from "./httpStatusMessageReducer";
-import CreateVolunteerSuccessReducer from "./CreateVolunteerSuccessReducer";
+import VolunteerSuccessReducer from "./VolunteerSuccessReducer";
 
 export default combineReducers({
   volunteers: volunteersReducer,
@@ -18,5 +18,5 @@ export default combineReducers({
   patients: patientReducer,
   admin: adminReducer,
   error: httpStatusMessageReducer,
-  volunteerSuccessData: CreateVolunteerSuccessReducer
+  volunteerSuccessData: VolunteerSuccessReducer
 });

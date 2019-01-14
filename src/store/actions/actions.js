@@ -209,10 +209,15 @@ export const updateVolunteer = (id, userData) => dispatch => {
   })
     .then(result => result.json())
     .then(res => {
-      dispatch({
-        type: UPDATE_VOLUNTEER,
-        payload: res
-      });
+      res.httpstatus === "error"
+        ? dispatch({
+            type: ISINVALID,
+            payload: res
+          })
+        : dispatch({
+            type: UPDATE_VOLUNTEER,
+            payload: res
+          });
     })
     .catch(error => {
       alert(error, "SERVER error 500 ");

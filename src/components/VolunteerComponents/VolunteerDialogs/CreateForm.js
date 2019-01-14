@@ -158,6 +158,7 @@ function EditForm({
           id="latesttraining"
           type="date"
           onChange={onCreateFormChange}
+          // defaultValue={null}
           fullWidth
           inputProps={{
             max: new Date().toISOString().slice(0, 10), //current date
