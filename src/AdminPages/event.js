@@ -9,6 +9,8 @@ import Paper from "@material-ui/core/Paper";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core";
 import { fetchEvents } from "../store/actions/actions";
+import moment from "moment";
+import "../containers/Icons.css";
 
 const styles = theme => ({
   root: {
@@ -58,12 +60,12 @@ class Event extends Component {
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
-              <TableCell>id</TableCell>
-              <TableCell>correspondence</TableCell>
-              <TableCell>address</TableCell>
-              <TableCell>latitude</TableCell>
-              <TableCell>longitude</TableCell>
-              <TableCell>timestamp</TableCell>
+              <TableCell>Ανταπόκριση</TableCell>
+              <TableCell>Διεύθυνση</TableCell>
+              <TableCell>Γεωγραφικό Πλάτος</TableCell>
+              <TableCell>Γεωγραφικό Μήκος</TableCell>
+              <TableCell>Ημερομηνία / Ώρα</TableCell>
+              <TableCell>Κατάσταση</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -71,16 +73,28 @@ class Event extends Component {
               .slice(0)
               .reverse()
               .map(function(item, key) {
+                var active = moment(item.datetime)
+                  .add(24, "hours")
+                  .format("YYYY MM DD H:mm:ss");
+                var now = moment().format("YYYY MM DD H:mm:ss");
                 return (
                   <TableRow key={item.id}>
-                    <TableCell component="th" scope="item">
-                      {item.id}
-                    </TableCell>
                     <TableCell>{item.correspondence}</TableCell>
                     <TableCell>{item.address}</TableCell>
                     <TableCell>{item.latitude}</TableCell>
                     <TableCell>{item.longitude}</TableCell>
                     <TableCell>{item.datetime}</TableCell>
+                    <TableCell>
+                      {active > now ? (
+                        <i className="material-icons teal600 md-36">
+                          notifications_active
+                        </i>
+                      ) : (
+                        <i className="material-icons red700 md-36">
+                          notification_important
+                        </i>
+                      )}
+                    </TableCell>
                   </TableRow>
                 );
               })}

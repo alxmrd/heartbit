@@ -16,6 +16,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { fetchPatients } from "../store/actions/actions";
 import { connect } from "react-redux";
+import Fab from "@material-ui/core/Fab";
 
 const styles = theme => ({
   root: {
@@ -94,14 +95,13 @@ class patients extends Component {
           </TableBody>
         </Table>
         <Tooltip title="Add Volunteer">
-          <Button
+          <Fab
             onClick={this.handleClickOpen}
-            variant="fab"
             color="secondary"
             className={classes.absolute}
           >
             <AddIcon />
-          </Button>
+          </Fab>
         </Tooltip>
         <Dialog
           open={this.state.open}

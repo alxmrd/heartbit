@@ -75,7 +75,7 @@ const styles = theme => ({
     }),
     width: theme.spacing.unit * 7,
     [theme.breakpoints.up("sm")]: {
-      width: theme.spacing.unit * 9
+      width: theme.spacing.unit * 7.5
     }
   },
   toolbar: {

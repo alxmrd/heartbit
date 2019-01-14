@@ -11,6 +11,7 @@ import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import Snackbar from "@material-ui/core/Snackbar";
 import MySnackbarContentWrapper from "../../components/MySnackbarContentWrapper";
+import Fab from "@material-ui/core/Fab";
 
 const styles = theme => ({
   button: {
@@ -151,13 +152,14 @@ class SearchBar extends React.Component {
                   />
 
                   {this.state.address.length > 0 && (
-                    <Button
+                    <Fab
                       className="Demo__clear-button"
                       onClick={this.handleCloseClick}
                       color="primary"
+                      size="small"
                     >
                       x
-                    </Button>
+                    </Fab>
                   )}
                 </div>
                 {suggestions.length > 0 && (

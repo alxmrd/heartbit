@@ -58,7 +58,6 @@ class Volunteer extends Component {
     this.setState({
       open: false
     });
-    console.log("ok");
   };
 
   componentDidMount() {

@@ -16,6 +16,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { fetchDefifrillators } from "../store/actions/actions";
 import { connect } from "react-redux";
+import Fab from "@material-ui/core/Fab";
 
 const styles = theme => ({
   root: {
@@ -66,22 +67,18 @@ class defibrillators extends Component {
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
-              <TableCell>id</TableCell>
-              <TableCell>installationdate</TableCell>
-              <TableCell>upgradedate</TableCell>
-              <TableCell>notes</TableCell>
-              <TableCell>model</TableCell>
-              <TableCell>presentflag</TableCell>
-              <TableCell>locker</TableCell>
+              <TableCell>Ημερομηνία Εγκατάστασης</TableCell>
+              <TableCell>Ημερομηνία Αναβάθμισης</TableCell>
+              <TableCell>Σημειώσεις</TableCell>
+              <TableCell>Μοντέλο</TableCell>
+              <TableCell>Τρέχουσα Κατάσταση</TableCell>
+              <TableCell>Κλείδωμα / Ξεκλείδωμα</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {defibrillators.map(function(item, key) {
               return (
                 <TableRow key={item.id}>
-                  <TableCell component="th" scope="item">
-                    {item.id}
-                  </TableCell>
                   <TableCell>{item.installationdate}</TableCell>
                   <TableCell>{item.upgradedate}</TableCell>
                   <TableCell>{item.notes}</TableCell>
@@ -94,14 +91,13 @@ class defibrillators extends Component {
           </TableBody>
         </Table>
         <Tooltip title="Add Defibrillator">
-          <Button
+          <Fab
             onClick={this.handleClickOpen}
-            variant="fab"
             color="secondary"
             className={classes.absolute}
           >
             <AddIcon />
-          </Button>
+          </Fab>
         </Tooltip>
         <Dialog
           open={this.state.open}
