@@ -156,7 +156,7 @@ class Home extends React.Component {
             ))}
             <TextField
               id="outlined-textarea"
-              label="Πληκτρολογείστε Μύνημα"
+              label="Πληκτρολογείστε Μήνυμα"
               placeholder=""
               multiline
               className={classes.textField}

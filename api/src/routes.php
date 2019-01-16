@@ -665,18 +665,19 @@ $app->post('/api/insertevent', function (Request $request, Response $response, a
     $longitude = $userData->{'longitude'};
     $latitude = $userData->{'latitude'};
     $address = $userData->{'address'};
+    $active=0;
   
    
    
 
-    $query = "INSERT INTO peristatiko (longitude, latitude, address ) VALUES (:longitude,:latitude, :address)";
+    $query = "INSERT INTO peristatiko (longitude, latitude, address ,active) VALUES (:longitude,:latitude, :address,:active)";
    
     $result = $pdo->prepare($query);
 
-    $result->execute(array(':longitude' => $longitude, ':latitude' => $latitude, ':address' => $address));
+    $result->execute(array(':longitude' => $longitude, ':latitude' => $latitude, ':address' => $address,':active'=> $active));
     $lastId = $pdo->lastInsertId();
     $timezone  = +2;
-    $datetime = date('Y-d-m H:i:s', time()+ 3600*($timezone+date("I")));
+    // $datetime = date('Y-d-m H:i:s', time()+ 3600*($timezone+date("I")));
 
     $myObj = new stdClass();
     $myObj->id = $lastId;
@@ -684,7 +685,7 @@ $app->post('/api/insertevent', function (Request $request, Response $response, a
     $myObj->longitude = $longitude;
     $myObj->latitude = $latitude;
     $myObj->address = $address;
-    $myObj->datetime = $datetime;
+    $myObj->active = $active;
    
    
 
@@ -692,6 +693,7 @@ $app->post('/api/insertevent', function (Request $request, Response $response, a
 
     return $response;
 });
+
 
 $app->add(function ($req, $res, $next) {
     $response = $next($req, $res);

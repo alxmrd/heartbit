@@ -4,6 +4,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import SimpleToolips from "../components/SimpleTooltips";
 import VolunteerTable from "../components/VolunteerComponents/VolunteerTable";
 import { connect } from "react-redux";
+import { withStyles } from "@material-ui/core/styles";
 import {
   fetchVolunteers,
   editVolunteer,
@@ -13,6 +14,16 @@ import Typography from "@material-ui/core/Typography";
 import VolunteerCard from "../components/VolunteerComponents/VolunteerCard";
 import VolunteerDialog from "../components/VolunteerComponents/VolunteerDialogs/VolunteerDialog";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1
+  },
+  grow: {
+    flexGrow: 1
+  }
+});
+
 class Volunteer extends Component {
   constructor(props) {
     super();
@@ -65,14 +76,19 @@ class Volunteer extends Component {
   }
 
   render() {
+    const { classes } = this.props;
     return (
       <Fragment>
-        <Toolbar>
-          <i className="material-icons teal600 md-36">supervised_user_circle</i>
-          <Typography variant="h6" color="inherit">
-            Εθελοντές
-          </Typography>
-        </Toolbar>
+        <div className={classes.root}>
+          <Toolbar>
+            <i className="material-icons teal600 md-36">
+              supervised_user_circle
+            </i>
+            <Typography variant="h6" color="inherit" className={classes.grow}>
+              Εθελοντές
+            </Typography>
+          </Toolbar>
+        </div>
 
         <VolunteerTable
           tabledata={this.props.data}
@@ -114,7 +130,8 @@ Volunteer.propTypes = {
   onEditVolunteer: PropTypes.func.isRequired,
   onCloseDialog: PropTypes.func.isRequired,
   data: PropTypes.array.isRequired,
-  id: PropTypes.number
+  id: PropTypes.number,
+  classes: PropTypes.object.isRequired
 };
 
 // Container !!
@@ -131,7 +148,8 @@ const mapDispatchToProps = dispatch => ({
   onCloseDialog: id => dispatch(idCleaner(id))
 });
 
+const VolunteerWithStyles = withStyles(styles)(Volunteer);
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Volunteer);
+)(VolunteerWithStyles);

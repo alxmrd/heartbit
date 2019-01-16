@@ -217,6 +217,7 @@ class SearchBar extends React.Component {
           ContentProps={{
             "aria-describedby": "message-id"
           }}
+          autoHideDuration={6000}
         >
           <MySnackbarContentWrapper
             onClose={this.handleClose}

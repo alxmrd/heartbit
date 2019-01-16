@@ -73,10 +73,13 @@ class Event extends Component {
               .slice(0)
               .reverse()
               .map(function(item, key) {
-                var active = moment(item.datetime)
-                  .add(24, "hours")
-                  .format("YYYY MM DD H:mm:ss");
-                var now = moment().format("YYYY MM DD H:mm:ss");
+                var hours24 = moment(item.datetime, "YYYY-MM-DD H:mm:ss").add(
+                  24,
+                  "hours"
+                );
+
+                var now = moment().format("YYYY-MM-DD H:mm:ss");
+                var active = moment(now).isBefore(hours24);
                 return (
                   <TableRow key={item.id}>
                     <TableCell>{item.correspondence}</TableCell>
@@ -85,7 +88,7 @@ class Event extends Component {
                     <TableCell>{item.longitude}</TableCell>
                     <TableCell>{item.datetime}</TableCell>
                     <TableCell>
-                      {active > now ? (
+                      {active ? (
                         <i className="material-icons teal600 md-36">
                           notifications_active
                         </i>
@@ -114,7 +117,8 @@ Event.propTypes = {
 const EventWithStyles = withStyles(styles)(Event);
 
 const mapStateToProps = state => ({
-  event: state.event
+  event: state.event,
+  active: state.eventSuccessData.active
 });
 
 const mapDispatchToProps = dispatch => ({

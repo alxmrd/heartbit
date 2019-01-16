@@ -164,23 +164,6 @@ class VolunteerDialog extends Component {
     };
     const id = this.props.id;
     this.props.onUpdateVolunteer(id, dataPouStelnw);
-
-    // this.setState({
-    //   hasChanged: false,
-    //   username: "",
-    //   name: "",
-    //   surname: "",
-    //   password: "",
-    //   email: "",
-    //   dateofbirth: "",
-    //   latesttraining: "",
-    //   tel1: "",
-    //   tel2: "",
-    //   address: "",
-    //   location: "",
-    //   showPassword: false
-    // });
-    // this.props.onClose();
   };
 
   render() {
