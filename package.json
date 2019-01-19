@@ -29,6 +29,7 @@
     "react-geocode": "^0.1.2",
     "react-lifecycles-compat": "^3.0.4",
     "react-material-ui-form-validator": "^2.0.3",
+    "react-onenterkeydown": "^2.1.1",
     "react-places-autocomplete": "^7.2.0",
     "react-redux": "^5.1.0",
     "react-router-dom": "^4.2.2",

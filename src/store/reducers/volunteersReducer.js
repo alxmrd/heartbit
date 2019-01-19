@@ -2,6 +2,7 @@ export const NEW_VOLUNTEER = "NEW_VOLUNTEER";
 export const UPDATE_VOLUNTEERS = "UPDATE_VOLUNTEERS";
 export const UPDATE_VOLUNTEER = "UPDATE_VOLUNTEER";
 export const VOLUNTEER_ACTIVITY_ON_OFF = "VOLUNTEER_ACTIVITY_ON_OFF";
+export const SEARCH_VOLUNTEER = "SEARCH_VOLUNTEER";
 
 const volunteersReducer = (state = [], action) => {
   switch (action.type) {
@@ -9,6 +10,8 @@ const volunteersReducer = (state = [], action) => {
       return action.payload;
     case NEW_VOLUNTEER:
       return [...state, action.payload];
+    case SEARCH_VOLUNTEER:
+      return action.payload;
 
     case VOLUNTEER_ACTIVITY_ON_OFF:
       return state.map((volunteer, index) => {

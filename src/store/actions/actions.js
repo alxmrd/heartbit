@@ -15,6 +15,7 @@ import { FETCH_ADMIN } from "../actions/types";
 import { ISINVALID } from "../actions/types";
 import { CLEAR_ISINVALID } from "../actions/types";
 import { CLEAN_VOLUNTEER_DATA } from "../actions/types";
+import { SEARCH_VOLUNTEER } from "../actions/types";
 
 import history from "../../history";
 
@@ -277,6 +278,34 @@ export const insertEventClick = datapoustelnw => dispatch => {
         payload: res
       });
     })
+    .catch(error => error.json())
+    .catch(error => {
+      alert(error, "SERVER error 500 ");
+    });
+};
+
+export const SearchOnVolunteers = ({ searched }) => dispatch => {
+  fetch(`http://localhost:8080/api/volunteer/search?input=${searched}`, {
+    method: "GET",
+    cache: "no-cache",
+    headers: {
+      ...headers,
+      Authorization: "Bearer " + sessionStorage.getItem("token")
+    },
+    redirect: "follow",
+    referrer: "no-referrer"
+    // body: JSON.stringify(searched)
+  })
+    .then(result => result.json())
+    .then(res => {
+      res.httpstatus === "error"
+        ? dispatch({
+            type: ISINVALID,
+            payload: res
+          })
+        : dispatch({ type: SEARCH_VOLUNTEER, payload: res });
+    })
+
     .catch(error => error.json())
     .catch(error => {
       alert(error, "SERVER error 500 ");

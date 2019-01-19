@@ -693,6 +693,43 @@ $app->post('/api/insertevent', function (Request $request, Response $response, a
 
     return $response;
 });
+$app->get('/api/volunteer/search', function (ServerRequestInterface $request, ResponseInterface $response, array $args) {
+    global $pdo;
+
+ $input = $request->getQueryParam('input');
+  
+
+    $query = " SELECT * FROM volunteer WHERE  username LIKE :searchedinput   OR name LIKE :searchedinput  OR email LIKE :searchedinput OR surname LIKE :searchedinput OR location LIKE :searchedinput ";
+   
+    $result = $pdo->prepare($query);
+    $result->execute(array(':searchedinput' => "%$input%"));
+   // $result->execute(array(':searchedinput' => "$input%"));
+    $count = $result->rowCount();
+   
+    if ($count== 0){
+        $message = "O χρήστης που αναζητήσατε, δεν υπάρχει!";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message, 409);
+        $myObj = new stdClass();
+        $myObj->message = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 404);
+       
+
+        return $response;
+
+    }
+    while ($r = $result->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $r;
+    }
+
+    // $myObj = new stdClass();
+    // $myObj->user = $user;
+   
+    $response = json_encode($data, JSON_NUMERIC_CHECK);
+
+    return $response;
+});
 
 
 $app->add(function ($req, $res, $next) {
