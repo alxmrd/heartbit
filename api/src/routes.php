@@ -234,9 +234,12 @@ $app->post('/api/editvolunteer/{id}', function (Request $request, Response $resp
     $password = $userData->{'password'};
     $tel1 = $userData->{'tel1'};
     $tel2 = $userData->{'tel2'};
+    if ($tel2== 0) {$tel2 = null;};
     $email = $userData->{'email'};
-    $dateofbirth = $userData->{'dateofbirth'};
+      $dateofbirth = $userData->{'dateofbirth'};
+  
     $latesttraining = $userData->{'latesttraining'};
+    if ($latesttraining== "0000-00-00") { $latesttraining = null;};
     $address = $userData->{'address'};
     $location = $userData->{'location'};
 
@@ -461,9 +464,12 @@ $app->post('/api/insertvolunteer', function (ServerRequestInterface $request, Re
     $password = $userData->{'password'};
     $tel1 = $userData->{'tel1'};
     $tel2 = $userData->{'tel2'};
+    $tel2 = $userData->{'tel2'};
+    if ($tel2== 0) {$tel2 = null;};
     $email = $userData->{'email'};
-    $dateofbirth = $userData->{'dateofbirth'};
+
     $latesttraining = $userData->{'latesttraining'};
+    if ($latesttraining== "0000-00-00") { $latesttraining = null;};
     $address = $userData->{'address'};
     $location = $userData->{'location'};
     $status = $userData->{'status'};
