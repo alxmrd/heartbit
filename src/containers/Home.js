@@ -168,7 +168,7 @@ class Home extends React.Component {
               InputProps={{
                 endAdornment: (
                   <InputAdornment variant="outlined" position="end">
-                    <IconButton>
+                    <IconButton color="primary">
                       <i className="material-icons">send</i>
                     </IconButton>
                   </InputAdornment>

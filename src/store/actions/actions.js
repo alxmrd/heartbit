@@ -16,7 +16,7 @@ import { ISINVALID } from "../actions/types";
 import { CLEAR_ISINVALID } from "../actions/types";
 import { CLEAN_VOLUNTEER_DATA } from "../actions/types";
 import { SEARCH_VOLUNTEER } from "../actions/types";
-
+import { CLEAR_SELECT_PLACE } from "../actions/types";
 import history from "../../history";
 
 const headers = {
@@ -316,5 +316,12 @@ export const selectPlace = datapoustelnw => dispatch => {
   dispatch({
     type: SELECT_PLACE,
     payload: datapoustelnw
+  });
+};
+
+export const clearSelectedPlace = selectedPlace => dispatch => {
+  dispatch({
+    type: CLEAR_SELECT_PLACE,
+    payload: selectPlace
   });
 };

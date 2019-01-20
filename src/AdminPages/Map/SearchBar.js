@@ -4,7 +4,11 @@ import PlacesAutocomplete from "react-places-autocomplete";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import Typography from "@material-ui/core/Typography";
 import { connect } from "react-redux";
-import { insertEventClick, selectPlace } from "../../store/actions/actions";
+import {
+  insertEventClick,
+  selectPlace,
+  clearSelectedPlace
+} from "../../store/actions/actions";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import Snackbar from "@material-ui/core/Snackbar";
@@ -15,7 +19,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import InputBase from "@material-ui/core/InputBase";
 import Divider from "@material-ui/core/Divider";
 import Paper from "@material-ui/core/Paper";
-
+import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 
 const styles = theme => ({
@@ -125,6 +129,8 @@ class SearchBar extends React.Component {
     };
 
     this.props.onInsertEventClick(dataPouStelnw);
+    this.props.onClearSelectPlace(this.props.selectPlace);
+
     this.setState({
       address: "",
       latitude: null,
@@ -189,33 +195,37 @@ class SearchBar extends React.Component {
                     </IconButton>
                   )}
                   <Divider className={classes.divider} />
-                  <IconButton
-                    color="secondary"
-                    className={classes.iconButton}
-                    aria-label="Directions"
-                  >
-                    <LocalHospitalIcon
-                      // className={classes.searchIcon}
-                      aria-label="Αναζήτηση"
-                    />
-                  </IconButton>
+                  <Tooltip title="Προσθήκη Aπινιδωτή" placement="bottom">
+                    <IconButton
+                      color="secondary"
+                      className={classes.iconButton}
+                      aria-label="Directions"
+                    >
+                      <LocalHospitalIcon
+                        // className={classes.searchIcon}
+                        aria-label="Αναζήτηση"
+                      />
+                    </IconButton>
+                  </Tooltip>
                   <Divider className={classes.divider} />
-                  <IconButton
-                    color="primary"
-                    className={classes.iconButton}
-                    aria-label="Directions"
-                  >
-                    <AddLocationIcon
-                      // className={classes.searchIcon}
-                      aria-label="Αναζήτηση"
-                      onClick={event =>
-                        this.handleInsertEvent(event, {
-                          vertical: "bottom",
-                          horizontal: "left"
-                        })
-                      }
-                    />
-                  </IconButton>
+                  <Tooltip title="Προσθήκη Περιστατικού" placement="bottom">
+                    <IconButton
+                      color="primary"
+                      className={classes.iconButton}
+                      aria-label="Directions"
+                    >
+                      <AddLocationIcon
+                        // className={classes.searchIcon}
+                        aria-label="Αναζήτηση"
+                        onClick={event =>
+                          this.handleInsertEvent(event, {
+                            vertical: "bottom",
+                            horizontal: "left"
+                          })
+                        }
+                      />
+                    </IconButton>
+                  </Tooltip>
                 </Paper>
 
                 {suggestions.length > 0 && (
@@ -283,15 +293,19 @@ const SearchBarWithStyles = withStyles(styles)(SearchBar);
 SearchBar.propTypes = {
   classes: PropTypes.object.isRequired
 };
-
+const mapStateToProps = state => ({
+  selectPlace: state.selectedPlace
+});
 const mapDispatchToProps = dispatch => ({
   onInsertEventClick: (longitude, latitude, address) =>
     dispatch(insertEventClick(longitude, latitude, address)),
   onSelectPlace: (longitude, latitude, address) =>
-    dispatch(selectPlace(longitude, latitude, address))
+    dispatch(selectPlace(longitude, latitude, address)),
+  onClearSelectPlace: selectedPlace =>
+    dispatch(clearSelectedPlace(selectedPlace))
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(SearchBarWithStyles);
