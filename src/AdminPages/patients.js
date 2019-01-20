@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import Tooltip from "@material-ui/core/Tooltip";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -17,6 +17,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { fetchPatients } from "../store/actions/actions";
 import { connect } from "react-redux";
 import Fab from "@material-ui/core/Fab";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
 
 const styles = theme => ({
   root: {
@@ -31,9 +33,10 @@ const styles = theme => ({
     margin: theme.spacing.unit * 2
   },
   absolute: {
-    position: "absolute",
-    bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 3
+    position: "fixed",
+    bottom: theme.spacing.unit * 6.5,
+    right: theme.spacing.unit * 3,
+    boxShadow: "5px 5px  5px grey "
   }
 });
 
@@ -61,89 +64,95 @@ class patients extends Component {
   render() {
     const { classes, patients } = this.props;
     return (
-      <Paper className={classes.root}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>id</TableCell>
-              <TableCell>name</TableCell>
-              <TableCell>surname</TableCell>
-              <TableCell>address</TableCell>
-              <TableCell>history</TableCell>
-              <TableCell>description</TableCell>
-              <TableCell>birthdate</TableCell>
-              <TableCell>gender</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {patients.map(function(item, key) {
-              return (
-                <TableRow key={item.id}>
-                  <TableCell component="th" scope="item">
-                    {item.id}
-                  </TableCell>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.surname}</TableCell>
-                  <TableCell>{item.address}</TableCell>
-                  <TableCell>{item.history}</TableCell>
-                  <TableCell>{item.description}</TableCell>
-                  <TableCell>{item.birthdate}</TableCell>
-                  <TableCell>{item.gender}</TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-        <Tooltip title="Add Volunteer">
-          <Fab
-            onClick={this.handleClickOpen}
-            color="secondary"
-            className={classes.absolute}
+      <Fragment>
+        <div className={classes.root}>
+          <Toolbar>
+            <i className="material-icons teal600 md-36">healing</i>
+            <Typography variant="h6" color="inherit" className={classes.grow}>
+              Aσθενείς
+            </Typography>
+          </Toolbar>
+        </div>
+        <Paper className={classes.root}>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <TableCell>name</TableCell>
+                <TableCell>surname</TableCell>
+                <TableCell>address</TableCell>
+                <TableCell>history</TableCell>
+                <TableCell>description</TableCell>
+                <TableCell>birthdate</TableCell>
+                <TableCell>gender</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {patients.map(function(item, key) {
+                return (
+                  <TableRow key={item.id}>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{item.surname}</TableCell>
+                    <TableCell>{item.address}</TableCell>
+                    <TableCell>{item.history}</TableCell>
+                    <TableCell>{item.description}</TableCell>
+                    <TableCell>{item.birthdate}</TableCell>
+                    <TableCell>{item.gender}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+          <Tooltip title="Add Volunteer">
+            <Fab
+              onClick={this.handleClickOpen}
+              color="secondary"
+              className={classes.absolute}
+            >
+              <AddIcon />
+            </Fab>
+          </Tooltip>
+          <Dialog
+            open={this.state.open}
+            onClose={this.handleClose}
+            aria-labelledby="form-dialog-title"
           >
-            <AddIcon />
-          </Fab>
-        </Tooltip>
-        <Dialog
-          open={this.state.open}
-          onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <DialogTitle id="form-dialog-title">New Patient</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Please Insert The Name Of The Patient
-            </DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="name"
-              type="name"
-              fullWidth
-            />
-            <DialogContentText>
-              Please Insert The Surname Of The Patient
-            </DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="surname"
-              label="surname"
-              type="surname"
-              fullWidth
-            />
-          </DialogContent>
+            <DialogTitle id="form-dialog-title">New Patient</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Please Insert The Name Of The Patient
+              </DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                label="name"
+                type="name"
+                fullWidth
+              />
+              <DialogContentText>
+                Please Insert The Surname Of The Patient
+              </DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="surname"
+                label="surname"
+                type="surname"
+                fullWidth
+              />
+            </DialogContent>
 
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={this.handleClose} color="primary">
-              Insert
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Paper>
+            <DialogActions>
+              <Button onClick={this.handleClose} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={this.handleClose} color="primary">
+                Insert
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </Paper>
+      </Fragment>
     );
   }
 }

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -11,6 +11,8 @@ import { withStyles } from "@material-ui/core";
 import { fetchEvents } from "../store/actions/actions";
 import moment from "moment";
 import "../containers/Icons.css";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
 
 const styles = theme => ({
   root: {
@@ -56,54 +58,64 @@ class Event extends Component {
   render() {
     const { classes, event } = this.props;
     return (
-      <Paper className={classes.root}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Ανταπόκριση</TableCell>
-              <TableCell>Διεύθυνση</TableCell>
-              <TableCell>Γεωγραφικό Πλάτος</TableCell>
-              <TableCell>Γεωγραφικό Μήκος</TableCell>
-              <TableCell>Ημερομηνία / Ώρα</TableCell>
-              <TableCell>Κατάσταση</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {event
-              .slice(0)
-              .reverse()
-              .map(function(item, key) {
-                var hours24 = moment(item.datetime, "YYYY-MM-DD H:mm:ss").add(
-                  24,
-                  "hours"
-                );
+      <Fragment>
+        <div className={classes.root}>
+          <Toolbar>
+            <i className="material-icons teal600 md-36">add_location</i>
+            <Typography variant="h6" color="inherit" className={classes.grow}>
+              Περιστατικά
+            </Typography>
+          </Toolbar>
+        </div>
+        <Paper className={classes.root}>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Ανταπόκριση</TableCell>
+                <TableCell>Διεύθυνση</TableCell>
+                <TableCell>Γεωγραφικό Πλάτος</TableCell>
+                <TableCell>Γεωγραφικό Μήκος</TableCell>
+                <TableCell>Ημερομηνία / Ώρα</TableCell>
+                <TableCell>Κατάσταση</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {event
+                .slice(0)
+                .reverse()
+                .map(function(item, key) {
+                  var hours24 = moment(item.datetime, "YYYY-MM-DD H:mm:ss").add(
+                    24,
+                    "hours"
+                  );
 
-                var now = moment().format("YYYY-MM-DD H:mm:ss");
-                var active = moment(now).isBefore(hours24);
-                return (
-                  <TableRow key={item.id}>
-                    <TableCell>{item.correspondence}</TableCell>
-                    <TableCell>{item.address}</TableCell>
-                    <TableCell>{item.latitude}</TableCell>
-                    <TableCell>{item.longitude}</TableCell>
-                    <TableCell>{item.datetime}</TableCell>
-                    <TableCell>
-                      {active ? (
-                        <i className="material-icons teal600 md-36">
-                          notifications_active
-                        </i>
-                      ) : (
-                        <i className="material-icons red700 md-36">
-                          notification_important
-                        </i>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </Paper>
+                  var now = moment().format("YYYY-MM-DD H:mm:ss");
+                  var active = moment(now).isBefore(hours24);
+                  return (
+                    <TableRow key={item.id}>
+                      <TableCell>{item.correspondence}</TableCell>
+                      <TableCell>{item.address}</TableCell>
+                      <TableCell>{item.latitude}</TableCell>
+                      <TableCell>{item.longitude}</TableCell>
+                      <TableCell>{item.datetime}</TableCell>
+                      <TableCell>
+                        {active ? (
+                          <i className="material-icons teal600 md-36">
+                            notifications_active
+                          </i>
+                        ) : (
+                          <i className="material-icons red700 md-36">
+                            notification_important
+                          </i>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </Paper>
+      </Fragment>
     );
   }
 }

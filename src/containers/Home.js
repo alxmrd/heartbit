@@ -14,6 +14,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ambulance3 from "../ambulance3.png";
 import { connect } from "react-redux";
 import { fetchAdmin } from "../store/actions/actions";
+import InputAdornment from "@material-ui/core/InputAdornment";
 import { TextField, Divider } from "@material-ui/core";
 
 const styles = theme => ({
@@ -154,15 +155,25 @@ class Home extends React.Component {
                 variant="outlined"
               />
             ))}
+
             <TextField
               id="outlined-textarea"
+              margin="normal"
               label="Πληκτρολογείστε Μήνυμα"
               placeholder=""
               multiline
-              className={classes.textField}
-              margin="normal"
               variant="outlined"
+              className={classes.textField}
               fullWidth
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment variant="outlined" position="end">
+                    <IconButton>
+                      <i className="material-icons">send</i>
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
             />
             {/* <i className="material-icons">send</i> */}
           </CardContent>

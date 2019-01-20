@@ -159,7 +159,7 @@ class App extends React.Component {
                       onClick={() => sessionStorage.clear()}
                     >
                       <Link to="/login" className={classes.link}>
-                        LOGOUT
+                        ΑΠΟΣΥΝΔΕΣΗ
                       </Link>
                     </Button>
                   ) : (

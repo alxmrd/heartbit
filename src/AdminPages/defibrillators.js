@@ -1,5 +1,4 @@
-import React, { Component } from "react";
-import Tooltip from "@material-ui/core/Tooltip";
+import React, { Component, Fragment } from "react";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -7,16 +6,18 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import PropTypes from "prop-types";
-import { withStyles, Button, TextField } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import { withStyles } from "@material-ui/core";
+// import AddIcon from "@material-ui/icons/Add";
+// import Dialog from "@material-ui/core/Dialog";
+// import DialogActions from "@material-ui/core/DialogActions";
+// import DialogContent from "@material-ui/core/DialogContent";
+// import DialogContentText from "@material-ui/core/DialogContentText";
+// import DialogTitle from "@material-ui/core/DialogTitle";
 import { fetchDefifrillators } from "../store/actions/actions";
 import { connect } from "react-redux";
-import Fab from "@material-ui/core/Fab";
+// import Fab from "@material-ui/core/Fab";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
 
 const styles = theme => ({
   root: {
@@ -46,13 +47,13 @@ class defibrillators extends Component {
       open: false
     };
   }
-  handleClickOpen = () => {
-    this.setState({ open: true });
-  };
+  // handleClickOpen = () => {
+  //   this.setState({ open: true });
+  // };
 
-  handleClose = () => {
-    this.setState({ open: false });
-  };
+  // handleClose = () => {
+  //   this.setState({ open: false });
+  // };
 
   componentDidMount() {
     // If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
@@ -63,83 +64,44 @@ class defibrillators extends Component {
     const { classes, defibrillators } = this.props;
 
     return (
-      <Paper className={classes.root}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Ημερομηνία Εγκατάστασης</TableCell>
-              <TableCell>Ημερομηνία Αναβάθμισης</TableCell>
-              <TableCell>Σημειώσεις</TableCell>
-              <TableCell>Μοντέλο</TableCell>
-              <TableCell>Τρέχουσα Κατάσταση</TableCell>
-              <TableCell>Κλείδωμα / Ξεκλείδωμα</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {defibrillators.map(function(item, key) {
-              return (
-                <TableRow key={item.id}>
-                  <TableCell>{item.installationdate}</TableCell>
-                  <TableCell>{item.upgradedate}</TableCell>
-                  <TableCell>{item.notes}</TableCell>
-                  <TableCell>{item.model}</TableCell>
-                  <TableCell>{item.presentflag}</TableCell>
-                  <TableCell>{item.locker}</TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-        <Tooltip title="Add Defibrillator">
-          <Fab
-            onClick={this.handleClickOpen}
-            color="secondary"
-            className={classes.absolute}
-          >
-            <AddIcon />
-          </Fab>
-        </Tooltip>
-        <Dialog
-          open={this.state.open}
-          onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <DialogTitle id="form-dialog-title">New Defibrillator</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Please Insert Notes about the Defibrillator
-            </DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="notes"
-              label="notes"
-              type="notes"
-              fullWidth
-            />
-            <DialogContentText>
-              Please Insert The model of the Defibrillator
-            </DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="model"
-              label="model"
-              type="model"
-              fullWidth
-            />
-          </DialogContent>
-
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={this.handleClose} color="primary">
-              Insert
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Paper>
+      <Fragment>
+        <div className={classes.root}>
+          <Toolbar>
+            <i className="material-icons teal600 md-36">local_hospital</i>
+            <Typography variant="h6" color="inherit" className={classes.grow}>
+              Aπινιδωτές
+            </Typography>
+          </Toolbar>
+        </div>
+        <Paper className={classes.root}>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Ημερομηνία Εγκατάστασης</TableCell>
+                <TableCell>Ημερομηνία Αναβάθμισης</TableCell>
+                <TableCell>Σημειώσεις</TableCell>
+                <TableCell>Μοντέλο</TableCell>
+                <TableCell>Τρέχουσα Κατάσταση</TableCell>
+                <TableCell>Κλείδωμα / Ξεκλείδωμα</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {defibrillators.map(function(item, key) {
+                return (
+                  <TableRow key={item.id}>
+                    <TableCell>{item.installationdate}</TableCell>
+                    <TableCell>{item.upgradedate}</TableCell>
+                    <TableCell>{item.notes}</TableCell>
+                    <TableCell>{item.model}</TableCell>
+                    <TableCell>{item.presentflag}</TableCell>
+                    <TableCell>{item.locker}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </Paper>
+      </Fragment>
     );
   }
 }
