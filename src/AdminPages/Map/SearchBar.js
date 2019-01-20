@@ -8,7 +8,8 @@ import {
   insertEventClick,
   selectPlace,
   clearSelectedPlace,
-  errorMessageCleaner
+  errorMessageCleaner,
+  successMessageCleaner
 } from "../../store/actions/actions";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
@@ -111,12 +112,13 @@ class SearchBar extends React.Component {
 
   handleClose = () => {
     this.setState({
-      open: false,
       errorMessage: "",
       address: "",
       latitude: null,
       longitude: null
     });
+    const successMessage = this.props.successmessage;
+    this.props.onSuccessMessageCleaner(successMessage);
   };
 
   handleCloseClick = () => {
@@ -142,7 +144,7 @@ class SearchBar extends React.Component {
       address: "",
       latitude: null,
       longitude: null,
-      open: true,
+
       ...state
     });
   };
@@ -155,7 +157,7 @@ class SearchBar extends React.Component {
   };
 
   render() {
-    const { vertical, horizontal, open } = this.state;
+    const { vertical, horizontal } = this.state;
     const {
       address,
       errorMessage,
@@ -163,7 +165,7 @@ class SearchBar extends React.Component {
       longitude,
       isGeocoding
     } = this.state;
-    const { classes, errormessage } = this.props;
+    const { classes, errormessage, successmessage } = this.props;
 
     return (
       <React.Fragment>
@@ -269,7 +271,7 @@ class SearchBar extends React.Component {
         </PlacesAutocomplete>
         {errorMessage.length > 0 && (
           <Snackbar
-            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
             open={this.state.errorMessage ? true : false}
             onClose={this.handleClose}
             ContentProps={{
@@ -281,7 +283,7 @@ class SearchBar extends React.Component {
               onClose={this.handleClose}
               variant="warning"
               className={classes.margin}
-              message="Κανένα Αποτέσμα "
+              message="Κανένα Αποτέλεσμα "
             />
           </Snackbar>
         )}
@@ -290,7 +292,7 @@ class SearchBar extends React.Component {
 
         <Snackbar
           anchorOrigin={{ vertical, horizontal }}
-          open={open}
+          open={successmessage ? true : false}
           onClose={this.handleClose}
           ContentProps={{
             "aria-describedby": "message-id"
@@ -301,9 +303,10 @@ class SearchBar extends React.Component {
             onClose={this.handleClose}
             variant="success"
             className={classes.margin}
-            message="Επιτυχής Προσθήκη περιστατικού!"
+            message={successmessage}
           />
         </Snackbar>
+
         <Snackbar
           anchorOrigin={{ vertical, horizontal }}
           open={errormessage ? true : false}
@@ -335,8 +338,8 @@ SearchBar.propTypes = {
 };
 const mapStateToProps = state => ({
   selectPlace: state.selectedPlace,
-
-  errormessage: state.error.message
+  errormessage: state.error.message,
+  successmessage: state.successMessage
 });
 const mapDispatchToProps = dispatch => ({
   onInsertEventClick: (longitude, latitude, address) =>
@@ -346,7 +349,9 @@ const mapDispatchToProps = dispatch => ({
   onClearSelectPlace: selectedPlace =>
     dispatch(clearSelectedPlace(selectedPlace)),
   onErrorMessageCleaner: errormessage =>
-    dispatch(errorMessageCleaner(errormessage))
+    dispatch(errorMessageCleaner(errormessage)),
+  onSuccessMessageCleaner: successmessage =>
+    dispatch(successMessageCleaner(successmessage))
 });
 
 export default connect(

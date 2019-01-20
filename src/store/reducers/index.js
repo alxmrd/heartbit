@@ -9,6 +9,7 @@ import eventReducer from "./eventReducer";
 import httpStatusMessageReducer from "./httpStatusMessageReducer";
 import VolunteerSuccessReducer from "./VolunteerSuccessReducer";
 import newSuccessEventReducer from "./newSuccessEventReducer";
+import successMessageReducer from "./successMessageReducer";
 
 export default combineReducers({
   volunteers: volunteersReducer,
@@ -20,5 +21,6 @@ export default combineReducers({
   admin: adminReducer,
   error: httpStatusMessageReducer,
   volunteerSuccessData: VolunteerSuccessReducer,
-  eventSuccessData: newSuccessEventReducer
+  eventSuccessData: newSuccessEventReducer,
+  successMessage: successMessageReducer
 });

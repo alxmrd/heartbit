@@ -17,6 +17,7 @@ import { CLEAR_ISINVALID } from "../actions/types";
 import { CLEAN_VOLUNTEER_DATA } from "../actions/types";
 import { SEARCH_VOLUNTEER } from "../actions/types";
 import { CLEAR_SELECT_PLACE } from "../actions/types";
+import { CLEAR_SUCCESS_MESSAGE } from "../actions/types";
 
 import history from "../../history";
 
@@ -183,6 +184,13 @@ export const errorMessageCleaner = errormessage => dispatch => {
   dispatch({
     type: CLEAR_ISINVALID,
     payload: errormessage
+  });
+};
+
+export const successMessageCleaner = successmessage => dispatch => {
+  dispatch({
+    type: CLEAR_SUCCESS_MESSAGE,
+    payload: successmessage
   });
 };
 
