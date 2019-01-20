@@ -664,7 +664,7 @@ $app->post('/api/insertvolunteer', function (ServerRequestInterface $request, Re
     }
 
 });
-$app->post('/api/insertevent', function (Request $request, Response $response, array $args) {
+$app->post('/api/insertevent', function (ServerRequestInterface $request, ResponseInterface $response, array $args) {
     global $pdo;
     $userData = json_decode(file_get_contents('php://input'));
 
@@ -672,7 +672,19 @@ $app->post('/api/insertevent', function (Request $request, Response $response, a
     $latitude = $userData->{'latitude'};
     $address = $userData->{'address'};
     $active=0;
-  
+    if ($longitude== null ){
+        $message = "Πληκτρολογήσατε λάθος διεύθυνση!";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message, 409);
+        $myObj = new stdClass();
+        $myObj->message = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 404);
+       
+
+        return $response;
+
+    }
    
    
 
@@ -681,23 +693,26 @@ $app->post('/api/insertevent', function (Request $request, Response $response, a
     $result = $pdo->prepare($query);
 
     $result->execute(array(':longitude' => $longitude, ':latitude' => $latitude, ':address' => $address,':active'=> $active));
+    $count = $result->rowCount();
     $lastId = $pdo->lastInsertId();
     $timezone  = +2;
     // $datetime = date('Y-d-m H:i:s', time()+ 3600*($timezone+date("I")));
 
-    $myObj = new stdClass();
-    $myObj->id = $lastId;
+  
+
+        $myObj = new stdClass();
+        $myObj->id = $lastId;
     
-    $myObj->longitude = $longitude;
-    $myObj->latitude = $latitude;
-    $myObj->address = $address;
-    $myObj->active = $active;
-   
-   
-
-    $response = json_encode($myObj, JSON_NUMERIC_CHECK);
-
+        $myObj->longitude = $longitude;
+        $myObj->latitude = $latitude;
+        $myObj->address = $address;
+        $myObj->active = $active;
+    $response=json_encode($myObj,JSON_NUMERIC_CHECK);
     return $response;
+       
+       
+
+
 });
 $app->get('/api/volunteer/search', function (ServerRequestInterface $request, ResponseInterface $response, array $args) {
     global $pdo;

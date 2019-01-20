@@ -7,7 +7,8 @@ import { connect } from "react-redux";
 import {
   insertEventClick,
   selectPlace,
-  clearSelectedPlace
+  clearSelectedPlace,
+  errorMessageCleaner
 } from "../../store/actions/actions";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
@@ -109,7 +110,13 @@ class SearchBar extends React.Component {
   };
 
   handleClose = () => {
-    this.setState({ open: false });
+    this.setState({
+      open: false,
+      errorMessage: "",
+      address: "",
+      latitude: null,
+      longitude: null
+    });
   };
 
   handleCloseClick = () => {
@@ -156,7 +163,7 @@ class SearchBar extends React.Component {
       longitude,
       isGeocoding
     } = this.state;
-    const { classes } = this.props;
+    const { classes, errormessage } = this.props;
 
     return (
       <React.Fragment>
@@ -261,7 +268,22 @@ class SearchBar extends React.Component {
           }}
         </PlacesAutocomplete>
         {errorMessage.length > 0 && (
-          <div className="Demo__error-message">{this.state.errorMessage}</div>
+          <Snackbar
+            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+            open={this.state.errorMessage ? true : false}
+            onClose={this.handleClose}
+            ContentProps={{
+              "aria-describedby": "message-id"
+            }}
+            autoHideDuration={6000}
+          >
+            <MySnackbarContentWrapper
+              onClose={this.handleClose}
+              variant="warning"
+              className={classes.margin}
+              message="Κανένα Αποτέσμα "
+            />
+          </Snackbar>
         )}
 
         {((latitude && longitude) || isGeocoding) && <div>{""}</div>}
@@ -279,9 +301,27 @@ class SearchBar extends React.Component {
             onClose={this.handleClose}
             variant="success"
             className={classes.margin}
-            message={
-              <span id="message-id">Επιτυχής προσθήκη περιστατικού</span>
+            message="Επιτυχής Προσθήκη περιστατικού!"
+          />
+        </Snackbar>
+        <Snackbar
+          anchorOrigin={{ vertical, horizontal }}
+          open={errormessage ? true : false}
+          onClose={errormessage =>
+            this.props.onErrorMessageCleaner(errormessage)
+          }
+          ContentProps={{
+            "aria-describedby": "message-id"
+          }}
+          autoHideDuration={6000}
+        >
+          <MySnackbarContentWrapper
+            onClose={errormessage =>
+              this.props.onErrorMessageCleaner(errormessage)
             }
+            variant="error"
+            className={classes.margin}
+            message={errormessage}
           />
         </Snackbar>
       </React.Fragment>
@@ -294,7 +334,9 @@ SearchBar.propTypes = {
   classes: PropTypes.object.isRequired
 };
 const mapStateToProps = state => ({
-  selectPlace: state.selectedPlace
+  selectPlace: state.selectedPlace,
+
+  errormessage: state.error.message
 });
 const mapDispatchToProps = dispatch => ({
   onInsertEventClick: (longitude, latitude, address) =>
@@ -302,7 +344,9 @@ const mapDispatchToProps = dispatch => ({
   onSelectPlace: (longitude, latitude, address) =>
     dispatch(selectPlace(longitude, latitude, address)),
   onClearSelectPlace: selectedPlace =>
-    dispatch(clearSelectedPlace(selectedPlace))
+    dispatch(clearSelectedPlace(selectedPlace)),
+  onErrorMessageCleaner: errormessage =>
+    dispatch(errorMessageCleaner(errormessage))
 });
 
 export default connect(

@@ -17,6 +17,7 @@ import { CLEAR_ISINVALID } from "../actions/types";
 import { CLEAN_VOLUNTEER_DATA } from "../actions/types";
 import { SEARCH_VOLUNTEER } from "../actions/types";
 import { CLEAR_SELECT_PLACE } from "../actions/types";
+
 import history from "../../history";
 
 const headers = {
@@ -184,6 +185,7 @@ export const errorMessageCleaner = errormessage => dispatch => {
     payload: errormessage
   });
 };
+
 export const clearVolunteerData = volunteerData => dispatch => {
   dispatch({
     type: CLEAN_VOLUNTEER_DATA,
@@ -273,10 +275,12 @@ export const insertEventClick = datapoustelnw => dispatch => {
   })
     .then(result => result.json())
     .then(res => {
-      dispatch({
-        type: INSERT_EVENT,
-        payload: res
-      });
+      res.httpstatus === "error"
+        ? dispatch({
+            type: ISINVALID,
+            payload: res
+          })
+        : dispatch({ type: INSERT_EVENT, payload: res });
     })
     .catch(error => error.json())
     .catch(error => {
