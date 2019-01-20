@@ -2,8 +2,6 @@ import React from "react";
 import { classnames } from "./helpers";
 import PlacesAutocomplete from "react-places-autocomplete";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
-import TextField from "@material-ui/core/TextField";
-import { Button } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import { connect } from "react-redux";
 import { insertEventClick, selectPlace } from "../../store/actions/actions";
@@ -11,17 +9,51 @@ import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import Snackbar from "@material-ui/core/Snackbar";
 import MySnackbarContentWrapper from "../../components/MySnackbarContentWrapper";
-import Fab from "@material-ui/core/Fab";
+import AddLocationIcon from "@material-ui/icons/AddLocation";
+import LocalHospitalIcon from "@material-ui/icons/LocalHospital";
+import CloseIcon from "@material-ui/icons/Close";
+import InputBase from "@material-ui/core/InputBase";
+import Divider from "@material-ui/core/Divider";
+import Paper from "@material-ui/core/Paper";
+
+import IconButton from "@material-ui/core/IconButton";
 
 const styles = theme => ({
   button: {
     margin: theme.spacing.unit
   },
-  input: {
-    display: "none"
-  },
+
   margin: {
     margin: theme.spacing.unit
+  },
+  search: {
+    padding: "2px 4px",
+    display: "flex",
+    grow: 1,
+    alignItems: "center",
+    width: 400,
+    marginRight: "8%",
+    marginTop: 20,
+    float: "left"
+  },
+  input: {
+    marginLeft: 8,
+    flex: 1
+  },
+  iconButton: {
+    padding: 10
+  },
+  divider: {
+    width: 1,
+    height: 28,
+    margin: 4
+  },
+  paper: {
+    position: "absolute",
+    zIndex: 1,
+    marginTop: theme.spacing.unit * 8.5,
+    marginLeft: "0px",
+    left: 0
   }
 });
 class SearchBar extends React.Component {
@@ -131,39 +163,63 @@ class SearchBar extends React.Component {
         >
           {({ getInputProps, suggestions, getSuggestionItemProps }) => {
             return (
-              <div className="Demo__search-bar-container">
-                <Typography variant="h5">
-                  Ψάξτε διεύθυνση
-                  <i className="material-icons">search</i>
-                </Typography>
-                <div className="Demo__search-input-container">
-                  <TextField
+              <React.Fragment>
+                <Paper className={classes.search} elevation={1}>
+                  <InputBase
+                    className={classes.input}
                     {...getInputProps({
                       id: "input",
 
-                      style: { margin: 8 },
-                      placeholder: "π.χ. Κοζάνη",
+                      placeholder: "Aναζήτηση Διεύθυνσης...",
 
-                      margin: "normal",
-                      InputLabelProps: {
-                        shrink: true
-                      }
+                      margin: "dense"
                     })}
                   />
-
                   {this.state.address.length > 0 && (
-                    <Fab
-                      className="Demo__clear-button"
-                      onClick={this.handleCloseClick}
-                      color="primary"
-                      size="small"
+                    <IconButton
+                      color="inherit"
+                      className={classes.iconButton}
+                      aria-label="Directions"
                     >
-                      x
-                    </Fab>
+                      <CloseIcon
+                        // className={classes.searchIcon}
+                        aria-label="Αναζήτηση"
+                        onClick={this.handleCloseClick}
+                      />
+                    </IconButton>
                   )}
-                </div>
+                  <Divider className={classes.divider} />
+                  <IconButton
+                    color="secondary"
+                    className={classes.iconButton}
+                    aria-label="Directions"
+                  >
+                    <LocalHospitalIcon
+                      // className={classes.searchIcon}
+                      aria-label="Αναζήτηση"
+                    />
+                  </IconButton>
+                  <Divider className={classes.divider} />
+                  <IconButton
+                    color="primary"
+                    className={classes.iconButton}
+                    aria-label="Directions"
+                  >
+                    <AddLocationIcon
+                      // className={classes.searchIcon}
+                      aria-label="Αναζήτηση"
+                      onClick={event =>
+                        this.handleInsertEvent(event, {
+                          vertical: "bottom",
+                          horizontal: "left"
+                        })
+                      }
+                    />
+                  </IconButton>
+                </Paper>
+
                 {suggestions.length > 0 && (
-                  <div className="Demo__autocomplete-container">
+                  <div className={classes.paper}>
                     {suggestions.map(suggestion => {
                       const className = classnames("Demo__suggestion-item", {
                         "Demo__suggestion-item--active": suggestion.active
@@ -171,23 +227,26 @@ class SearchBar extends React.Component {
 
                       return (
                         /* eslint-disable react/jsx-key */
-                        <div
+                        <Paper
+                          className={classes.paper}
                           {...getSuggestionItemProps(suggestion, { className })}
                         >
-                          <strong>
-                            {suggestion.formattedSuggestion.mainText}
-                          </strong>{" "}
-                          <small>
-                            {suggestion.formattedSuggestion.secondaryText}
-                          </small>
-                        </div>
+                          <Typography>
+                            <strong>
+                              {suggestion.formattedSuggestion.mainText}
+                            </strong>{" "}
+                            <small>
+                              {suggestion.formattedSuggestion.secondaryText}
+                            </small>
+                          </Typography>
+                        </Paper>
                       );
                       /* eslint-enable react/jsx-key */
                     })}
-                    <div className="Demo__dropdown-footer" />
+                    <div />
                   </div>
                 )}
-              </div>
+              </React.Fragment>
             );
           }}
         </PlacesAutocomplete>
@@ -197,19 +256,6 @@ class SearchBar extends React.Component {
 
         {((latitude && longitude) || isGeocoding) && <div>{""}</div>}
 
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          onClick={event =>
-            this.handleInsertEvent(event, {
-              vertical: "bottom",
-              horizontal: "left"
-            })
-          }
-        >
-          ΠΡΟΣΘΗΚΗ ΠΕΡΙΣΤΑΤΙΚΟΥ
-        </Button>
         <Snackbar
           anchorOrigin={{ vertical, horizontal }}
           open={open}

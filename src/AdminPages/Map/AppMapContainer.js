@@ -5,12 +5,15 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import SearchBar from "./SearchBar.js";
 import firstaid from "../../firstaid.png";
+import pin from "../../pin.png";
 import defibrillator from "../../defibrillator.png";
 import { fetchDefifrillators } from "../../store/actions/actions.js";
+import Paper from "@material-ui/core/Paper";
 
 const mapStyles = {
   width: "92%",
-  height: "700px"
+  height: "80%",
+  marginTop: "100px"
 };
 
 export class MapContainer extends Component {
@@ -49,45 +52,55 @@ export class MapContainer extends Component {
     const onMarkerClick = this.onMarkerClick;
     return (
       <React.Fragment>
-        <SearchBar />
-
-        <Map
-          google={this.props.google}
-          zoom={14}
-          style={mapStyles}
-          initialCenter={{ lat: 40.30069, lng: 21.78896 }}
-        >
-          <Marker onClick={this.onMarkerClick} name={"Κοζάνη"} />
-          <Marker
-            onClick={this.onMarkerClick}
-            name={this.props.address}
-            position={{ lat: this.props.latitude, lng: this.props.longitude }}
-            icon={firstaid}
-          />
-
-          {defibrillators.map(item => (
-            <Marker
-              key={item.id}
-              onClick={onMarkerClick}
-              const
-              name={item.model}
-              position={{ lat: item.latitude, lng: item.longitude }}
-              icon={defibrillator}
-            />
-          ))}
-
-          <InfoWindow
-            marker={this.state.activeMarker}
-            visible={this.state.showingInfoWindow}
-            onClose={this.onClose}
+        <Paper>
+          <Map
+            google={this.props.google}
+            zoom={14}
+            style={mapStyles}
+            initialCenter={{ lat: 40.30069, lng: 21.78896 }}
           >
-            <div>
-              <h4>
-                {this.state.selectedPlace && this.state.selectedPlace.name}
-              </h4>
-            </div>
-          </InfoWindow>
-        </Map>
+            <SearchBar />
+            <Marker onClick={this.onMarkerClick} name={"Κοζάνη"} />
+            <Marker
+              onClick={this.onMarkerClick}
+              name={this.props.address}
+              position={{ lat: this.props.latitude, lng: this.props.longitude }}
+              icon={pin}
+            />
+            <Marker
+              onClick={this.onMarkerClick}
+              name={this.props.insertAddress}
+              position={{
+                lat: this.props.insertLat,
+                lng: this.props.insertLong
+              }}
+              icon={firstaid}
+            />
+
+            {defibrillators.map(item => (
+              <Marker
+                key={item.id}
+                onClick={onMarkerClick}
+                const
+                name={item.model}
+                position={{ lat: item.latitude, lng: item.longitude }}
+                icon={defibrillator}
+              />
+            ))}
+
+            <InfoWindow
+              marker={this.state.activeMarker}
+              visible={this.state.showingInfoWindow}
+              onClose={this.onClose}
+            >
+              <div>
+                <h4>
+                  {this.state.selectedPlace && this.state.selectedPlace.name}
+                </h4>
+              </div>
+            </InfoWindow>
+          </Map>
+        </Paper>
       </React.Fragment>
     );
   }
@@ -99,6 +112,9 @@ MapContainer.propTypes = {
   address: PropTypes.string,
   latitude: PropTypes.number,
   longitude: PropTypes.number,
+  insertAddress: PropTypes.string,
+  insertLat: PropTypes.number,
+  insertLong: PropTypes.number,
   defibrillators: PropTypes.array.isRequired,
   onfetchDefibrillators: PropTypes.func.isRequired
 };
@@ -107,7 +123,10 @@ const mapStateToProps = state => ({
   longitude: state.selectedPlace.longitude,
   latitude: state.selectedPlace.latitude,
   address: state.selectedPlace.address,
-  defibrillators: state.defibrillators
+  defibrillators: state.defibrillators,
+  insertLong: state.eventSuccessData.longitude,
+  insertLat: state.eventSuccessData.latitude,
+  insertAddress: state.eventSuccessData.address
 });
 
 const mapDispatchToProps = dispatch => ({

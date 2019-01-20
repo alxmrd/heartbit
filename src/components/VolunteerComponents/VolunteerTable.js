@@ -225,18 +225,19 @@ class VolunteerTable extends React.Component {
             onChange={this.handleChange}
             onKeyPress={this.enterPressed.bind(this)}
           />
-
-          <IconButton
-            color="inherit"
-            className={classes.iconButton}
-            aria-label="Directions"
-          >
-            <CloseIcon
-              // className={classes.searchIcon}
-              aria-label="Αναζήτηση"
-              onClick={this.handleSearchClear}
-            />
-          </IconButton>
+          {this.state.searched.length > 0 && (
+            <IconButton
+              color="inherit"
+              className={classes.iconButton}
+              aria-label="Directions"
+            >
+              <CloseIcon
+                // className={classes.searchIcon}
+                aria-label="Αναζήτηση"
+                onClick={this.handleSearchClear}
+              />
+            </IconButton>
+          )}
           <Divider className={classes.divider} />
           <IconButton
             color="primary"
