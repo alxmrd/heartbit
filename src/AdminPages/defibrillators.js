@@ -6,7 +6,11 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core";
+import {
+  withStyles,
+  MuiThemeProvider,
+  createMuiTheme
+} from "@material-ui/core";
 // import AddIcon from "@material-ui/icons/Add";
 // import Dialog from "@material-ui/core/Dialog";
 // import DialogActions from "@material-ui/core/DialogActions";
@@ -15,7 +19,11 @@ import { withStyles } from "@material-ui/core";
 // import DialogTitle from "@material-ui/core/DialogTitle";
 import { fetchDefifrillators } from "../store/actions/actions";
 import { connect } from "react-redux";
-// import Fab from "@material-ui/core/Fab";
+import IconButton from "@material-ui/core/IconButton";
+import FlagIcon from "@material-ui/icons/Flag";
+import OutlinedFlagIcon from "@material-ui/icons/OutlinedFlag";
+import LockIcon from "@material-ui/icons/Lock";
+import LockOpenIcon from "@material-ui/icons/LockOpen";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 
@@ -35,6 +43,17 @@ const styles = theme => ({
     position: "absolute",
     bottom: theme.spacing.unit * 2,
     right: theme.spacing.unit * 3
+  }
+});
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#00897b"
+    },
+    secondary: {
+      main: "#e64a19"
+    }
   }
 });
 
@@ -93,8 +112,63 @@ class defibrillators extends Component {
                     <TableCell>{item.upgradedate}</TableCell>
                     <TableCell>{item.location}</TableCell>
                     <TableCell>{item.model}</TableCell>
-                    <TableCell>{item.presentflag}</TableCell>
-                    <TableCell>{item.locker}</TableCell>
+                    <TableCell>
+                      {item.presentflag === 0 ? (
+                        <MuiThemeProvider theme={theme}>
+                          <IconButton
+                            color="primary"
+                            // className={classes.iconButton}
+
+                            aria-label="Directions"
+                          >
+                            <FlagIcon
+                              className="material-icons md-36"
+                              aria-label="Αναζήτηση"
+                            />
+                          </IconButton>
+                        </MuiThemeProvider>
+                      ) : (
+                        <MuiThemeProvider theme={theme}>
+                          <IconButton
+                            color="secondary"
+                            //className={classes.iconButton}
+                            aria-label="Directions"
+                          >
+                            <OutlinedFlagIcon
+                              className="material-icons md-36"
+                              aria-label="Αναζήτηση"
+                            />
+                          </IconButton>
+                        </MuiThemeProvider>
+                      )}
+                    </TableCell>
+
+                    <TableCell>
+                      {item.locker === 0 ? (
+                        <MuiThemeProvider theme={theme}>
+                          <IconButton color="primary" aria-label="Directions">
+                            <LockIcon
+                              // className={classes.searchIcon}
+                              className="material-icons md-36"
+                              aria-label="Αναζήτηση"
+                            />
+                          </IconButton>
+                        </MuiThemeProvider>
+                      ) : (
+                        <MuiThemeProvider theme={theme}>
+                          <IconButton
+                            color="secondary"
+                            // className={classes.iconButton}
+                            aria-label="Directions"
+                          >
+                            <LockOpenIcon
+                              className="material-icons md-36"
+                              aria-label="Αναζήτηση"
+                            />
+                          </IconButton>
+                        </MuiThemeProvider>
+                      )}
+                    </TableCell>
                   </TableRow>
                 );
               })}
