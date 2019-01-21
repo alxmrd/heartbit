@@ -19,6 +19,9 @@ import { connect } from "react-redux";
 import Fab from "@material-ui/core/Fab";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import TablePaginationActionsWrapped from "../components/TablePaginationActions";
+import TableFooter from "@material-ui/core/TableFooter";
+import TablePagination from "@material-ui/core/TablePagination";
 
 const styles = theme => ({
   root: {
@@ -28,6 +31,9 @@ const styles = theme => ({
   },
   table: {
     minWidth: 700
+  },
+  tableWrapper: {
+    float: "right"
   },
   fab: {
     margin: theme.spacing.unit * 2
@@ -51,7 +57,9 @@ class patients extends Component {
     this.props = props;
     this.state = {
       data: [],
-      open: false
+      open: false,
+      page: 0,
+      rowsPerPage: 5
     };
   }
   handleClickOpen = () => {
@@ -65,9 +73,17 @@ class patients extends Component {
     // If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
     this.props.onfetchPatients();
   }
+  handleChangePage = (event, page) => {
+    this.setState({ page });
+  };
+
+  handleChangeRowsPerPage = event => {
+    this.setState({ rowsPerPage: event.target.value });
+  };
 
   render() {
     const { classes, patients } = this.props;
+    const { rowsPerPage, page } = this.state;
     return (
       <Fragment>
         <div className={classes.root}>
@@ -92,20 +108,39 @@ class patients extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {patients.map(function(item, key) {
-                return (
-                  <TableRow key={item.id} className={classes.row} hover>
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{item.surname}</TableCell>
-                    <TableCell>{item.address}</TableCell>
-                    <TableCell>{item.history}</TableCell>
-                    <TableCell>{item.description}</TableCell>
-                    <TableCell>{item.birthdate}</TableCell>
-                    <TableCell>{item.gender}</TableCell>
-                  </TableRow>
-                );
-              })}
+              {patients
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map(row => {
+                  return (
+                    <TableRow key={row.id} className={classes.row} hover>
+                      <TableCell>{row.name}</TableCell>
+                      <TableCell>{row.surname}</TableCell>
+                      <TableCell>{row.address}</TableCell>
+                      <TableCell>{row.history}</TableCell>
+                      <TableCell>{row.description}</TableCell>
+                      <TableCell>{row.birthdate}</TableCell>
+                      <TableCell>{row.gender}</TableCell>
+                    </TableRow>
+                  );
+                })}
             </TableBody>
+            <TableFooter className={classes.tableWrapper}>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  colSpan={3}
+                  count={patients.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  SelectProps={{
+                    native: false
+                  }}
+                  onChangePage={this.handleChangePage}
+                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                  ActionsComponent={TablePaginationActionsWrapped}
+                />
+              </TableRow>
+            </TableFooter>
           </Table>
           <Tooltip title="Add Volunteer">
             <Fab

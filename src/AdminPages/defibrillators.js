@@ -11,6 +11,8 @@ import {
   MuiThemeProvider,
   createMuiTheme
 } from "@material-ui/core";
+import TableFooter from "@material-ui/core/TableFooter";
+import TablePagination from "@material-ui/core/TablePagination";
 // import AddIcon from "@material-ui/icons/Add";
 // import Dialog from "@material-ui/core/Dialog";
 // import DialogActions from "@material-ui/core/DialogActions";
@@ -26,6 +28,7 @@ import LockIcon from "@material-ui/icons/Lock";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import TablePaginationActionsWrapped from "../components/TablePaginationActions";
 
 const styles = theme => ({
   root: {
@@ -35,6 +38,9 @@ const styles = theme => ({
   },
   table: {
     minWidth: 700
+  },
+  tableWrapper: {
+    float: "right"
   },
   fab: {
     margin: theme.spacing.unit * 2
@@ -68,9 +74,19 @@ class defibrillators extends Component {
     this.props = props;
     this.state = {
       data: [],
-      open: false
+      open: false,
+      page: 0,
+      rowsPerPage: 5
     };
   }
+  handleChangePage = (event, page) => {
+    this.setState({ page });
+  };
+
+  handleChangeRowsPerPage = event => {
+    this.setState({ rowsPerPage: event.target.value });
+  };
+
   // handleClickOpen = () => {
   //   this.setState({ open: true });
   // };
@@ -86,7 +102,7 @@ class defibrillators extends Component {
 
   render() {
     const { classes, defibrillators } = this.props;
-
+    const { rowsPerPage, page } = this.state;
     return (
       <Fragment>
         <div className={classes.root}>
@@ -110,74 +126,93 @@ class defibrillators extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {defibrillators.map(function(item, key) {
-                return (
-                  <TableRow key={item.id} className={classes.row} hover>
-                    <TableCell>{item.installationdate}</TableCell>
-                    <TableCell>{item.upgradedate}</TableCell>
-                    <TableCell>{item.location}</TableCell>
-                    <TableCell>{item.model}</TableCell>
-                    <TableCell>
-                      {item.presentflag === 0 ? (
-                        <MuiThemeProvider theme={theme}>
-                          <IconButton
-                            color="primary"
-                            // className={classes.iconButton}
+              {defibrillators
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map(row => {
+                  return (
+                    <TableRow key={row.id} className={classes.row} hover>
+                      <TableCell>{row.installationdate}</TableCell>
+                      <TableCell>{row.upgradedate}</TableCell>
+                      <TableCell>{row.location}</TableCell>
+                      <TableCell>{row.model}</TableCell>
+                      <TableCell>
+                        {row.presentflag === 0 ? (
+                          <MuiThemeProvider theme={theme}>
+                            <IconButton
+                              color="primary"
+                              // className={classes.iconButton}
 
-                            aria-label="Directions"
-                          >
-                            <FlagIcon
-                              className="material-icons md-24"
-                              aria-label="Αναζήτηση"
-                            />
-                          </IconButton>
-                        </MuiThemeProvider>
-                      ) : (
-                        <MuiThemeProvider theme={theme}>
-                          <IconButton
-                            color="secondary"
-                            //className={classes.iconButton}
-                            aria-label="Directions"
-                          >
-                            <OutlinedFlagIcon
-                              className="material-icons md-24"
-                              aria-label="Αναζήτηση"
-                            />
-                          </IconButton>
-                        </MuiThemeProvider>
-                      )}
-                    </TableCell>
+                              aria-label="Directions"
+                            >
+                              <FlagIcon
+                                className="material-icons md-36"
+                                aria-label="Αναζήτηση"
+                              />
+                            </IconButton>
+                          </MuiThemeProvider>
+                        ) : (
+                          <MuiThemeProvider theme={theme}>
+                            <IconButton
+                              color="secondary"
+                              //className={classes.iconButton}
+                              aria-label="Directions"
+                            >
+                              <OutlinedFlagIcon
+                                className="material-icons md-36"
+                                aria-label="Αναζήτηση"
+                              />
+                            </IconButton>
+                          </MuiThemeProvider>
+                        )}
+                      </TableCell>
 
-                    <TableCell>
-                      {item.locker === 0 ? (
-                        <MuiThemeProvider theme={theme}>
-                          <IconButton color="primary" aria-label="Directions">
-                            <LockIcon
-                              // className={classes.searchIcon}
-                              className="material-icons md-24"
-                              aria-label="Αναζήτηση"
-                            />
-                          </IconButton>
-                        </MuiThemeProvider>
-                      ) : (
-                        <MuiThemeProvider theme={theme}>
-                          <IconButton
-                            color="secondary"
-                            // className={classes.iconButton}
-                            aria-label="Directions"
-                          >
-                            <LockOpenIcon
-                              className="material-icons md-24"
-                              aria-label="Αναζήτηση"
-                            />
-                          </IconButton>
-                        </MuiThemeProvider>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                      <TableCell>
+                        {row.locker === 0 ? (
+                          <MuiThemeProvider theme={theme}>
+                            <IconButton color="primary" aria-label="Directions">
+                              <LockIcon
+                                // className={classes.searchIcon}
+                                className="material-icons md-36"
+                                aria-label="Αναζήτηση"
+                              />
+                            </IconButton>
+                          </MuiThemeProvider>
+                        ) : (
+                          <MuiThemeProvider theme={theme}>
+                            <IconButton
+                              color="secondary"
+                              // className={classes.iconButton}
+                              aria-label="Directions"
+                            >
+                              <LockOpenIcon
+                                className="material-icons md-36"
+                                aria-label="Αναζήτηση"
+                              />
+                            </IconButton>
+                          </MuiThemeProvider>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
             </TableBody>
+            <TableFooter className={classes.tableWrapper}>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  colSpan={3}
+                  count={defibrillators.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  SelectProps={{
+                    native: false
+                  }}
+                  onChangePage={this.handleChangePage}
+                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                  ActionsComponent={TablePaginationActionsWrapped}
+                />
+              </TableRow>
+            </TableFooter>
           </Table>
         </Paper>
       </Fragment>

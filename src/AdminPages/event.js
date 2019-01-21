@@ -13,6 +13,9 @@ import moment from "moment";
 import "../containers/Icons.css";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import TableFooter from "@material-ui/core/TableFooter";
+import TablePagination from "@material-ui/core/TablePagination";
+import TablePaginationActionsWrapped from "../components/TablePaginationActions";
 
 const styles = theme => ({
   root: {
@@ -22,6 +25,9 @@ const styles = theme => ({
   },
   table: {
     minWidth: 700
+  },
+  tableWrapper: {
+    float: "right"
   },
   fab: {
     margin: theme.spacing.unit * 2
@@ -44,7 +50,9 @@ class Event extends Component {
     this.props = props;
     this.state = {
       data: [],
-      open: false
+      open: false,
+      page: 0,
+      rowsPerPage: 5
     };
   }
   handleClickOpen = () => {
@@ -59,9 +67,17 @@ class Event extends Component {
     // If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
     this.props.onfetchEvents();
   }
+  handleChangePage = (event, page) => {
+    this.setState({ page });
+  };
+
+  handleChangeRowsPerPage = event => {
+    this.setState({ rowsPerPage: event.target.value });
+  };
 
   render() {
     const { classes, event } = this.props;
+    const { rowsPerPage, page } = this.state;
     return (
       <Fragment>
         <div className={classes.root}>
@@ -88,8 +104,10 @@ class Event extends Component {
               {event
                 .slice(0)
                 .reverse()
-                .map(function(item, key) {
-                  var hours24 = moment(item.datetime, "YYYY-MM-DD H:mm:ss").add(
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+
+                .map(row => {
+                  var hours24 = moment(row.datetime, "YYYY-MM-DD H:mm:ss").add(
                     24,
                     "hours"
                   );
@@ -97,12 +115,12 @@ class Event extends Component {
                   var now = moment().format("YYYY-MM-DD H:mm:ss");
                   var active = moment(now).isBefore(hours24);
                   return (
-                    <TableRow key={item.id} className={classes.row} hover>
-                      <TableCell>{item.correspondence}</TableCell>
-                      <TableCell>{item.address}</TableCell>
-                      <TableCell>{item.latitude}</TableCell>
-                      <TableCell>{item.longitude}</TableCell>
-                      <TableCell>{item.datetime}</TableCell>
+                    <TableRow key={row.id} className={classes.row} hover>
+                      <TableCell>{row.correspondence}</TableCell>
+                      <TableCell>{row.address}</TableCell>
+                      <TableCell>{row.latitude}</TableCell>
+                      <TableCell>{row.longitude}</TableCell>
+                      <TableCell>{row.datetime}</TableCell>
                       <TableCell>
                         {active ? (
                           <i className="material-icons teal600 md-36">
@@ -118,6 +136,23 @@ class Event extends Component {
                   );
                 })}
             </TableBody>
+            <TableFooter className={classes.tableWrapper}>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  colSpan={3}
+                  count={event.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  SelectProps={{
+                    native: false
+                  }}
+                  onChangePage={this.handleChangePage}
+                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                  ActionsComponent={TablePaginationActionsWrapped}
+                />
+              </TableRow>
+            </TableFooter>
           </Table>
         </Paper>
       </Fragment>
