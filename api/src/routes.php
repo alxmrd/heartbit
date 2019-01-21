@@ -453,6 +453,33 @@ $app->post('/api/deactivate/{id}', function (Request $request, Response $respons
     return $response;
 });
 
+$app->post('/api/defibrillator/presentflag', function (Request $request, Response $response, array $args) {
+    global $pdo;
+    $flagData = json_decode(file_get_contents('php://input'));
+    $defibrillator_id = $flagData->{'id'};
+    $flag = $flagData->{'presentflag'};
+     
+    if ($flag == 0) {
+        $response_flag = 1;
+
+    } else {
+        $response_flag = 0;
+    }
+
+    $query = ("UPDATE apinidotis SET presentflag=:presentflag WHERE id=:id");
+    $result = $pdo->prepare($query);
+
+    $result->execute(array(':presentflag' => $response_flag, ':id' => $defibrillator_id));
+
+    $myObj = new stdClass();
+    $myObj->id = $defibrillator_id;
+    $myObj->presentflag = $response_flag;
+
+    $response = json_encode($myObj, JSON_NUMERIC_CHECK);
+
+    return $response;
+});
+
 $app->post('/api/insertvolunteer', function (ServerRequestInterface $request, ResponseInterface $response, array $args) {
     global $pdo;
     require_once 'validation/validationRules.php';

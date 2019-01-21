@@ -128,7 +128,7 @@ class Event extends Component {
                           </i>
                         ) : (
                           <i className="material-icons red700 md-36">
-                            notification_important
+                            notifications_off
                           </i>
                         )}
                       </TableCell>

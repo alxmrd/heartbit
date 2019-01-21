@@ -19,6 +19,7 @@ import { SEARCH_VOLUNTEER } from "../actions/types";
 import { CLEAR_SELECT_PLACE } from "../actions/types";
 import { CLEAR_SUCCESS_MESSAGE } from "../actions/types";
 import { INSERT_DEFIBRILLATOR } from "../actions/types";
+import { CHANGE_DEFIBRILLATOR_FLAG } from "../actions/types";
 
 import history from "../../history";
 
@@ -68,7 +69,7 @@ export const fetchVolunteers = dispatch => {
 // };
 
 export const fetchDefifrillators = dispatch => {
-  fetch(`http://localhost:8080//api/defibrillators`, {
+  fetch(`http://localhost:8080/api/defibrillators`, {
     headers: {
       ...headers,
       Authorization: "Bearer " + sessionStorage.getItem("token")
@@ -85,6 +86,30 @@ export const fetchDefifrillators = dispatch => {
     .catch(error => {
       alert("Απαιτείται σύνδεση");
       history.push("/login");
+    });
+};
+export const changeDefibrillatorFlag = flagData => dispatch => {
+  fetch(`http://localhost:8080/api/defibrillator/presentflag`, {
+    method: "POST",
+    cache: "no-cache",
+    headers: {
+      ...headers,
+      Authorization: "Bearer " + sessionStorage.getItem("token")
+    },
+    redirect: "follow",
+    referrer: "no-referrer",
+    body: JSON.stringify(flagData)
+  })
+    .then(result => result.json())
+
+    .then(res =>
+      dispatch({
+        type: CHANGE_DEFIBRILLATOR_FLAG,
+        payload: res
+      })
+    )
+    .catch(error => {
+      alert(error, "SERVER error 500 ");
     });
 };
 

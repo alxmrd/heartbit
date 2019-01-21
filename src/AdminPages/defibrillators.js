@@ -19,7 +19,10 @@ import TablePagination from "@material-ui/core/TablePagination";
 // import DialogContent from "@material-ui/core/DialogContent";
 // import DialogContentText from "@material-ui/core/DialogContentText";
 // import DialogTitle from "@material-ui/core/DialogTitle";
-import { fetchDefifrillators } from "../store/actions/actions";
+import {
+  fetchDefifrillators,
+  changeDefibrillatorFlag
+} from "../store/actions/actions";
 import { connect } from "react-redux";
 import IconButton from "@material-ui/core/IconButton";
 import FlagIcon from "@material-ui/icons/Flag";
@@ -65,6 +68,9 @@ const theme = createMuiTheme({
     secondary: {
       main: "#e64a19"
     }
+  },
+  typography: {
+    useNextVariants: true
   }
 });
 
@@ -94,6 +100,20 @@ class defibrillators extends Component {
   // handleClose = () => {
   //   this.setState({ open: false });
   // };
+  handlePresentFlag = (e, id, flag) => {
+    e.stopPropagation();
+
+    const flagData = {
+      id: id,
+      presentflag: flag
+    };
+    this.props.onChangeFlag(flagData);
+
+    // this.setState({
+    //   openSnack: false
+    // });
+    // this.props.onClose();
+  };
 
   componentDidMount() {
     // If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
@@ -141,7 +161,13 @@ class defibrillators extends Component {
                             <IconButton
                               color="primary"
                               // className={classes.iconButton}
-
+                              onClick={e =>
+                                this.handlePresentFlag(
+                                  e,
+                                  row.id,
+                                  row.presentflag
+                                )
+                              }
                               aria-label="Directions"
                             >
                               <FlagIcon
@@ -156,6 +182,13 @@ class defibrillators extends Component {
                               color="secondary"
                               //className={classes.iconButton}
                               aria-label="Directions"
+                              onClick={e =>
+                                this.handlePresentFlag(
+                                  e,
+                                  row.id,
+                                  row.presentflag
+                                )
+                              }
                             >
                               <OutlinedFlagIcon
                                 className="material-icons md-36"
@@ -231,7 +264,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onfetchDefibrillators: () => fetchDefifrillators(dispatch)
+  onfetchDefibrillators: () => fetchDefifrillators(dispatch),
+
+  onChangeFlag: flagData => dispatch(changeDefibrillatorFlag(flagData))
 });
 
 export default connect(
