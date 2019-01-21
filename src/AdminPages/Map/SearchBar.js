@@ -9,7 +9,8 @@ import {
   selectPlace,
   clearSelectedPlace,
   errorMessageCleaner,
-  successMessageCleaner
+  successMessageCleaner,
+  insertDefibrillatorClick
 } from "../../store/actions/actions";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
@@ -148,6 +149,25 @@ class SearchBar extends React.Component {
       ...state
     });
   };
+  handleInsertDefibrillator = (event, state) => {
+    event.preventDefault();
+    const dataPouStelnw = {
+      latitude: this.state.latitude,
+      longitude: this.state.longitude,
+      address: this.state.address
+    };
+
+    this.props.onInsertDefibrillatorClick(dataPouStelnw);
+    this.props.onClearSelectPlace(this.props.selectPlace);
+
+    this.setState({
+      address: "",
+      latitude: null,
+      longitude: null,
+
+      ...state
+    });
+  };
 
   handleError = (status, clearSuggestions) => {
     console.log("Error from Google Maps API", status); // eslint-disable-line no-console
@@ -213,6 +233,12 @@ class SearchBar extends React.Component {
                       <LocalHospitalIcon
                         // className={classes.searchIcon}
                         aria-label="Αναζήτηση"
+                        onClick={event =>
+                          this.handleInsertDefibrillator(event, {
+                            vertical: "bottom",
+                            horizontal: "left"
+                          })
+                        }
                       />
                     </IconButton>
                   </Tooltip>
@@ -344,6 +370,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onInsertEventClick: (longitude, latitude, address) =>
     dispatch(insertEventClick(longitude, latitude, address)),
+  onInsertDefibrillatorClick: (longitude, latitude, address) =>
+    dispatch(insertDefibrillatorClick(longitude, latitude, address)),
   onSelectPlace: (longitude, latitude, address) =>
     dispatch(selectPlace(longitude, latitude, address)),
   onClearSelectPlace: selectedPlace =>

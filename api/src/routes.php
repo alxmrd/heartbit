@@ -720,8 +720,8 @@ $app->post('/api/insertdefibrillator', function (ServerRequestInterface $request
 
     $longitude = $userData->{'longitude'};
     $latitude = $userData->{'latitude'};
-    $address = $userData->{'address'};
-    $active=0;
+    $location = $userData->{'address'};
+
     if ($longitude== null ){
         $message = "Kατι πήγε στραβά!";
         $httpstatus = "error";
@@ -738,12 +738,12 @@ $app->post('/api/insertdefibrillator', function (ServerRequestInterface $request
    
    
 
-    $query = "INSERT INTO peristatiko (longitude, latitude, address ,active) VALUES (:longitude,:latitude, :address,:active)";
+    $query = "INSERT INTO apinidotis (longitude, latitude, location) VALUES (:longitude,:latitude, :location)";
    
     $result = $pdo->prepare($query);
 
-    $result->execute(array(':longitude' => $longitude, ':latitude' => $latitude, ':address' => $address,':active'=> $active));
-    $count = $result->rowCount();
+    $result->execute(array(':longitude' => $longitude, ':latitude' => $latitude, ':location' => $location));
+
     $lastId = $pdo->lastInsertId();
     $timezone  = +2;
     // $datetime = date('Y-d-m H:i:s', time()+ 3600*($timezone+date("I")));
@@ -755,8 +755,8 @@ $app->post('/api/insertdefibrillator', function (ServerRequestInterface $request
     
         $myObj->longitude = $longitude;
         $myObj->latitude = $latitude;
-        $myObj->address = $address;
-        $myObj->active = $active;
+        $myObj->location = $location;
+
     $response=json_encode($myObj,JSON_NUMERIC_CHECK);
     return $response;
        

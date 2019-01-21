@@ -79,7 +79,7 @@ class defibrillators extends Component {
               <TableRow>
                 <TableCell>Ημερομηνία Εγκατάστασης</TableCell>
                 <TableCell>Ημερομηνία Αναβάθμισης</TableCell>
-                <TableCell>Σημειώσεις</TableCell>
+                <TableCell>Διεύθυνση</TableCell>
                 <TableCell>Μοντέλο</TableCell>
                 <TableCell>Τρέχουσα Κατάσταση</TableCell>
                 <TableCell>Κλείδωμα / Ξεκλείδωμα</TableCell>
@@ -91,7 +91,7 @@ class defibrillators extends Component {
                   <TableRow key={item.id}>
                     <TableCell>{item.installationdate}</TableCell>
                     <TableCell>{item.upgradedate}</TableCell>
-                    <TableCell>{item.notes}</TableCell>
+                    <TableCell>{item.location}</TableCell>
                     <TableCell>{item.model}</TableCell>
                     <TableCell>{item.presentflag}</TableCell>
                     <TableCell>{item.locker}</TableCell>

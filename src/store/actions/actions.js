@@ -18,6 +18,7 @@ import { CLEAN_VOLUNTEER_DATA } from "../actions/types";
 import { SEARCH_VOLUNTEER } from "../actions/types";
 import { CLEAR_SELECT_PLACE } from "../actions/types";
 import { CLEAR_SUCCESS_MESSAGE } from "../actions/types";
+import { INSERT_DEFIBRILLATOR } from "../actions/types";
 
 import history from "../../history";
 
@@ -296,6 +297,32 @@ export const insertEventClick = datapoustelnw => dispatch => {
     });
 };
 
+export const insertDefibrillatorClick = datapoustelnw => dispatch => {
+  fetch(`http://localhost:8080/api/insertdefibrillator`, {
+    method: "POST",
+    cache: "no-cache",
+    headers: {
+      ...headers,
+      Authorization: "Bearer " + sessionStorage.getItem("token")
+    },
+    redirect: "follow",
+    referrer: "no-referrer",
+    body: JSON.stringify(datapoustelnw)
+  })
+    .then(result => result.json())
+    .then(res => {
+      res.httpstatus === "error"
+        ? dispatch({
+            type: ISINVALID,
+            payload: res
+          })
+        : dispatch({ type: INSERT_DEFIBRILLATOR, payload: res });
+    })
+    .catch(error => error.json())
+    .catch(error => {
+      alert(error, "SERVER error 500 ");
+    });
+};
 export const SearchOnVolunteers = ({ searched }) => dispatch => {
   fetch(`http://localhost:8080/api/volunteer/search?input=${searched}`, {
     method: "GET",
