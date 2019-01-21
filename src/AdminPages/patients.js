@@ -37,6 +37,11 @@ const styles = theme => ({
     bottom: theme.spacing.unit * 6.5,
     right: theme.spacing.unit * 3,
     boxShadow: "5px 5px  5px grey "
+  },
+  row: {
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.background.default
+    }
   }
 });
 
@@ -89,7 +94,7 @@ class patients extends Component {
             <TableBody>
               {patients.map(function(item, key) {
                 return (
-                  <TableRow key={item.id}>
+                  <TableRow key={item.id} className={classes.row} hover>
                     <TableCell>{item.name}</TableCell>
                     <TableCell>{item.surname}</TableCell>
                     <TableCell>{item.address}</TableCell>

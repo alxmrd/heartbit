@@ -43,6 +43,11 @@ const styles = theme => ({
     position: "absolute",
     bottom: theme.spacing.unit * 2,
     right: theme.spacing.unit * 3
+  },
+  row: {
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.background.default
+    }
   }
 });
 
@@ -107,7 +112,7 @@ class defibrillators extends Component {
             <TableBody>
               {defibrillators.map(function(item, key) {
                 return (
-                  <TableRow key={item.id}>
+                  <TableRow key={item.id} className={classes.row} hover>
                     <TableCell>{item.installationdate}</TableCell>
                     <TableCell>{item.upgradedate}</TableCell>
                     <TableCell>{item.location}</TableCell>
@@ -122,7 +127,7 @@ class defibrillators extends Component {
                             aria-label="Directions"
                           >
                             <FlagIcon
-                              className="material-icons md-36"
+                              className="material-icons md-24"
                               aria-label="Αναζήτηση"
                             />
                           </IconButton>
@@ -135,7 +140,7 @@ class defibrillators extends Component {
                             aria-label="Directions"
                           >
                             <OutlinedFlagIcon
-                              className="material-icons md-36"
+                              className="material-icons md-24"
                               aria-label="Αναζήτηση"
                             />
                           </IconButton>
@@ -149,7 +154,7 @@ class defibrillators extends Component {
                           <IconButton color="primary" aria-label="Directions">
                             <LockIcon
                               // className={classes.searchIcon}
-                              className="material-icons md-36"
+                              className="material-icons md-24"
                               aria-label="Αναζήτηση"
                             />
                           </IconButton>
@@ -162,7 +167,7 @@ class defibrillators extends Component {
                             aria-label="Directions"
                           >
                             <LockOpenIcon
-                              className="material-icons md-36"
+                              className="material-icons md-24"
                               aria-label="Αναζήτηση"
                             />
                           </IconButton>

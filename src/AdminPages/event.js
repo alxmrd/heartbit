@@ -30,6 +30,11 @@ const styles = theme => ({
     position: "absolute",
     bottom: theme.spacing.unit * 2,
     right: theme.spacing.unit * 3
+  },
+  row: {
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.background.default
+    }
   }
 });
 
@@ -92,7 +97,7 @@ class Event extends Component {
                   var now = moment().format("YYYY-MM-DD H:mm:ss");
                   var active = moment(now).isBefore(hours24);
                   return (
-                    <TableRow key={item.id}>
+                    <TableRow key={item.id} className={classes.row} hover>
                       <TableCell>{item.correspondence}</TableCell>
                       <TableCell>{item.address}</TableCell>
                       <TableCell>{item.latitude}</TableCell>

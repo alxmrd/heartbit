@@ -5,7 +5,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import EditIcon from "@material-ui/icons/Edit";
-import { Button } from "@material-ui/core";
+
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -296,9 +296,12 @@ class VolunteerTable extends React.Component {
                     <Activity volunteerid={row.id} volstatus={row.status} />
 
                     <TableCell>
-                      <Button onClick={e => onEditClick(e, row.id)}>
+                      <IconButton
+                        onClick={e => onEditClick(e, row.id)}
+                        color="inherit"
+                      >
                         <EditIcon />
-                      </Button>
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 );

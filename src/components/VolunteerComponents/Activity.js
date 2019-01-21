@@ -11,6 +11,7 @@ import {
 } from "../../store/actions/actions";
 import Snackbar from "@material-ui/core/Snackbar";
 import { withStyles } from "@material-ui/core/styles";
+import IconButton from "@material-ui/core/IconButton";
 
 const styles = theme => ({
   deactivateButton: {
@@ -61,23 +62,23 @@ class Activity extends Component {
     return (
       <TableCell>
         {volstatus !== 0 ? (
-          <Button
+          <IconButton
             onClick={e => {
               this.handleClick(e);
               this.props.onEditVolunteer(volunteerid);
             }}
           >
             <i className="material-icons red700 md-36">person</i>
-          </Button>
+          </IconButton>
         ) : (
-          <Button
+          <IconButton
             onClick={e => {
               this.handleClick(e);
               this.props.onEditVolunteer(volunteerid);
             }}
           >
             <i className="material-icons teal600 md-36">person</i>
-          </Button>
+          </IconButton>
         )}
         {volstatus !== 0 ? (
           <Snackbar
