@@ -455,9 +455,9 @@ $app->post('/api/deactivate/{id}', function (Request $request, Response $respons
 
 $app->post('/api/defibrillator/presentflag', function (Request $request, Response $response, array $args) {
     global $pdo;
-    $flagData = json_decode(file_get_contents('php://input'));
-    $defibrillator_id = $flagData->{'id'};
-    $flag = $flagData->{'presentflag'};
+    $defibrillatorData = json_decode(file_get_contents('php://input'));
+    $defibrillator_id = $defibrillatorData->{'id'};
+    $flag = $defibrillatorData->{'presentflag'};
      
     if ($flag == 0) {
         $response_flag = 1;
@@ -474,6 +474,33 @@ $app->post('/api/defibrillator/presentflag', function (Request $request, Respons
     $myObj = new stdClass();
     $myObj->id = $defibrillator_id;
     $myObj->presentflag = $response_flag;
+
+    $response = json_encode($myObj, JSON_NUMERIC_CHECK);
+
+    return $response;
+});
+
+$app->post('/api/defibrillator/locker', function (Request $request, Response $response, array $args) {
+    global $pdo;
+    $defibrillatorData = json_decode(file_get_contents('php://input'));
+    $defibrillator_id = $defibrillatorData->{'id'};
+    $locker = $defibrillatorData->{'locker'};
+     
+    if ($locker == 0) {
+        $response_locker = 1;
+
+    } else {
+        $response_locker = 0;
+    }
+
+    $query = ("UPDATE apinidotis SET locker=:locker WHERE id=:id");
+    $result = $pdo->prepare($query);
+
+    $result->execute(array(':locker' => $response_locker, ':id' => $defibrillator_id));
+
+    $myObj = new stdClass();
+    $myObj->id = $defibrillator_id;
+    $myObj->locker = $response_locker;
 
     $response = json_encode($myObj, JSON_NUMERIC_CHECK);
 

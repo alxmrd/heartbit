@@ -21,7 +21,8 @@ import TablePagination from "@material-ui/core/TablePagination";
 // import DialogTitle from "@material-ui/core/DialogTitle";
 import {
   fetchDefifrillators,
-  changeDefibrillatorFlag
+  changeDefibrillatorFlag,
+  changeDefibrillatorLocker
 } from "../store/actions/actions";
 import { connect } from "react-redux";
 import IconButton from "@material-ui/core/IconButton";
@@ -103,11 +104,25 @@ class defibrillators extends Component {
   handlePresentFlag = (e, id, flag) => {
     e.stopPropagation();
 
-    const flagData = {
+    const defibrillatorData = {
       id: id,
       presentflag: flag
     };
-    this.props.onChangeFlag(flagData);
+    this.props.onChangeFlag(defibrillatorData);
+
+    // this.setState({
+    //   openSnack: false
+    // });
+    // this.props.onClose();
+  };
+  handleLocker = (e, id, locker) => {
+    e.stopPropagation();
+
+    const defibrillatorData = {
+      id: id,
+      locker: locker
+    };
+    this.props.onChangeLocker(defibrillatorData);
 
     // this.setState({
     //   openSnack: false
@@ -202,7 +217,13 @@ class defibrillators extends Component {
                       <TableCell>
                         {row.locker === 0 ? (
                           <MuiThemeProvider theme={theme}>
-                            <IconButton color="primary" aria-label="Directions">
+                            <IconButton
+                              color="primary"
+                              aria-label="Directions"
+                              onClick={e =>
+                                this.handleLocker(e, row.id, row.locker)
+                              }
+                            >
                               <LockIcon
                                 // className={classes.searchIcon}
                                 className="material-icons md-36"
@@ -216,6 +237,9 @@ class defibrillators extends Component {
                               color="secondary"
                               // className={classes.iconButton}
                               aria-label="Directions"
+                              onClick={e =>
+                                this.handleLocker(e, row.id, row.locker)
+                              }
                             >
                               <LockOpenIcon
                                 className="material-icons md-36"
@@ -255,7 +279,9 @@ class defibrillators extends Component {
 defibrillators.propTypes = {
   classes: PropTypes.object.isRequired,
   defibrillators: PropTypes.array.isRequired,
-  onfetchDefibrillators: PropTypes.func.isRequired
+  onfetchDefibrillators: PropTypes.func.isRequired,
+  onChangeFlag: PropTypes.func.isRequired,
+  onChangeLocker: PropTypes.func.isRequired
 };
 const defibrillatorsWithStyles = withStyles(styles)(defibrillators);
 
@@ -266,7 +292,10 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onfetchDefibrillators: () => fetchDefifrillators(dispatch),
 
-  onChangeFlag: flagData => dispatch(changeDefibrillatorFlag(flagData))
+  onChangeFlag: defibrillatorData =>
+    dispatch(changeDefibrillatorFlag(defibrillatorData)),
+  onChangeLocker: defibrillatorData =>
+    dispatch(changeDefibrillatorLocker(defibrillatorData))
 });
 
 export default connect(

@@ -20,6 +20,7 @@ import { CLEAR_SELECT_PLACE } from "../actions/types";
 import { CLEAR_SUCCESS_MESSAGE } from "../actions/types";
 import { INSERT_DEFIBRILLATOR } from "../actions/types";
 import { CHANGE_DEFIBRILLATOR_FLAG } from "../actions/types";
+import { CHANGE_DEFIBRILLATOR_LOCKER } from "../actions/types";
 
 import history from "../../history";
 
@@ -50,24 +51,6 @@ export const fetchVolunteers = dispatch => {
     });
 };
 
-// export const fetchVolunteersAsync = async dispatch => {
-//   try {
-//     const result = await fetch(`http://localhost:8080/api/volunteers`, { TRY CATCH BLOCK
-//       headers: {
-//         ...headers,
-//         Authorization: "Bearer " + sessionStorage.getItem("token")
-//       }
-//     });
-//     const volunteers = result.json();
-//     dispatch({
-//       type: UPDATE_VOLUNTEERS,
-//       payload: volunteers.data
-//     });
-//   } catch (e) {
-//     console.error(e);
-//   }
-// };
-
 export const fetchDefifrillators = dispatch => {
   fetch(`http://localhost:8080/api/defibrillators`, {
     headers: {
@@ -88,7 +71,7 @@ export const fetchDefifrillators = dispatch => {
       history.push("/login");
     });
 };
-export const changeDefibrillatorFlag = flagData => dispatch => {
+export const changeDefibrillatorFlag = defibrillatorData => dispatch => {
   fetch(`http://localhost:8080/api/defibrillator/presentflag`, {
     method: "POST",
     cache: "no-cache",
@@ -98,13 +81,38 @@ export const changeDefibrillatorFlag = flagData => dispatch => {
     },
     redirect: "follow",
     referrer: "no-referrer",
-    body: JSON.stringify(flagData)
+    body: JSON.stringify(defibrillatorData)
   })
     .then(result => result.json())
 
     .then(res =>
       dispatch({
         type: CHANGE_DEFIBRILLATOR_FLAG,
+        payload: res
+      })
+    )
+    .catch(error => {
+      alert(error, "SERVER error 500 ");
+    });
+};
+
+export const changeDefibrillatorLocker = defibrillatorData => dispatch => {
+  fetch(`http://localhost:8080/api/defibrillator/locker`, {
+    method: "POST",
+    cache: "no-cache",
+    headers: {
+      ...headers,
+      Authorization: "Bearer " + sessionStorage.getItem("token")
+    },
+    redirect: "follow",
+    referrer: "no-referrer",
+    body: JSON.stringify(defibrillatorData)
+  })
+    .then(result => result.json())
+
+    .then(res =>
+      dispatch({
+        type: CHANGE_DEFIBRILLATOR_LOCKER,
         payload: res
       })
     )
