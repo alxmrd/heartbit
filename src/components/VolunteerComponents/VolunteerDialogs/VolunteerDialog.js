@@ -16,8 +16,6 @@ import CreateForm from "./CreateForm";
 import MySnackbarContentWrapper from "../../MySnackbarContentWrapper";
 import Snackbar from "@material-ui/core/Snackbar";
 import withStyles from "@material-ui/core/styles/withStyles";
-import IconButton from "@material-ui/core/IconButton";
-import ReactToPrint from "react-to-print";
 
 const styles = theme => ({
   margin: {
@@ -171,31 +169,11 @@ class VolunteerDialog extends Component {
     return (
       <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
         {onEdit === false ? (
-          <DialogTitle id="form-dialog-title">
-            Επεξεργασία Εθελοντή
-            <ReactToPrint
-              trigger={() => (
-                <IconButton>
-                  <i className="material-icons">print</i>
-                </IconButton>
-              )}
-              content={() => this.componentRef}
-            />
-          </DialogTitle>
+          <DialogTitle id="form-dialog-title">Επεξεργασία Εθελοντή</DialogTitle>
         ) : (
-          <DialogTitle id="form-dialog-title">
-            Εισαγωγή Εθελοντή
-            <ReactToPrint
-              trigger={() => (
-                <IconButton>
-                  <i className="material-icons">print</i>
-                </IconButton>
-              )}
-              content={() => this.componentRef}
-            />
-          </DialogTitle>
+          <DialogTitle id="form-dialog-title">Εισαγωγή Εθελοντή</DialogTitle>
         )}
-        <DialogContent ref={el => (this.componentRef = el)}>
+        <DialogContent>
           {onEdit === false ? (
             <EditForm
               onEditFormChange={this.handleChange}
