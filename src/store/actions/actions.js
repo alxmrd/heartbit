@@ -21,6 +21,8 @@ import { CLEAR_SUCCESS_MESSAGE } from "../actions/types";
 import { INSERT_DEFIBRILLATOR } from "../actions/types";
 import { CHANGE_DEFIBRILLATOR_FLAG } from "../actions/types";
 import { CHANGE_DEFIBRILLATOR_LOCKER } from "../actions/types";
+import { DEF_DATA_CLEANER } from "../actions/types";
+import { DEF_DATA_KEEPER } from "../actions/types";
 
 import history from "../../history";
 
@@ -240,6 +242,29 @@ export const editVolunteer = id => dispatch => {
   dispatch({
     type: VOLUNTEER_DIALOG_OPEN,
     payload: id
+  });
+};
+
+export const lockerClick = defibrillatorData => dispatch => {
+  // const state = getState();
+  dispatch({
+    type: DEF_DATA_KEEPER,
+    payload: defibrillatorData
+  });
+};
+export const flagClick = defibrillatorData => dispatch => {
+  // const state = getState();
+  dispatch({
+    type: DEF_DATA_KEEPER,
+    payload: defibrillatorData
+  });
+};
+
+export const SnackClose = defibrillatorData => dispatch => {
+  // const state = getState();
+  dispatch({
+    type: DEF_DATA_CLEANER,
+    payload: defibrillatorData
   });
 };
 

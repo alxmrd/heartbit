@@ -10,6 +10,7 @@ import httpStatusMessageReducer from "./httpStatusMessageReducer";
 import VolunteerSuccessReducer from "./VolunteerSuccessReducer";
 import newSuccessEventReducer from "./newSuccessEventReducer";
 import successMessageReducer from "./successMessageReducer";
+import defibrillatorDataReducer from "./defibrillatorDataReducer";
 
 export default combineReducers({
   volunteers: volunteersReducer,
@@ -22,5 +23,6 @@ export default combineReducers({
   error: httpStatusMessageReducer,
   volunteerSuccessData: VolunteerSuccessReducer,
   eventSuccessData: newSuccessEventReducer,
-  successMessage: successMessageReducer
+  successMessage: successMessageReducer,
+  defibrillatorData: defibrillatorDataReducer
 });

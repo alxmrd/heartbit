@@ -5,6 +5,8 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import { Button } from "@material-ui/core";
+import Snackbar from "@material-ui/core/Snackbar";
 import PropTypes from "prop-types";
 import {
   withStyles,
@@ -22,7 +24,10 @@ import TablePagination from "@material-ui/core/TablePagination";
 import {
   fetchDefifrillators,
   changeDefibrillatorFlag,
-  changeDefibrillatorLocker
+  changeDefibrillatorLocker,
+  lockerClick,
+  SnackClose,
+  flagClick
 } from "../store/actions/actions";
 import { connect } from "react-redux";
 import IconButton from "@material-ui/core/IconButton";
@@ -58,6 +63,9 @@ const styles = theme => ({
     "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.background.default
     }
+  },
+  deactivateButton: {
+    color: "#C62828"
   }
 });
 
@@ -83,7 +91,10 @@ class defibrillators extends Component {
       data: [],
       open: false,
       page: 0,
-      rowsPerPage: 5
+      rowsPerPage: 5,
+      openLockerSnack: false,
+      vertical: "top",
+      horizontal: "center"
     };
   }
   handleChangePage = (event, page) => {
@@ -92,6 +103,14 @@ class defibrillators extends Component {
 
   handleChangeRowsPerPage = event => {
     this.setState({ rowsPerPage: event.target.value });
+  };
+
+  handleLockerSnackClose = e => {
+    e.preventDefault();
+
+    this.setState({ openLockerSnack: false });
+
+    this.props.onSnackClose(this.props.defibrillatorData);
   };
 
   // handleClickOpen = () => {
@@ -122,12 +141,15 @@ class defibrillators extends Component {
       id: id,
       locker: locker
     };
-    this.props.onChangeLocker(defibrillatorData);
+    this.props.onLockerClick(defibrillatorData);
+    this.setState({ openLockerSnack: true });
+  };
+  handleYesClick = (e, defibrillatorData) => {
+    e.preventDefault();
 
-    // this.setState({
-    //   openSnack: false
-    // });
-    // this.props.onClose();
+    this.props.onChangeLocker(defibrillatorData);
+    this.setState({ openLockerSnack: false });
+    this.props.onSnackClose(defibrillatorData);
   };
 
   componentDidMount() {
@@ -136,8 +158,15 @@ class defibrillators extends Component {
   }
 
   render() {
-    const { classes, defibrillators } = this.props;
-    const { rowsPerPage, page } = this.state;
+    const { classes, defibrillators, defibrillatorData } = this.props;
+    const {
+      rowsPerPage,
+      page,
+      vertical,
+      horizontal,
+      openLockerSnack
+    } = this.state;
+
     return (
       <Fragment>
         <div className={classes.root}>
@@ -271,6 +300,35 @@ class defibrillators extends Component {
               </TableRow>
             </TableFooter>
           </Table>
+          <Snackbar
+            anchorOrigin={{ vertical, horizontal }}
+            open={openLockerSnack}
+            onClose={this.handleLockerSnackClose}
+            ContentProps={{
+              "aria-describedby": "message-id"
+            }}
+            message={<span id="message-id">Eίστε Σίγουρος;</span>}
+            action={[
+              <Button
+                key="Deactivate"
+                // className={classes.deactivateButton}
+                color="primary"
+                size="small"
+                onClick={e => this.handleYesClick(e, defibrillatorData)}
+              >
+                ναι
+              </Button>,
+
+              <Button
+                key="undo"
+                color="secondary"
+                size="small"
+                onClick={e => this.handleLockerSnackClose(e)}
+              >
+                οχι
+              </Button>
+            ]}
+          />
         </Paper>
       </Fragment>
     );
@@ -281,21 +339,26 @@ defibrillators.propTypes = {
   defibrillators: PropTypes.array.isRequired,
   onfetchDefibrillators: PropTypes.func.isRequired,
   onChangeFlag: PropTypes.func.isRequired,
-  onChangeLocker: PropTypes.func.isRequired
+  onChangeLocker: PropTypes.func.isRequired,
+  onLockerClick: PropTypes.func.isRequired,
+  onSnackClose: PropTypes.func.isRequired,
+  defibrillatorData: PropTypes.object
 };
 const defibrillatorsWithStyles = withStyles(styles)(defibrillators);
 
 const mapStateToProps = state => ({
-  defibrillators: state.defibrillators
+  defibrillators: state.defibrillators,
+  defibrillatorData: state.defibrillatorData
 });
 
 const mapDispatchToProps = dispatch => ({
   onfetchDefibrillators: () => fetchDefifrillators(dispatch),
-
+  onLockerClick: defibrillatorData => dispatch(lockerClick(defibrillatorData)),
   onChangeFlag: defibrillatorData =>
     dispatch(changeDefibrillatorFlag(defibrillatorData)),
   onChangeLocker: defibrillatorData =>
-    dispatch(changeDefibrillatorLocker(defibrillatorData))
+    dispatch(changeDefibrillatorLocker(defibrillatorData)),
+  onSnackClose: defibrillatorData => dispatch(SnackClose(defibrillatorData))
 });
 
 export default connect(

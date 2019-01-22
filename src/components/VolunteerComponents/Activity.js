@@ -88,11 +88,7 @@ class Activity extends Component {
             ContentProps={{
               "aria-describedby": "message-id"
             }}
-            message={
-              <span id="message-id">
-                Are you sure you want to Activate this User?
-              </span>
-            }
+            message={<span id="message-id">Eίστε σίγουρος;</span>}
             action={[
               <Button
                 color="primary"
@@ -100,7 +96,7 @@ class Activity extends Component {
                 size="small"
                 onClick={e => this.handleActivity(e, volstatus)}
               >
-                Activate
+                Ενεργοποιηση
               </Button>,
 
               <Button
@@ -109,7 +105,7 @@ class Activity extends Component {
                 size="small"
                 onClick={e => this.handleClose(e)}
               >
-                Cancel
+                Ακυρωση
               </Button>
             ]}
           />
@@ -121,11 +117,7 @@ class Activity extends Component {
             ContentProps={{
               "aria-describedby": "message-id"
             }}
-            message={
-              <span id="message-id">
-                Are you sure you want to deactivate this User?
-              </span>
-            }
+            message={<span id="message-id">Eίστε σίγουρος;</span>}
             action={[
               <Button
                 key="Deactivate"
@@ -133,7 +125,7 @@ class Activity extends Component {
                 size="small"
                 onClick={e => this.handleActivity(e, volstatus)}
               >
-                Deactivate
+                Απενεργοποιηση
               </Button>,
 
               <Button
@@ -142,7 +134,7 @@ class Activity extends Component {
                 size="small"
                 onClick={e => this.handleClose(e)}
               >
-                Cancel
+                Ακυρωση
               </Button>
             ]}
           />
