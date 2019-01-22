@@ -856,6 +856,68 @@ $app->get('/api/volunteer/search', function (ServerRequestInterface $request, Re
     return $response;
 });
 
+$app->post('/api/editdefibrillator', function (Request $request, Response $response, array $args) {
+    global $pdo;
+    require_once 'validation/validationRules.php';
+    $defibrillatorData = json_decode(file_get_contents('php://input'));
+    $id = $defibrillatorData->{'id'};
+    $installationdate = $defibrillatorData->{'installationdate'};
+    $upgradedate = $defibrillatorData->{'upgradedate'};
+    $notes = $defibrillatorData->{'notes'};
+    $model = $defibrillatorData->{'model'};
+
+
+
+  
+  
+    if (!$defibrillatordateValidator->validate($installationdate)) {
+        $message = "Οι ημερομηνίες πρέπει να είναι της μορφής 'ΕΕΕΕ-ΜΜ-ΗΗ'.";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->message = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+    if (!$defibrillatordateValidator->validate($upgradedate)) {
+        $message = "Οι ημερομηνίες πρέπει να είναι της μορφής 'ΕΕΕΕ-ΜΜ-ΗΗ'! ";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->message = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+   
+  
+
+            $query = "UPDATE apinidotis SET installationdate=:installationdate, upgradedate=:upgradedate, notes=:notes,model=:model WHERE id=:id";
+            $result = $pdo->prepare($query);
+            $result->execute(array(':installationdate' => $installationdate,  ':upgradedate' => $upgradedate, ':notes' => $notes, ':model' => $model,  ':id' => $id));
+            $message = "success";
+            
+            $myObj = new stdClass();
+            $myObj->id = $id;
+            $myObj->installationdate = $installationdate;
+   
+            $myObj->upgradedate = $upgradedate;
+            $myObj->notes = $notes;
+          
+            $myObj->model = $model;
+         
+
+            $response = json_encode($myObj, JSON_NUMERIC_CHECK);
+
+            return $response;
+     
+
+});
+
+
 
 $app->add(function ($req, $res, $next) {
     $response = $next($req, $res);

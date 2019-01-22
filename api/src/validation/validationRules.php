@@ -13,4 +13,5 @@ $mobile2NumberValidator = v::optional(v::positive()->length(10,10));//Validates 
 $addressValidator=v::optional(v::alnum($greek));//Validates alphanumeric characters from a-Z and 0-9
 $locationValidator = v::stringType()->alnum($greek)->notBlank();// validates location to be string and not blank,required
 $passwordValidator = v::stringType()->alnum($greek)->notBlank()->length(10,10); 
+$defibrillatordateValidator=v::optional(v::date('Y-m-d')->between('2019-01-01', 'now'))->notBlank();
 

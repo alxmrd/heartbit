@@ -15,19 +15,15 @@ import {
 } from "@material-ui/core";
 import TableFooter from "@material-ui/core/TableFooter";
 import TablePagination from "@material-ui/core/TablePagination";
-// import AddIcon from "@material-ui/icons/Add";
-// import Dialog from "@material-ui/core/Dialog";
-// import DialogActions from "@material-ui/core/DialogActions";
-// import DialogContent from "@material-ui/core/DialogContent";
-// import DialogContentText from "@material-ui/core/DialogContentText";
-// import DialogTitle from "@material-ui/core/DialogTitle";
 import {
   fetchDefifrillators,
   changeDefibrillatorFlag,
   changeDefibrillatorLocker,
   lockerClick,
   SnackClose,
-  flagClick
+  flagClick,
+  editDefibrillator,
+  idCleaner
 } from "../store/actions/actions";
 import { connect } from "react-redux";
 import IconButton from "@material-ui/core/IconButton";
@@ -38,6 +34,8 @@ import LockOpenIcon from "@material-ui/icons/LockOpen";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import TablePaginationActionsWrapped from "../components/TablePaginationActions";
+import EditDefibrillatorDialog from "../components/DefibrillatorComponents/EditDefibrillatorDialog";
+import EditIcon from "@material-ui/icons/Edit";
 
 const styles = theme => ({
   root: {
@@ -113,13 +111,17 @@ class defibrillators extends Component {
     this.props.onSnackClose(this.props.defibrillatorData);
   };
 
-  // handleClickOpen = () => {
-  //   this.setState({ open: true });
-  // };
+  handlePencilClick = (e, id) => {
+    e.stopPropagation();
+    this.setState({ open: true });
+    this.props.onEditDefibrillator(id);
+  };
 
-  // handleClose = () => {
-  //   this.setState({ open: false });
-  // };
+  handleClose = () => {
+    this.setState({ open: false });
+    const id = this.props.id;
+    this.props.onCloseDialog(id);
+  };
   handlePresentFlag = (e, id, flag) => {
     e.stopPropagation();
 
@@ -129,10 +131,6 @@ class defibrillators extends Component {
     };
     this.props.onFlagClick(defibrillatorData);
     this.setState({ openSnack: true });
-    // this.setState({
-    //   openSnack: false
-    // });
-    // this.props.onClose();
   };
   handleLocker = (e, id, locker) => {
     e.stopPropagation();
@@ -157,7 +155,6 @@ class defibrillators extends Component {
   };
 
   componentDidMount() {
-    // If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
     this.props.onfetchDefibrillators();
   }
 
@@ -185,6 +182,7 @@ class defibrillators extends Component {
                 <TableCell>Μοντέλο</TableCell>
                 <TableCell>Τρέχουσα Κατάσταση</TableCell>
                 <TableCell>Κλείδωμα / Ξεκλείδωμα</TableCell>
+                <TableCell>Eπεξεργασία Απινιδωτή</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -276,6 +274,14 @@ class defibrillators extends Component {
                           </MuiThemeProvider>
                         )}
                       </TableCell>
+                      <TableCell>
+                        <IconButton
+                          onClick={e => this.handlePencilClick(e, row.id)}
+                          color="inherit"
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -328,6 +334,10 @@ class defibrillators extends Component {
             ]}
           />
         </Paper>
+        <EditDefibrillatorDialog
+          open={this.state.open}
+          onClose={this.handleClose}
+        />
       </Fragment>
     );
   }
@@ -341,13 +351,18 @@ defibrillators.propTypes = {
   onLockerClick: PropTypes.func.isRequired,
   onSnackClose: PropTypes.func.isRequired,
   defibrillatorData: PropTypes.object,
-  onFlagClick: PropTypes.func.isRequired
+  onFlagClick: PropTypes.func.isRequired,
+  onEditDefibrillator: PropTypes.func.isRequired,
+  id: PropTypes.number,
+  onCloseDialog: PropTypes.func.isRequired,
+  defibrillator: PropTypes.object
 };
 const defibrillatorsWithStyles = withStyles(styles)(defibrillators);
 
 const mapStateToProps = state => ({
   defibrillators: state.defibrillators,
-  defibrillatorData: state.defibrillatorData
+  defibrillatorData: state.defibrillatorData,
+  id: state.id
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -358,7 +373,9 @@ const mapDispatchToProps = dispatch => ({
     dispatch(changeDefibrillatorFlag(defibrillatorData)),
   onChangeLocker: defibrillatorData =>
     dispatch(changeDefibrillatorLocker(defibrillatorData)),
-  onSnackClose: defibrillatorData => dispatch(SnackClose(defibrillatorData))
+  onSnackClose: defibrillatorData => dispatch(SnackClose(defibrillatorData)),
+  onEditDefibrillator: id => dispatch(editDefibrillator(id)),
+  onCloseDialog: id => dispatch(idCleaner(id))
 });
 
 export default connect(

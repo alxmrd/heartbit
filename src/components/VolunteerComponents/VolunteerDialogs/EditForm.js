@@ -39,7 +39,7 @@ function EditForm({
             autoFocus
             inputProps={{
               title: "Eισάγετε Όνομα Χρήστη",
-              autocomplete: "off"
+              autoComplete: "off"
             }}
           />
         </FormControl>

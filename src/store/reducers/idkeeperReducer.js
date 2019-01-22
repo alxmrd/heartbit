@@ -1,12 +1,12 @@
-import { VOLUNTEER_DIALOG_OPEN } from "../actions/types";
-import { VOLUNTEER_DIALOG_CLOSE } from "../actions/types";
+import { DIALOG_OPEN } from "../actions/types";
+import { DIALOG_CLOSE } from "../actions/types";
 
 const idkeeperReducer = (state = null, action) => {
   switch (action.type) {
-    case VOLUNTEER_DIALOG_OPEN:
+    case DIALOG_OPEN:
       return action.payload;
 
-    case VOLUNTEER_DIALOG_CLOSE:
+    case DIALOG_CLOSE:
       return null;
 
     default:
