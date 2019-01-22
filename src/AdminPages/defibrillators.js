@@ -92,7 +92,7 @@ class defibrillators extends Component {
       open: false,
       page: 0,
       rowsPerPage: 5,
-      openLockerSnack: false,
+      openSnack: false,
       vertical: "top",
       horizontal: "center"
     };
@@ -105,10 +105,10 @@ class defibrillators extends Component {
     this.setState({ rowsPerPage: event.target.value });
   };
 
-  handleLockerSnackClose = e => {
+  handleSnackClose = e => {
     e.preventDefault();
 
-    this.setState({ openLockerSnack: false });
+    this.setState({ openSnack: false });
 
     this.props.onSnackClose(this.props.defibrillatorData);
   };
@@ -127,8 +127,8 @@ class defibrillators extends Component {
       id: id,
       presentflag: flag
     };
-    this.props.onChangeFlag(defibrillatorData);
-
+    this.props.onFlagClick(defibrillatorData);
+    this.setState({ openSnack: true });
     // this.setState({
     //   openSnack: false
     // });
@@ -142,13 +142,17 @@ class defibrillators extends Component {
       locker: locker
     };
     this.props.onLockerClick(defibrillatorData);
-    this.setState({ openLockerSnack: true });
+    this.setState({ openSnack: true });
   };
   handleYesClick = (e, defibrillatorData) => {
     e.preventDefault();
 
-    this.props.onChangeLocker(defibrillatorData);
-    this.setState({ openLockerSnack: false });
+    if (
+      defibrillatorData.locker === 0 || defibrillatorData.locker === 1
+        ? this.props.onChangeLocker(defibrillatorData)
+        : this.props.onChangeFlag(defibrillatorData)
+    );
+    this.setState({ openSnack: false });
     this.props.onSnackClose(defibrillatorData);
   };
 
@@ -159,13 +163,7 @@ class defibrillators extends Component {
 
   render() {
     const { classes, defibrillators, defibrillatorData } = this.props;
-    const {
-      rowsPerPage,
-      page,
-      vertical,
-      horizontal,
-      openLockerSnack
-    } = this.state;
+    const { rowsPerPage, page, vertical, horizontal, openSnack } = this.state;
 
     return (
       <Fragment>
@@ -302,8 +300,8 @@ class defibrillators extends Component {
           </Table>
           <Snackbar
             anchorOrigin={{ vertical, horizontal }}
-            open={openLockerSnack}
-            onClose={this.handleLockerSnackClose}
+            open={openSnack}
+            onClose={this.handleSnackClose}
             ContentProps={{
               "aria-describedby": "message-id"
             }}
@@ -323,7 +321,7 @@ class defibrillators extends Component {
                 key="undo"
                 color="secondary"
                 size="small"
-                onClick={e => this.handleLockerSnackClose(e)}
+                onClick={e => this.handleSnackClose(e)}
               >
                 οχι
               </Button>
@@ -342,7 +340,8 @@ defibrillators.propTypes = {
   onChangeLocker: PropTypes.func.isRequired,
   onLockerClick: PropTypes.func.isRequired,
   onSnackClose: PropTypes.func.isRequired,
-  defibrillatorData: PropTypes.object
+  defibrillatorData: PropTypes.object,
+  onFlagClick: PropTypes.func.isRequired
 };
 const defibrillatorsWithStyles = withStyles(styles)(defibrillators);
 
@@ -354,6 +353,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onfetchDefibrillators: () => fetchDefifrillators(dispatch),
   onLockerClick: defibrillatorData => dispatch(lockerClick(defibrillatorData)),
+  onFlagClick: defibrillatorData => dispatch(flagClick(defibrillatorData)),
   onChangeFlag: defibrillatorData =>
     dispatch(changeDefibrillatorFlag(defibrillatorData)),
   onChangeLocker: defibrillatorData =>
