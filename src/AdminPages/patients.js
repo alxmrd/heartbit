@@ -9,7 +9,7 @@ import Paper from "@material-ui/core/Paper";
 import PropTypes from "prop-types";
 import { IconButton } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import { fetchPatients } from "../store/actions/actions";
+import { fetchPatients, newPatient } from "../store/actions/actions";
 import { connect } from "react-redux";
 import Fab from "@material-ui/core/Fab";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -74,15 +74,54 @@ class patients extends Component {
       data: [],
       open: false,
       page: 0,
-      rowsPerPage: 5
+      rowsPerPage: 5,
+      gender: "0",
+      hasChanged: false,
+      name: "",
+      surname: "",
+      address: "",
+      history: "",
+      birthdate: "",
+      description: ""
     };
   }
+  handleSubmit = event => {
+    event.preventDefault();
+
+    const dataPouStelnw = {
+      gender: this.state.gender,
+      email: this.state.email,
+      birthdate: this.state.birthdate,
+      description: this.state.description,
+      history: this.state.history,
+
+      name: this.state.name,
+      surname: this.state.surname,
+      address: this.state.address
+    };
+
+    this.props.onNewPatient(dataPouStelnw);
+    this.handleClose();
+  };
+  handleChangeNumber = event => {
+    this.setState({
+      [event.target.id]: event.target.valueAsNumber,
+      hasChanged: true
+    });
+  };
+  handleChange = event => {
+    this.setState({
+      [event.target.id]: event.target.value,
+
+      hasChanged: true
+    });
+  };
   handleClickOpen = () => {
     this.setState({ open: true });
   };
 
   handleClose = () => {
-    this.setState({ open: false });
+    this.setState({ open: false, hasChanged: false });
   };
   componentDidMount() {
     // If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
@@ -94,6 +133,9 @@ class patients extends Component {
 
   handleChangeRowsPerPage = event => {
     this.setState({ rowsPerPage: event.target.value });
+  };
+  handleGenderChange = event => {
+    this.setState({ gender: event.target.value });
   };
 
   render() {
@@ -201,6 +243,12 @@ class patients extends Component {
           <InsertPatientDialog
             open={this.state.open}
             onClose={this.handleClose}
+            onGenderChange={this.handleGenderChange}
+            gender={this.state.gender}
+            onCreateFormChangeNumber={this.handleChangeNumber}
+            onCreateFormChange={this.handleChange}
+            hasChanged={this.state.hasChanged}
+            onCreate={this.handleSubmit}
           />
         </Paper>
       </Fragment>
@@ -211,7 +259,8 @@ class patients extends Component {
 patients.propTypes = {
   classes: PropTypes.object.isRequired,
   patients: PropTypes.array.isRequired,
-  onfetchPatients: PropTypes.func.isRequired
+  onfetchPatients: PropTypes.func.isRequired,
+  onNewPatient: PropTypes.func.isRequired
 };
 
 const patientWithStyles = withStyles(styles)(patients);
@@ -221,7 +270,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onfetchPatients: () => fetchPatients(dispatch)
+  onfetchPatients: () => fetchPatients(dispatch),
+  onNewPatient: dataPouStelnw => newPatient(dispatch, dataPouStelnw)
 });
 
 export default connect(

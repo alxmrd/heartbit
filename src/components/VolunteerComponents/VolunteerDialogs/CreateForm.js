@@ -58,7 +58,7 @@ function EditForm({
           onChange={onCreateFormChange}
           autoFocus
           inputProps={{
-            title: "Eισάγετε Επίθετο"
+            title: "Eισάγετε Επώνυμο"
           }}
         />
       </FormControl>

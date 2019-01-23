@@ -935,7 +935,101 @@ $app->post('/api/editdefibrillator', function (Request $request, Response $respo
 
 });
 
+$app->post('/api/insertpatient', function (ServerRequestInterface $request, ResponseInterface $response, array $args) {
+    global $pdo;
+    require_once 'validation/validationRules.php';
+    $patientData = json_decode(file_get_contents('php://input'));
 
+    $name = $patientData->{'name'};
+  
+    $surname = $patientData->{'surname'};
+    $address = $patientData->{'address'};
+    $history = $patientData->{'history'};
+    $gender = $patientData->{'gender'};
+
+    if ($gender== "0") {$gender = 0;};
+    if ($gender== "1") {$gender = 1;};
+    $description = $patientData->{'description'};
+
+    $birthdate = $patientData->{'birthdate'};
+ 
+    if (!$addressValidator->validate($address)) {
+        $patmessage = "Mη αποδεκτή μορφή Διεύθυνσης. ";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'patmessage' => $patmessage);
+        $myObj = new stdClass();
+        $myObj->patmessage = $patmessage;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+
+    if (!$nameValidator->validate($name)) {
+        $patmessage = "Πληκτρολογήσατε μη αποδεκτό Όνομα.";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'patmessage' => $patmessage);
+        $myObj = new stdClass();
+        $myObj->patmessage = $patmessage;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+    if (!$surnameValidator->validate($surname)) {
+        $patmessage = "Πληκτρολογήσατε μη αποδεκτό Επώνυμο.";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'patmessage' => $patmessage);
+        $myObj = new stdClass();
+        $myObj->patmessage = $patmessage;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+    if (!$patientDateOfBirth->validate($birthdate)) {
+        $patmessage = "To έτος γέννησης πρέπει να είναι απο το 1950 εως 2010";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'patmessage' => $patmessage);
+        $myObj = new stdClass();
+        $myObj->patmessage = $patmessage;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+          
+   
+            $query = "INSERT INTO asthenis (name,surname,address,history,description,birthdate,gender) VALUES (:name,:surname,:address,:history,:description,:birthdate,:gender)";
+            $result = $pdo->prepare($query);
+
+            $result->execute(array( ':name' => $name, ':surname' => $surname, ':address' => $address, ':history' => $history, ':description' => $description, ':birthdate' => $birthdate, ':gender' => $gender));
+            $lastId = $pdo->lastInsertId();
+          
+            $message = "success";
+            //  $response=json_encode($lastId);
+            $myObj = new stdClass();
+            $myObj->id = $lastId;
+        
+            $myObj->name = $name;
+            $myObj->surname = $surname;
+            $myObj->address = $address;
+            $myObj->history = $history;
+            $myObj->description = $description;
+            $myObj->birthdate = $birthdate;
+            $myObj->gender = $gender;
+         
+            
+            $myObj->message = $message;
+           
+
+            $response = json_encode($myObj, JSON_NUMERIC_CHECK);
+
+            return $response;
+
+     
+
+});
 
 $app->add(function ($req, $res, $next) {
     $response = $next($req, $res);

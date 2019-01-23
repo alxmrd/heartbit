@@ -22,6 +22,7 @@ import { DEF_DATA_CLEANER } from "../actions/types";
 import { DEF_DATA_KEEPER } from "../actions/types";
 import { UPDATE_DEFIBRILLATOR } from "../actions/types";
 import { CLEAN_DEFIBRILLATOR_DATA } from "../actions/types";
+import { NEW_PATIENT } from "../actions/types";
 
 import history from "../../history";
 
@@ -206,6 +207,35 @@ export const newVolunteer = (dispatch, userData) => {
           })
         : dispatch({
             type: NEW_VOLUNTEER,
+            payload: res
+          });
+    })
+
+    .catch(error => {
+      alert(error, "SERVER error 500 ");
+    });
+};
+export const newPatient = (dispatch, userData) => {
+  fetch(`http://localhost:8080/api/insertpatient`, {
+    method: "POST",
+    cache: "no-cache",
+    headers: {
+      ...headers,
+      Authorization: "Bearer " + sessionStorage.getItem("token")
+    },
+    redirect: "follow",
+    referrer: "no-referrer",
+    body: JSON.stringify(userData)
+  })
+    .then(result => result.json())
+    .then(res => {
+      res.httpstatus === "error"
+        ? dispatch({
+            type: ISINVALID,
+            payload: res
+          })
+        : dispatch({
+            type: NEW_PATIENT,
             payload: res
           });
     })
