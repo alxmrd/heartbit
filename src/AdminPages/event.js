@@ -7,7 +7,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core";
+import { withStyles, Tooltip } from "@material-ui/core";
 import { fetchEvents } from "../store/actions/actions";
 import moment from "moment";
 import "../containers/Icons.css";
@@ -116,7 +116,22 @@ class Event extends Component {
                   var active = moment(now).isBefore(hours24);
                   return (
                     <TableRow key={row.id} className={classes.row} hover>
-                      <TableCell>{row.correspondence}</TableCell>
+                      <TableCell>
+                        {row.correspondence === 0 ? (
+                          <Tooltip title="Με Ανταπόκριση" placement="bottom">
+                            <i className="material-icons teal600 md-36">
+                              check_circle
+                            </i>
+                          </Tooltip>
+                        ) : (
+                          <Tooltip title="Χωρίς Ανταπόκριση" placement="bottom">
+                            <i className="material-icons red700 md-36">
+                              cancel
+                            </i>
+                          </Tooltip>
+                        )}
+                      </TableCell>
+
                       <TableCell>{row.address}</TableCell>
                       <TableCell>{row.latitude}</TableCell>
                       <TableCell>{row.longitude}</TableCell>
