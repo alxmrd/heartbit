@@ -248,7 +248,7 @@ class App extends React.Component {
                 </Link>
                 <Link to="/event" className={classes.link}>
                   <ListItem>
-                    <Tooltip title="Περιστατικό" placement="right">
+                    <Tooltip title="Περιστατικά" placement="right">
                       <ListItemIcon>
                         <i className="material-icons">add_location</i>
                       </ListItemIcon>

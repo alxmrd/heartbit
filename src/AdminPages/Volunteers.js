@@ -116,7 +116,7 @@ class Volunteer extends Component {
           }}
         />
         <SimpleToolips
-          definition="Add Volunteer"
+          definition="Eισαγωγή Εθελοντή"
           onButtonClick={e => {
             this.handleClickOpen(e);
           }}

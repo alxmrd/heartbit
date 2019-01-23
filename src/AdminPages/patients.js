@@ -7,13 +7,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import PropTypes from "prop-types";
-import { Button, TextField, IconButton } from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
 import { fetchPatients } from "../store/actions/actions";
 import { connect } from "react-redux";
 import Fab from "@material-ui/core/Fab";
@@ -28,6 +23,7 @@ import {
   MuiThemeProvider,
   createMuiTheme
 } from "@material-ui/core";
+import InsertPatientDialog from "../components/PatientComponents/InsertPatientDialog";
 
 const styles = theme => ({
   root: {
@@ -193,7 +189,7 @@ class patients extends Component {
               </TableRow>
             </TableFooter>
           </Table>
-          <Tooltip title="Add Volunteer">
+          <Tooltip title="Εισαγωγή Ασθενή">
             <Fab
               onClick={this.handleClickOpen}
               color="secondary"
@@ -202,46 +198,10 @@ class patients extends Component {
               <AddIcon />
             </Fab>
           </Tooltip>
-          <Dialog
+          <InsertPatientDialog
             open={this.state.open}
             onClose={this.handleClose}
-            aria-labelledby="form-dialog-title"
-          >
-            <DialogTitle id="form-dialog-title">New Patient</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Please Insert The Name Of The Patient
-              </DialogContentText>
-              <TextField
-                autoFocus
-                margin="dense"
-                id="name"
-                label="name"
-                type="name"
-                fullWidth
-              />
-              <DialogContentText>
-                Please Insert The Surname Of The Patient
-              </DialogContentText>
-              <TextField
-                autoFocus
-                margin="dense"
-                id="surname"
-                label="surname"
-                type="surname"
-                fullWidth
-              />
-            </DialogContent>
-
-            <DialogActions>
-              <Button onClick={this.handleClose} color="primary">
-                Cancel
-              </Button>
-              <Button onClick={this.handleClose} color="primary">
-                Insert
-              </Button>
-            </DialogActions>
-          </Dialog>
+          />
         </Paper>
       </Fragment>
     );

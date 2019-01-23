@@ -92,11 +92,11 @@ class Event extends Component {
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
-                <TableCell>Ανταπόκριση</TableCell>
                 <TableCell>Διεύθυνση</TableCell>
                 <TableCell>Γεωγραφικό Πλάτος</TableCell>
                 <TableCell>Γεωγραφικό Μήκος</TableCell>
                 <TableCell>Ημερομηνία / Ώρα</TableCell>
+                <TableCell>Ανταπόκριση</TableCell>
                 <TableCell>Κατάσταση</TableCell>
               </TableRow>
             </TableHead>
@@ -116,6 +116,10 @@ class Event extends Component {
                   var active = moment(now).isBefore(hours24);
                   return (
                     <TableRow key={row.id} className={classes.row} hover>
+                      <TableCell>{row.address}</TableCell>
+                      <TableCell>{row.latitude}</TableCell>
+                      <TableCell>{row.longitude}</TableCell>
+                      <TableCell>{row.datetime}</TableCell>
                       <TableCell>
                         {row.correspondence === 0 ? (
                           <Tooltip title="Με Ανταπόκριση" placement="bottom">
@@ -131,11 +135,6 @@ class Event extends Component {
                           </Tooltip>
                         )}
                       </TableCell>
-
-                      <TableCell>{row.address}</TableCell>
-                      <TableCell>{row.latitude}</TableCell>
-                      <TableCell>{row.longitude}</TableCell>
-                      <TableCell>{row.datetime}</TableCell>
                       <TableCell>
                         {active ? (
                           <i className="material-icons teal600 md-36">
