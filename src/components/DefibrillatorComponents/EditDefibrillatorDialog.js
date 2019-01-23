@@ -137,9 +137,7 @@ class EditDefibrillatorDialog extends React.Component {
           longitude: latLng.lng,
           location: suggestion
         })
-      )
-
-      .catch(error => console.error("Error", error));
+      );
   };
 
   handleLocationChange = location => {

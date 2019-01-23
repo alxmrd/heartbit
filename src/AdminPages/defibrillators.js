@@ -36,6 +36,7 @@ import Typography from "@material-ui/core/Typography";
 import TablePaginationActionsWrapped from "../components/TablePaginationActions";
 import EditDefibrillatorDialog from "../components/DefibrillatorComponents/EditDefibrillatorDialog";
 import EditIcon from "@material-ui/icons/Edit";
+import DefibrillatorCard from "../components/DefibrillatorComponents/DefibrillatorCard";
 
 const styles = theme => ({
   root: {
@@ -92,7 +93,8 @@ class defibrillators extends Component {
       rowsPerPage: 5,
       openSnack: false,
       vertical: "top",
-      horizontal: "center"
+      horizontal: "center",
+      openCard: false
     };
   }
   handleChangePage = (event, page) => {
@@ -119,6 +121,11 @@ class defibrillators extends Component {
 
   handleClose = () => {
     this.setState({ open: false });
+    const id = this.props.id;
+    this.props.onCloseDialog(id);
+  };
+  handleCardClose = () => {
+    this.setState({ openCard: false });
     const id = this.props.id;
     this.props.onCloseDialog(id);
   };
@@ -152,6 +159,14 @@ class defibrillators extends Component {
     );
     this.setState({ openSnack: false });
     this.props.onSnackClose(defibrillatorData);
+  };
+  handleRowClick = (e, id) => {
+    e.stopPropagation();
+
+    this.setState({
+      openCard: true
+    });
+    this.props.onEditDefibrillator(id);
   };
 
   componentDidMount() {
@@ -190,7 +205,12 @@ class defibrillators extends Component {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(row => {
                   return (
-                    <TableRow key={row.id} className={classes.row} hover>
+                    <TableRow
+                      key={row.id}
+                      onClick={e => this.handleRowClick(e, row.id)}
+                      className={classes.row}
+                      hover
+                    >
                       <TableCell>{row.installationdate}</TableCell>
                       <TableCell>{row.upgradedate}</TableCell>
                       <TableCell>{row.location}</TableCell>
@@ -338,6 +358,11 @@ class defibrillators extends Component {
           open={this.state.open}
           onClose={this.handleClose}
         />
+        <DefibrillatorCard
+          open={this.state.openCard}
+          onClose={this.handleCardClose}
+          scroll={this.state.scroll}
+        />
       </Fragment>
     );
   }
@@ -355,7 +380,8 @@ defibrillators.propTypes = {
   onEditDefibrillator: PropTypes.func.isRequired,
   id: PropTypes.number,
   onCloseDialog: PropTypes.func.isRequired,
-  defibrillator: PropTypes.object
+  defibrillator: PropTypes.object,
+  onRowClick: PropTypes.func
 };
 const defibrillatorsWithStyles = withStyles(styles)(defibrillators);
 

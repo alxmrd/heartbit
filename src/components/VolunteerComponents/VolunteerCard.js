@@ -18,26 +18,11 @@ const styles = theme => ({
   cardHeader: {
     minHeight: "100px"
   },
-  media: {
-    height: 0,
-    paddingTop: "56.25%" // 16:9
-  },
+
   actions: {
     display: "flex"
   },
-  expand: {
-    transform: "rotate(0deg)",
-    transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest
-    }),
-    marginLeft: "auto",
-    [theme.breakpoints.up("sm")]: {
-      marginRight: -8
-    }
-  },
-  expandOpen: {
-    transform: "rotate(180deg)"
-  },
+
   avatar: {
     backgroundColor: "#4e878c"
   },
@@ -48,12 +33,6 @@ const styles = theme => ({
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit
-  },
-  dense: {
-    marginTop: 16
-  },
-  menu: {
-    width: 200
   }
 });
 class VolunteerCard extends React.Component {
