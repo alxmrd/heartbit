@@ -865,28 +865,43 @@ $app->post('/api/editdefibrillator', function (Request $request, Response $respo
     $upgradedate = $defibrillatorData->{'upgradedate'};
     $notes = $defibrillatorData->{'notes'};
     $model = $defibrillatorData->{'model'};
+    $location = $defibrillatorData->{'location'};
+    $latitude = $defibrillatorData->{'latitude'};
+    $longitude = $defibrillatorData->{'longitude'};
 
 
+    if ($longitude== null ){
+        $defmessage = "Kατι πήγε στραβά!";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'defmessage' => $defmessage, 409);
+        $myObj = new stdClass();
+        $myObj->defmessage = $defmessage;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 404);
+       
 
+        return $response;
+
+    }
   
   
     if (!$defibrillatordateValidator->validate($installationdate)) {
-        $message = "Οι ημερομηνίες πρέπει να είναι της μορφής 'ΕΕΕΕ-ΜΜ-ΗΗ'.";
+        $defmessage = "Οι ημερομηνίες πρέπει να είναι απο 01-01-2019 εώς σήμερα.";
         $httpstatus = "error";
-        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'defmessage' => $defmessage);
         $myObj = new stdClass();
-        $myObj->message = $message;
+        $myObj->defmessage = $defmessage;
         $myObj->httpstatus = $httpstatus;
         $response = $response->withJson($myObj, 409);
 
         return $response;
     }
     if (!$defibrillatordateValidator->validate($upgradedate)) {
-        $message = "Οι ημερομηνίες πρέπει να είναι της μορφής 'ΕΕΕΕ-ΜΜ-ΗΗ'! ";
+        $defmessage = "Οι ημερομηνίες πρέπει να είναι απο 01-01-2019 εώς σήμερα! ";
         $httpstatus = "error";
-        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'defmessage' => $defmessage);
         $myObj = new stdClass();
-        $myObj->message = $message;
+        $myObj->defmessage = $defmessage;
         $myObj->httpstatus = $httpstatus;
         $response = $response->withJson($myObj, 409);
 
@@ -895,9 +910,9 @@ $app->post('/api/editdefibrillator', function (Request $request, Response $respo
    
   
 
-            $query = "UPDATE apinidotis SET installationdate=:installationdate, upgradedate=:upgradedate, notes=:notes,model=:model WHERE id=:id";
+            $query = "UPDATE apinidotis SET installationdate=:installationdate, upgradedate=:upgradedate, notes=:notes,model=:model,location=:location,latitude=:latitude,longitude=:longitude WHERE id=:id";
             $result = $pdo->prepare($query);
-            $result->execute(array(':installationdate' => $installationdate,  ':upgradedate' => $upgradedate, ':notes' => $notes, ':model' => $model,  ':id' => $id));
+            $result->execute(array(':installationdate' => $installationdate,  ':upgradedate' => $upgradedate, ':notes' => $notes, ':model' => $model,':location' => $location,':latitude' => $latitude,':longitude' => $longitude,  ':id' => $id));
             $message = "success";
             
             $myObj = new stdClass();
@@ -906,8 +921,11 @@ $app->post('/api/editdefibrillator', function (Request $request, Response $respo
    
             $myObj->upgradedate = $upgradedate;
             $myObj->notes = $notes;
-          
+            $myObj->message = $message;
             $myObj->model = $model;
+            $myObj->location = $location;
+            $myObj->latitude = $latitude;
+            $myObj->longitude = $longitude;
          
 
             $response = json_encode($myObj, JSON_NUMERIC_CHECK);

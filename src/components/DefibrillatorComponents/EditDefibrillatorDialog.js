@@ -11,9 +11,25 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import moment from "moment";
 import NativeSelect from "@material-ui/core/NativeSelect";
-
-import { updateDefibrillator } from "../../store/actions/actions";
-
+import {
+  updateDefibrillator,
+  clearDefibrillatorData,
+  errorMessageCleaner
+} from "../../store/actions/actions";
+import LocationSearchbar from "./LocationSearchbar";
+import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
+import MySnackbarContentWrapper from "../MySnackbarContentWrapper";
+import withStyles from "@material-ui/core/styles/withStyles";
+import Snackbar from "@material-ui/core/Snackbar";
+const styles = theme => ({
+  margin: {
+    marginTop: theme.spacing.unit * 3
+  },
+  root: {
+    display: "flex",
+    flexWrap: "wrap"
+  }
+});
 const initState = {
   installationdate: "",
   upgradedate: "",
@@ -25,7 +41,8 @@ const initState = {
   locker: "",
   presentflag: "",
   id: "",
-  hasChanged: false
+  hasChanged: false,
+  gmapsLoaded: false
 };
 class EditDefibrillatorDialog extends React.Component {
   constructor(props) {
@@ -40,7 +57,35 @@ class EditDefibrillatorDialog extends React.Component {
         ...this.props.defibrillator
       });
     }
+    if (
+      this.props.newDefibrillator.message !==
+        prevProps.newDefibrillator.message &&
+      this.props.newDefibrillator.message === "success"
+    ) {
+      this.handleCloseDialog();
+
+      const newDefibrillatorData = this.props.newDefibrillator;
+
+      this.props.onClearDefibrillatorData(newDefibrillatorData);
+    }
   }
+  initMap = () => {
+    this.setState({
+      gmapsLoaded: true
+    });
+  };
+
+  componentDidMount() {
+    window.initMap = this.initMap;
+    const gmapScriptEl = document.createElement(`script`);
+    gmapScriptEl.src = `https://maps.googleapis.com/maps/api/js?key=${
+      process.env.REACT_APP_GOOGLE_MAPS_API_KEY
+    }&libraries=places&callback=initMap`;
+    document
+      .querySelector(`body`)
+      .insertAdjacentElement(`beforeend`, gmapScriptEl);
+  }
+
   handleChange = event => {
     this.setState({
       [event.target.id]: event.target.value,
@@ -74,15 +119,40 @@ class EditDefibrillatorDialog extends React.Component {
       notes: this.state.notes,
       location: this.state.location,
       model: this.state.model,
-      id: this.state.id
+      id: this.state.id,
+      latitude: this.state.latitude,
+      longitude: this.state.longitude
     };
 
     this.props.onUpdateDefibrillator(dataPouStelnw);
-    this.props.onClose();
+    // this.props.onClose();
+  };
+
+  handleSelect = suggestion => {
+    geocodeByAddress(suggestion)
+      .then(results => getLatLng(results[0]))
+      .then(latLng =>
+        this.setState({
+          latitude: latLng.lat,
+          longitude: latLng.lng,
+          location: suggestion
+        })
+      )
+
+      .catch(error => console.error("Error", error));
+  };
+
+  handleLocationChange = location => {
+    this.setState({
+      location: location,
+      hasChanged: true,
+      latitude: "",
+      longitude: ""
+    });
   };
 
   render() {
-    const { open, onClose, defibrillator } = this.props;
+    const { classes, open, onClose, defibrillator, errormessage } = this.props;
     return (
       <form>
         <Dialog
@@ -153,6 +223,14 @@ class EditDefibrillatorDialog extends React.Component {
                 onChange={this.handleChange}
               />
             </FormControl>
+
+            {this.state.gmapsLoaded && (
+              <LocationSearchbar
+                location={this.state.location}
+                onLocationChange={this.handleLocationChange}
+                onSelect={suggestion => this.handleSelect(suggestion)}
+              />
+            )}
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleCloseDialog} color="primary">
@@ -167,6 +245,26 @@ class EditDefibrillatorDialog extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left"
+          }}
+          open={errormessage ? true : false}
+          autoHideDuration={6000}
+          onClose={errormessage =>
+            this.props.onErrorMessageCleaner(errormessage)
+          }
+        >
+          <MySnackbarContentWrapper
+            onClose={errormessage =>
+              this.props.onErrorMessageCleaner(errormessage)
+            }
+            variant="error"
+            className={classes.margin}
+            message={errormessage}
+          />
+        </Snackbar>
       </form>
     );
   }
@@ -176,7 +274,12 @@ EditDefibrillatorDialog.propTypes = {
   onClose: PropTypes.func,
   open: PropTypes.bool,
   defibrillator: PropTypes.object,
-  onUpdateDefibrillator: PropTypes.func
+  onUpdateDefibrillator: PropTypes.func,
+  newDefibrillator: PropTypes.object,
+  onClearDefibrillatorData: PropTypes.func,
+  classes: PropTypes.object.isRequired,
+  errormessage: PropTypes.string,
+  onErrorMessageCleaner: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -186,14 +289,22 @@ const mapStateToProps = state => ({
       defibrillator => defibrillator.id === state.id
     )[0] || {},
   defibrillatorData: state.defibrillatorData,
-  id: state.id
+  id: state.id,
+  newDefibrillator: state.defibrillatorSuccessData,
+  errormessage: state.error.defmessage
 });
 const mapDispatchToProps = dispatch => ({
   onUpdateDefibrillator: defibrillatorData =>
-    dispatch(updateDefibrillator(defibrillatorData))
+    dispatch(updateDefibrillator(defibrillatorData)),
+  onClearDefibrillatorData: newDefibrillatorData =>
+    dispatch(clearDefibrillatorData(newDefibrillatorData)),
+  onErrorMessageCleaner: errormessage =>
+    dispatch(errorMessageCleaner(errormessage))
 });
-
+const EditDefibrillatorDialogWithStyles = withStyles(styles)(
+  EditDefibrillatorDialog
+);
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(EditDefibrillatorDialog);
+)(EditDefibrillatorDialogWithStyles);

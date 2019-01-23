@@ -21,6 +21,7 @@ import { CHANGE_DEFIBRILLATOR_LOCKER } from "../actions/types";
 import { DEF_DATA_CLEANER } from "../actions/types";
 import { DEF_DATA_KEEPER } from "../actions/types";
 import { UPDATE_DEFIBRILLATOR } from "../actions/types";
+import { CLEAN_DEFIBRILLATOR_DATA } from "../actions/types";
 
 import history from "../../history";
 
@@ -232,6 +233,13 @@ export const clearVolunteerData = volunteerData => dispatch => {
   dispatch({
     type: CLEAN_VOLUNTEER_DATA,
     payload: volunteerData
+  });
+};
+
+export const clearDefibrillatorData = defibrillatorData => dispatch => {
+  dispatch({
+    type: CLEAN_DEFIBRILLATOR_DATA,
+    payload: defibrillatorData
   });
 };
 
