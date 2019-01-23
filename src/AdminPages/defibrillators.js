@@ -5,7 +5,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import { Button } from "@material-ui/core";
+import { Button, Tooltip } from "@material-ui/core";
 import Snackbar from "@material-ui/core/Snackbar";
 import PropTypes from "prop-types";
 import {
@@ -230,10 +230,15 @@ class defibrillators extends Component {
                               }
                               aria-label="Directions"
                             >
-                              <FlagIcon
-                                className="material-icons md-36"
-                                aria-label="Αναζήτηση"
-                              />
+                              <Tooltip
+                                title="Απινιδωτής Παρών"
+                                placement="bottom"
+                              >
+                                <FlagIcon
+                                  className="material-icons md-36"
+                                  aria-label="Αναζήτηση"
+                                />
+                              </Tooltip>
                             </IconButton>
                           </MuiThemeProvider>
                         ) : (
@@ -250,10 +255,15 @@ class defibrillators extends Component {
                                 )
                               }
                             >
-                              <OutlinedFlagIcon
-                                className="material-icons md-36"
-                                aria-label="Αναζήτηση"
-                              />
+                              <Tooltip
+                                title="Απινιδωτής Απών"
+                                placement="bottom"
+                              >
+                                <OutlinedFlagIcon
+                                  className="material-icons md-36"
+                                  aria-label="Αναζήτηση"
+                                />
+                              </Tooltip>
                             </IconButton>
                           </MuiThemeProvider>
                         )}
@@ -269,11 +279,16 @@ class defibrillators extends Component {
                                 this.handleLocker(e, row.id, row.locker)
                               }
                             >
-                              <LockIcon
-                                // className={classes.searchIcon}
-                                className="material-icons md-36"
-                                aria-label="Αναζήτηση"
-                              />
+                              <Tooltip
+                                title="Απινιδωτής Κλειδωμένος"
+                                placement="bottom"
+                              >
+                                <LockIcon
+                                  // className={classes.searchIcon}
+                                  className="material-icons md-36"
+                                  aria-label="Αναζήτηση"
+                                />
+                              </Tooltip>
                             </IconButton>
                           </MuiThemeProvider>
                         ) : (
@@ -286,10 +301,15 @@ class defibrillators extends Component {
                                 this.handleLocker(e, row.id, row.locker)
                               }
                             >
-                              <LockOpenIcon
-                                className="material-icons md-36"
-                                aria-label="Αναζήτηση"
-                              />
+                              <Tooltip
+                                title="Απινιδωτής Ξεκλείδωτος"
+                                placement="bottom"
+                              >
+                                <LockOpenIcon
+                                  className="material-icons md-36"
+                                  aria-label="Αναζήτηση"
+                                />
+                              </Tooltip>
                             </IconButton>
                           </MuiThemeProvider>
                         )}
@@ -299,7 +319,12 @@ class defibrillators extends Component {
                           onClick={e => this.handlePencilClick(e, row.id)}
                           color="inherit"
                         >
-                          <EditIcon />
+                          <Tooltip
+                            title="Επεξεργασία Απινιδωτή"
+                            placement="bottom"
+                          >
+                            <EditIcon />
+                          </Tooltip>
                         </IconButton>
                       </TableCell>
                     </TableRow>

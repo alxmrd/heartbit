@@ -12,7 +12,7 @@ import {
 import Snackbar from "@material-ui/core/Snackbar";
 import { withStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
-
+import Tooltip from "@material-ui/core/Tooltip";
 const styles = theme => ({
   deactivateButton: {
     color: "#C62828"
@@ -62,23 +62,27 @@ class Activity extends Component {
     return (
       <TableCell>
         {volstatus !== 0 ? (
-          <IconButton
-            onClick={e => {
-              this.handleClick(e);
-              this.props.onEditVolunteer(volunteerid);
-            }}
-          >
-            <i className="material-icons red700 md-36">person</i>
-          </IconButton>
+          <Tooltip title="Εθελοντής Απενεργοποιημένος" placement="bottom">
+            <IconButton
+              onClick={e => {
+                this.handleClick(e);
+                this.props.onEditVolunteer(volunteerid);
+              }}
+            >
+              <i className="material-icons red700 md-36">person</i>
+            </IconButton>
+          </Tooltip>
         ) : (
-          <IconButton
-            onClick={e => {
-              this.handleClick(e);
-              this.props.onEditVolunteer(volunteerid);
-            }}
-          >
-            <i className="material-icons teal600 md-36">person</i>
-          </IconButton>
+          <Tooltip title="Εθελοντής Ενεργοποιημένος" placement="bottom">
+            <IconButton
+              onClick={e => {
+                this.handleClick(e);
+                this.props.onEditVolunteer(volunteerid);
+              }}
+            >
+              <i className="material-icons teal600 md-36">person</i>
+            </IconButton>
+          </Tooltip>
         )}
         {volstatus !== 0 ? (
           <Snackbar

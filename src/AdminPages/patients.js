@@ -7,7 +7,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import PropTypes from "prop-types";
-import { withStyles, Button, TextField } from "@material-ui/core";
+import { Button, TextField, IconButton } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -22,6 +22,12 @@ import Typography from "@material-ui/core/Typography";
 import TablePaginationActionsWrapped from "../components/TablePaginationActions";
 import TableFooter from "@material-ui/core/TableFooter";
 import TablePagination from "@material-ui/core/TablePagination";
+import FaceIcon from "@material-ui/icons/Face";
+import {
+  withStyles,
+  MuiThemeProvider,
+  createMuiTheme
+} from "@material-ui/core";
 
 const styles = theme => ({
   root: {
@@ -48,6 +54,19 @@ const styles = theme => ({
     "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.background.default
     }
+  }
+});
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#6747e5"
+    },
+    secondary: {
+      main: "#d86187"
+    }
+  },
+  typography: {
+    useNextVariants: true
   }
 });
 
@@ -98,13 +117,13 @@ class patients extends Component {
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
-                <TableCell>name</TableCell>
-                <TableCell>surname</TableCell>
-                <TableCell>address</TableCell>
-                <TableCell>history</TableCell>
-                <TableCell>description</TableCell>
-                <TableCell>birthdate</TableCell>
-                <TableCell>gender</TableCell>
+                <TableCell>Όνομα</TableCell>
+                <TableCell>Επώνυμο</TableCell>
+                <TableCell>Διεύθυνση</TableCell>
+                <TableCell>Έτος Γέννησης</TableCell>
+                <TableCell>Φύλο</TableCell>
+                <TableCell>Ιστορικό</TableCell>
+                <TableCell>Περιγραφή</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -116,10 +135,42 @@ class patients extends Component {
                       <TableCell>{row.name}</TableCell>
                       <TableCell>{row.surname}</TableCell>
                       <TableCell>{row.address}</TableCell>
+
+                      <TableCell>{row.birthdate}</TableCell>
+                      <TableCell>
+                        {row.gender === 0 ? (
+                          <MuiThemeProvider theme={theme}>
+                            <Tooltip title="Άντρας" placement="bottom">
+                              <IconButton
+                                color="primary"
+                                aria-label="Directions"
+                              >
+                                <FaceIcon
+                                  className="material-icons md-36"
+                                  aria-label="Αναζήτηση"
+                                />
+                              </IconButton>
+                            </Tooltip>
+                          </MuiThemeProvider>
+                        ) : (
+                          <MuiThemeProvider theme={theme}>
+                            <Tooltip title="Γυναίκα" placement="bottom">
+                              <IconButton
+                                color="secondary"
+                                //className={classes.iconButton}
+                                aria-label="Directions"
+                              >
+                                <FaceIcon
+                                  className="material-icons md-36"
+                                  aria-label="Αναζήτηση"
+                                />
+                              </IconButton>
+                            </Tooltip>
+                          </MuiThemeProvider>
+                        )}
+                      </TableCell>
                       <TableCell>{row.history}</TableCell>
                       <TableCell>{row.description}</TableCell>
-                      <TableCell>{row.birthdate}</TableCell>
-                      <TableCell>{row.gender}</TableCell>
                     </TableRow>
                   );
                 })}

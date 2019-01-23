@@ -25,6 +25,7 @@ import {
 } from "../../store/actions/actions";
 import MySnackbarContentWrapper from "../MySnackbarContentWrapper";
 import TablePaginationActionsWrapped from "../TablePaginationActions";
+import { Tooltip } from "@material-ui/core";
 
 const styles = theme => ({
   root: {
@@ -211,7 +212,12 @@ class VolunteerTable extends React.Component {
                         onClick={e => onEditClick(e, row.id)}
                         color="inherit"
                       >
-                        <EditIcon />
+                        <Tooltip
+                          title="Επεξεργασία Εθελοντή"
+                          placement="bottom"
+                        >
+                          <EditIcon />
+                        </Tooltip>
                       </IconButton>
                     </TableCell>
                   </TableRow>
