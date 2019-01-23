@@ -14,5 +14,5 @@ $addressValidator=v::optional(v::alnum($greek));//Validates alphanumeric charact
 $locationValidator = v::stringType()->alnum($greek)->notBlank();// validates location to be string and not blank,required
 $passwordValidator = v::stringType()->alnum($greek)->notBlank()->length(10,10); 
 $defibrillatordateValidator=v::optional(v::date('Y-m-d')->between('2019-01-01', 'now'))->notBlank();
-$patientDateOfBirth=v::intType();
+$patientDateOfBirth=v::intType()->min(1950)->max(2010);
 

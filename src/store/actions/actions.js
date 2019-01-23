@@ -23,6 +23,7 @@ import { DEF_DATA_KEEPER } from "../actions/types";
 import { UPDATE_DEFIBRILLATOR } from "../actions/types";
 import { CLEAN_DEFIBRILLATOR_DATA } from "../actions/types";
 import { NEW_PATIENT } from "../actions/types";
+import { CLEAN_PATIENT_DATA } from "../actions/types";
 
 import history from "../../history";
 
@@ -270,6 +271,12 @@ export const clearDefibrillatorData = defibrillatorData => dispatch => {
   dispatch({
     type: CLEAN_DEFIBRILLATOR_DATA,
     payload: defibrillatorData
+  });
+};
+export const clearPatientData = patientData => dispatch => {
+  dispatch({
+    type: CLEAN_PATIENT_DATA,
+    payload: patientData
   });
 };
 

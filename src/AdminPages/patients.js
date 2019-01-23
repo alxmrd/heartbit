@@ -9,7 +9,12 @@ import Paper from "@material-ui/core/Paper";
 import PropTypes from "prop-types";
 import { IconButton } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import { fetchPatients, newPatient } from "../store/actions/actions";
+import {
+  fetchPatients,
+  newPatient,
+  errorMessageCleaner,
+  clearPatientData
+} from "../store/actions/actions";
 import { connect } from "react-redux";
 import Fab from "@material-ui/core/Fab";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -24,6 +29,8 @@ import {
   createMuiTheme
 } from "@material-ui/core";
 import InsertPatientDialog from "../components/PatientComponents/InsertPatientDialog";
+import Snackbar from "@material-ui/core/Snackbar";
+import MySnackbarContentWrapper from "../components/MySnackbarContentWrapper";
 
 const styles = theme => ({
   root: {
@@ -85,6 +92,24 @@ class patients extends Component {
       description: ""
     };
   }
+  componentDidUpdate(prevProps) {
+    // Typical usage (don't forget to compare props):
+    // if (this.props.defibrillator !== prevProps.defibrillator) {
+    //   this.setState({
+    //     ...this.props.defibrillator
+    //   });
+    // }
+    if (
+      this.props.newPatient.message !== prevProps.newPatient.message &&
+      this.props.newPatient.message === "success"
+    ) {
+      this.handleClose();
+
+      const newPatientData = this.props.newPatient;
+
+      this.props.onClearPatientData(newPatientData);
+    }
+  }
   handleSubmit = event => {
     event.preventDefault();
 
@@ -101,7 +126,6 @@ class patients extends Component {
     };
 
     this.props.onNewPatient(dataPouStelnw);
-    this.handleClose();
   };
   handleChangeNumber = event => {
     this.setState({
@@ -139,7 +163,7 @@ class patients extends Component {
   };
 
   render() {
-    const { classes, patients } = this.props;
+    const { classes, patients, errormessage } = this.props;
     const { rowsPerPage, page } = this.state;
     return (
       <Fragment>
@@ -251,6 +275,26 @@ class patients extends Component {
             onCreate={this.handleSubmit}
           />
         </Paper>
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left"
+          }}
+          open={errormessage ? true : false}
+          autoHideDuration={6000}
+          onClose={errormessage =>
+            this.props.onErrorMessageCleaner(errormessage)
+          }
+        >
+          <MySnackbarContentWrapper
+            onClose={errormessage =>
+              this.props.onErrorMessageCleaner(errormessage)
+            }
+            variant="error"
+            className={classes.margin}
+            message={errormessage}
+          />
+        </Snackbar>
       </Fragment>
     );
   }
@@ -260,18 +304,28 @@ patients.propTypes = {
   classes: PropTypes.object.isRequired,
   patients: PropTypes.array.isRequired,
   onfetchPatients: PropTypes.func.isRequired,
-  onNewPatient: PropTypes.func.isRequired
+  onNewPatient: PropTypes.func.isRequired,
+  errormessage: PropTypes.string,
+  onErrorMessageCleaner: PropTypes.func.isRequired,
+  onClearPatientData: PropTypes.func,
+  newPatient: PropTypes.object
 };
 
 const patientWithStyles = withStyles(styles)(patients);
 
 const mapStateToProps = state => ({
-  patients: state.patients
+  patients: state.patients,
+  errormessage: state.error.patmessage,
+  newPatient: state.patientSuccessData
 });
 
 const mapDispatchToProps = dispatch => ({
   onfetchPatients: () => fetchPatients(dispatch),
-  onNewPatient: dataPouStelnw => newPatient(dispatch, dataPouStelnw)
+  onNewPatient: dataPouStelnw => newPatient(dispatch, dataPouStelnw),
+  onErrorMessageCleaner: errormessage =>
+    dispatch(errorMessageCleaner(errormessage)),
+  onClearPatientData: newPatientData =>
+    dispatch(clearPatientData(newPatientData))
 });
 
 export default connect(

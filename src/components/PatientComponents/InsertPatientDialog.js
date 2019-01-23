@@ -23,6 +23,7 @@ const styles = theme => ({
     flexDirection: "row"
   }
 });
+
 class InsertPatientDialog extends React.Component {
   constructor(props) {
     super();
