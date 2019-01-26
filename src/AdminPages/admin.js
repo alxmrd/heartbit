@@ -12,7 +12,10 @@ import {
   fetchAdmin,
   newAdmin,
   errorMessageCleaner,
-  clearAdminData
+  clearAdminData,
+  editAdmin,
+  idCleaner,
+  updateAdmin
 } from "../store/actions/actions";
 import { connect } from "react-redux";
 import { Fab } from "@material-ui/core";
@@ -20,11 +23,14 @@ import AddIcon from "@material-ui/icons/Add";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import InsertAdminDialog from "../components/AdminComponents/InsertAdminDialog";
+import EditAdminDialog from "../components/AdminComponents/EditAdminDialog";
 import TablePaginationActionsWrapped from "../components/TablePaginationActions";
 import TableFooter from "@material-ui/core/TableFooter";
 import TablePagination from "@material-ui/core/TablePagination";
 import Snackbar from "@material-ui/core/Snackbar";
 import MySnackbarContentWrapper from "../components/MySnackbarContentWrapper";
+import EditIcon from "@material-ui/icons/Edit";
+import { IconButton } from "@material-ui/core";
 
 const styles = theme => ({
   root: {
@@ -63,6 +69,7 @@ class admin extends Component {
       page: 0,
       rowsPerPage: 5,
       open: false,
+      openEditDialog: false,
       hasChanged: false,
       showPassword: false,
       type: "",
@@ -79,18 +86,18 @@ class admin extends Component {
     this.props.onfetchAdmin();
   }
   componentDidUpdate(prevProps) {
-    // Typical usage (don't forget to compare props):
-    // if (this.props.patient !== prevProps.patient) {
-    //   this.setState({
-    //     ...this.props.patient
-    //   });
-    // }
+    //Typical usage (don't forget to compare props):
+    if (this.props.admin !== prevProps.admin) {
+      this.setState({
+        ...this.props.admin
+      });
+    }
     if (
       this.props.newAdmin.message !== prevProps.newAdmin.message &&
       this.props.newAdmin.message === "success"
     ) {
       this.handleDialogClose();
-      // this.handleCloseEditDialog();
+      this.handleCloseEditDialog();
       const newAdminData = this.props.newAdmin;
 
       this.props.onClearAdminData(newAdminData);
@@ -103,6 +110,7 @@ class admin extends Component {
   handleDialogClose = () => {
     this.setState({
       open: false,
+
       hasChanged: false,
       showPassword: false,
       type: "",
@@ -162,9 +170,45 @@ class admin extends Component {
 
     this.props.onNewAdmin(dataPouStelnw);
   };
+  handleEditClick = (e, id) => {
+    e.stopPropagation();
+    this.setState({ openEditDialog: true });
+    this.props.onEditAdmin(id);
+  };
+  handleCloseEditDialog = () => {
+    this.setState({
+      openEditDialog: false,
+      hasChanged: false,
+      showPassword: false,
+      type: "",
+      name: "",
+      surname: "",
+      email: "",
+      address: "",
+      username: "",
+      password: ""
+    });
+    const id = this.props.id;
+    this.props.onCloseDialog(id);
+  };
+  handleUpdate = event => {
+    event.preventDefault();
+
+    const dataPouStelnw = {
+      type: this.state.type,
+      email: this.state.email,
+      name: this.state.name,
+      surname: this.state.surname,
+      username: this.state.username,
+      address: this.state.address,
+      password: this.state.password
+    };
+    const id = this.props.id;
+    this.props.onUpdateAdmin(id, dataPouStelnw);
+  };
 
   render() {
-    const { classes, admin, errormessage } = this.props;
+    const { classes, admins, errormessage, admin } = this.props;
     const { rowsPerPage, page } = this.state;
     return (
       <React.Fragment>
@@ -187,10 +231,11 @@ class admin extends Component {
                 <TableCell>Διεύθυνση</TableCell>
                 <TableCell>Όνομα Χρήστη</TableCell>
                 <TableCell>Κωδικός</TableCell>
+                <TableCell>Eπεξεργασία Διαχειριστή</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {admin
+              {admins
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(row => {
                   return (
@@ -203,6 +248,19 @@ class admin extends Component {
                       <TableCell>{row.address}</TableCell>
                       <TableCell>{row.username}</TableCell>
                       <TableCell>{row.password}</TableCell>
+                      <TableCell>
+                        <IconButton
+                          onClick={e => this.handleEditClick(e, row.id)}
+                          color="inherit"
+                        >
+                          <Tooltip
+                            title="Επεξεργασία Διαχειριστή"
+                            placement="bottom"
+                          >
+                            <EditIcon />
+                          </Tooltip>
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -212,7 +270,7 @@ class admin extends Component {
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 25]}
                   colSpan={3}
-                  count={admin.length}
+                  count={admins.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   SelectProps={{
@@ -245,6 +303,18 @@ class admin extends Component {
             visibility={this.state.showPassword}
             hasChanged={this.state.hasChanged}
           />
+          <EditAdminDialog
+            open={this.state.openEditDialog}
+            onEditFormChange={this.handleChange}
+            onUpdate={this.handleUpdate}
+            onClose={this.handleCloseEditDialog}
+            Generate={this.onGenerate}
+            password={this.state.password}
+            onPasswordVisibility={this.handleClickShowPassword}
+            visibility={this.state.showPassword}
+            hasChanged={this.state.hasChanged}
+            admin={admin}
+          />
         </Paper>
         <Snackbar
           anchorOrigin={{
@@ -273,18 +343,26 @@ class admin extends Component {
 admin.propTypes = {
   classes: PropTypes.object.isRequired,
   onfetchAdmin: PropTypes.func.isRequired,
-  admin: PropTypes.array.isRequired,
+  admins: PropTypes.array.isRequired,
+  admin: PropTypes.object.isRequired,
   onNewAdmin: PropTypes.func.isRequired,
   errormessage: PropTypes.string,
   onErrorMessageCleaner: PropTypes.func.isRequired,
   newAdmin: PropTypes.object,
-  onClearAdminData: PropTypes.func
+  onClearAdminData: PropTypes.func,
+  onEditAdmin: PropTypes.func.isRequired,
+  EditAdmin: PropTypes.func,
+  onCloseDialog: PropTypes.func.isRequired,
+  onUpdateAdmin: PropTypes.func.isRequired,
+  id: PropTypes.number
 };
 const adminWithStyles = withStyles(styles)(admin);
 const mapStateToProps = state => ({
-  admin: state.admin,
+  admins: state.admin,
   errormessage: state.error.admmessage,
-  newAdmin: state.adminSuccessData
+  newAdmin: state.adminSuccessData,
+  id: state.id,
+  admin: state.admin.filter(admin => admin.id === state.id)[0] || {}
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -292,7 +370,10 @@ const mapDispatchToProps = dispatch => ({
   onNewAdmin: dataPouStelnw => newAdmin(dispatch, dataPouStelnw),
   onErrorMessageCleaner: errormessage =>
     dispatch(errorMessageCleaner(errormessage)),
-  onClearAdminData: newAdminData => dispatch(clearAdminData(newAdminData))
+  onClearAdminData: newAdminData => dispatch(clearAdminData(newAdminData)),
+  onEditAdmin: id => dispatch(editAdmin(id)),
+  onCloseDialog: id => dispatch(idCleaner(id)),
+  onUpdateAdmin: (id, dataPouStelnw) => dispatch(updateAdmin(id, dataPouStelnw))
 });
 
 export default connect(

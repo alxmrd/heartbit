@@ -32,3 +32,4 @@ export const UPDATE_PATIENT = "UPDATE_PATIENT";
 export const NEW_ADMIN = "NEW_ADMIN";
 export const CLEAN_ADMIN_DATA = "CLEAN_ADMIN_DATA";
 export const LOGGED_IN_ADMIN = "LOGGED_IN_ADMIN";
+export const UPDATE_ADMIN = "UPDATE_ADMIN";

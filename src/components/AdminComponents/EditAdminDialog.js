@@ -8,12 +8,10 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@material-ui/core/FormControl";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
-
 import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-
 const styles = theme => ({
   formControl: {
     marginTop: theme.spacing.unit
@@ -24,7 +22,7 @@ const styles = theme => ({
   }
 });
 
-class InsertAdminDialog extends React.Component {
+class EditAdminDialog extends React.Component {
   constructor(props) {
     super();
     this.props = props;
@@ -34,31 +32,32 @@ class InsertAdminDialog extends React.Component {
     const {
       open,
       onClose,
-      Generate,
-      password,
       onPasswordVisibility,
       visibility,
-      onCreateFormChange,
-
+      onEditFormChange,
+      Generate,
       hasChanged,
-      onCreate
+      onUpdate,
+      admin,
+      password
     } = this.props;
 
     return (
       <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
-        <form onSubmit={onCreate}>
+        <form onSubmit={onUpdate}>
           <DialogTitle id="form-dialog-title">Εισαγωγή Διαχειριστή</DialogTitle>
           <DialogContent>
             <FormControl margin="dense" required fullWidth>
-              <InputLabel htmlFor="name">Τύπος</InputLabel>
+              <InputLabel htmlFor="type">Τύπος</InputLabel>
               <Input
                 id="type"
                 name="type"
-                type="text"
-                onChange={onCreateFormChange}
+                type="type"
+                defaultValue={admin.type}
+                onChange={onEditFormChange}
                 autoFocus
                 inputProps={{
-                  title: "Eισάγετε Τύπο Διαχειριστή"
+                  title: "Eισάγετε Tύπο Διαχειριστή"
                 }}
               />
             </FormControl>
@@ -68,10 +67,11 @@ class InsertAdminDialog extends React.Component {
                 id="name"
                 name="name"
                 type="name"
-                onChange={onCreateFormChange}
+                onChange={onEditFormChange}
+                defaultValue={admin.name}
                 autoFocus
                 inputProps={{
-                  title: "Eισάγετε Όνομα Ασθενή"
+                  title: "Eισάγετε Όνομα"
                 }}
               />
             </FormControl>
@@ -81,23 +81,28 @@ class InsertAdminDialog extends React.Component {
                 id="surname"
                 name="surname"
                 type="name"
-                onChange={onCreateFormChange}
+                onChange={onEditFormChange}
+                defaultValue={admin.surname}
                 autoFocus
                 inputProps={{
                   title: "Eισάγετε Επώνυμο"
                 }}
               />
             </FormControl>
-            <FormControl margin="dense" required fullWidth>
-              <InputLabel htmlFor="email">E-mail</InputLabel>
+
+            <FormControl margin="dense" fullWidth>
+              <InputLabel htmlFor="email">Ε-mail</InputLabel>
+
               <Input
                 id="email"
-                name="email"
-                type="email"
-                onChange={onCreateFormChange}
+                type="text"
+                onChange={onEditFormChange}
+                defaultValue={admin.email}
+                fullWidth
                 inputProps={{
-                  title: "Eισάγετε Ε-mail"
+                  title: "Ε-mail"
                 }}
+                multiline
               />
             </FormControl>
             <FormControl margin="dense" fullWidth>
@@ -108,34 +113,40 @@ class InsertAdminDialog extends React.Component {
               <Input
                 id="address"
                 type="text"
-                onChange={onCreateFormChange}
+                onChange={onEditFormChange}
+                defaultValue={admin.address}
                 fullWidth
                 inputProps={{
                   title: "Eισάγετε Διεύθυνση"
                 }}
               />
             </FormControl>
-            <FormControl margin="dense" required fullWidth>
+
+            <FormControl margin="dense" fullWidth>
               <InputLabel htmlFor="username">Όνομα Χρήστη</InputLabel>
+
               <Input
                 id="username"
-                name="username"
-                type="username"
-                onChange={onCreateFormChange}
-                autoFocus
+                type="text"
+                onChange={onEditFormChange}
+                defaultValue={admin.username}
+                fullWidth
                 inputProps={{
-                  title: "Eισάγετε Όνομα Χρήστη"
+                  title: "Όνομα Χρήστη"
                 }}
               />
             </FormControl>
-            <FormControl margin="dense" required fullWidth>
-              <InputLabel htmlFor="email">Kωδικός</InputLabel>
+            <FormControl margin="dense" fullWidth>
+              <InputLabel htmlFor="password">Κωδικός</InputLabel>
+
               <Input
                 id="password"
                 name="password"
-                value={password}
                 type={visibility ? "text" : "password"}
-                onChange={onCreateFormChange}
+                // defaultValue={volunteerData.password}
+
+                value={password}
+                onChange={onEditFormChange}
                 inputProps={{
                   title: "Eισάγετε Κωδικό"
                 }}
@@ -162,7 +173,7 @@ class InsertAdminDialog extends React.Component {
               Ακυρωση
             </Button>
             <Button type="submit" color="primary" disabled={!hasChanged}>
-              Εισαγωγη
+              Eνημερωση
             </Button>
           </DialogActions>
         </form>
@@ -171,19 +182,21 @@ class InsertAdminDialog extends React.Component {
   }
 }
 
-const InsertAdminDialogWithStyles = withStyles(styles)(InsertAdminDialog);
+const EditAdminDialogWithStyles = withStyles(styles)(EditAdminDialog);
 
-InsertAdminDialog.propTypes = {
+EditAdminDialog.propTypes = {
   classes: PropTypes.object.isRequired,
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   hasChanged: PropTypes.bool,
-  onCreateFormChange: PropTypes.func,
+  onEditFormChange: PropTypes.func,
+  onEditFormChangeNumber: PropTypes.func,
   Generate: PropTypes.func,
   password: PropTypes.string.isRequired,
   visibility: PropTypes.bool,
   onPasswordVisibility: PropTypes.func,
-  onCreate: PropTypes.func
+  onUpdate: PropTypes.func,
+  admin: PropTypes.object
 };
 
-export default InsertAdminDialogWithStyles;
+export default EditAdminDialogWithStyles;

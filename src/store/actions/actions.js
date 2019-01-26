@@ -28,6 +28,7 @@ import { UPDATE_PATIENT } from "../actions/types";
 import { NEW_ADMIN } from "../actions/types";
 import { CLEAN_ADMIN_DATA } from "../actions/types";
 import { LOGGED_IN_ADMIN } from "../actions/types";
+import { UPDATE_ADMIN } from "../actions/types";
 
 import history from "../../history";
 
@@ -357,6 +358,13 @@ export const editVolunteer = id => dispatch => {
     payload: id
   });
 };
+export const editAdmin = id => dispatch => {
+  // const state = getState();
+  dispatch({
+    type: DIALOG_OPEN,
+    payload: id
+  });
+};
 export const editDefibrillator = id => dispatch => {
   // const state = getState();
   dispatch({
@@ -413,6 +421,32 @@ export const updateVolunteer = (id, userData) => dispatch => {
           })
         : dispatch({
             type: UPDATE_VOLUNTEER,
+            payload: res
+          });
+    })
+    .catch(error => {
+      alert(error, "SERVER error 500 ");
+    });
+};
+
+export const updateAdmin = (id, adminData) => dispatch => {
+  fetch(`http://localhost:8080/api/editadmin/${id}`, {
+    method: "POST",
+    headers: {
+      ...headers,
+      Authorization: "Bearer " + sessionStorage.getItem("token")
+    },
+    body: JSON.stringify(adminData)
+  })
+    .then(result => result.json())
+    .then(res => {
+      res.httpstatus === "error"
+        ? dispatch({
+            type: ISINVALID,
+            payload: res
+          })
+        : dispatch({
+            type: UPDATE_ADMIN,
             payload: res
           });
     })
