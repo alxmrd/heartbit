@@ -276,11 +276,25 @@ class patients extends Component {
                               </IconButton>
                             </Tooltip>
                           </MuiThemeProvider>
-                        ) : (
+                        ) : row.gender === "f" ? (
                           <MuiThemeProvider theme={theme}>
                             <Tooltip title="Γυναίκα" placement="bottom">
                               <IconButton
                                 color="secondary"
+                                //className={classes.iconButton}
+                                aria-label="Directions"
+                              >
+                                <FaceIcon
+                                  className="material-icons md-36"
+                                  aria-label="Αναζήτηση"
+                                />
+                              </IconButton>
+                            </Tooltip>
+                          </MuiThemeProvider>
+                        ) : (
+                          <MuiThemeProvider theme={theme}>
+                            <Tooltip title="Άλλο" placement="bottom">
+                              <IconButton
                                 //className={classes.iconButton}
                                 aria-label="Directions"
                               >

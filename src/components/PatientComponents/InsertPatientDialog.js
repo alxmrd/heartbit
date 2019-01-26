@@ -146,6 +146,19 @@ class InsertPatientDialog extends React.Component {
                   }
                   label="Γυναίκα"
                 />
+                <FormControlLabel
+                  control={
+                    <Radio
+                      checked={gender === "o"}
+                      onChange={this.handleChange}
+                      value={"o"}
+                      name="radio-button-demo"
+                      aria-label="Άλλο"
+                      color="inherit"
+                    />
+                  }
+                  label="Άλλο"
+                />
               </RadioGroup>
             </FormControl>
             <FormControl margin="dense" fullWidth>
