@@ -13,7 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ambulance3 from "../ambulance3.png";
 import { connect } from "react-redux";
-import { fetchAdmin } from "../store/actions/actions";
+import { successLogin } from "../store/actions/actions";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { TextField, Divider } from "@material-ui/core";
 
@@ -57,31 +57,31 @@ class Home extends React.Component {
     this.setState(state => ({ expanded: !state.expanded }));
   };
   componentDidMount() {
-    this.props.onfetchAdmin();
+    // this.props.onfetchLoggedInUser(this.props.loggedInAdminUsername);
+    const username = { username: sessionStorage.getItem("username") };
+
+    this.props.onSuccessLogin(username);
   }
   render() {
-    const { classes, admin } = this.props;
+    const { classes, loggedInAdmin } = this.props;
 
     return (
       <Card className={classes.card}>
-        {admin.map(item => (
-          <CardHeader
-            key={item.id}
-            avatar={
-              <Avatar
-                aria-label="Recipe"
-                className={classes.avatar}
-                src={ambulance3}
-              />
-            }
-            title={
-              <Typography component="h5" variant="h4" color="primary">
-                {item.name} {item.surname}
-              </Typography>
-            }
-            subheader={item.type}
-          />
-        ))}
+        <CardHeader
+          avatar={
+            <Avatar
+              aria-label="Recipe"
+              className={classes.avatar}
+              src={ambulance3}
+            />
+          }
+          title={
+            <Typography component="h5" variant="h4" color="primary">
+              {loggedInAdmin.name} {loggedInAdmin.surname}
+            </Typography>
+          }
+          subheader={loggedInAdmin.type}
+        />
 
         <CardContent>
           <Typography component="p">
@@ -107,54 +107,51 @@ class Home extends React.Component {
         <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <Typography paragraph>Στοιχεία Διαχειριστή:</Typography>
-            {admin.map(item => (
-              <TextField
-                key={item.id}
-                id="tel"
-                type="number"
-                label="Τηλέφωνο επικοινωνίας"
-                defaultValue={item.tel}
-                className={classes.textField}
-                fullWidth
-                margin="normal"
-                InputProps={{
-                  readOnly: true
-                }}
-                variant="outlined"
-              />
-            ))}
-            {admin.map(item => (
-              <TextField
-                key={item.id}
-                id="email"
-                type="email"
-                label="email"
-                defaultValue={item.email}
-                className={classes.textField}
-                fullWidth
-                margin="normal"
-                InputProps={{
-                  readOnly: true
-                }}
-                variant="outlined"
-              />
-            ))}
-            {admin.map(item => (
-              <TextField
-                key={item.id}
-                id="address"
-                type="address"
-                label="Διεύθυνση"
-                defaultValue={item.address}
-                className={classes.textField}
-                fullWidth
-                margin="normal"
-                InputProps={{
-                  readOnly: true
-                }}
-                variant="outlined"
-              />
-            ))}
+
+            <TextField
+              key={loggedInAdmin.id}
+              id="tel"
+              type="number"
+              label="Τηλέφωνο επικοινωνίας"
+              defaultValue={loggedInAdmin.tel}
+              className={classes.textField}
+              fullWidth
+              margin="normal"
+              InputProps={{
+                readOnly: true
+              }}
+              variant="outlined"
+            />
+
+            <TextField
+              key={loggedInAdmin.id}
+              id="email"
+              type="email"
+              label="email"
+              defaultValue={loggedInAdmin.email}
+              className={classes.textField}
+              fullWidth
+              margin="normal"
+              InputProps={{
+                readOnly: true
+              }}
+              variant="outlined"
+            />
+
+            <TextField
+              key={loggedInAdmin.id}
+              id="address"
+              type="address"
+              label="Διεύθυνση"
+              defaultValue={loggedInAdmin.address}
+              className={classes.textField}
+              fullWidth
+              margin="normal"
+              InputProps={{
+                readOnly: true
+              }}
+              variant="outlined"
+            />
 
             <TextField
               id="outlined-textarea"
@@ -185,17 +182,17 @@ class Home extends React.Component {
 
 Home.propTypes = {
   classes: PropTypes.object.isRequired,
-  onfetchAdmin: PropTypes.func.isRequired,
-  admin: PropTypes.array.isRequired
+  onSuccessLogin: PropTypes.func.isRequired,
+  loggedInAdmin: PropTypes.object.isRequired
 };
 const HomeWithStyles = withStyles(styles)(Home);
 
 const mapStateToProps = state => ({
-  admin: state.admin
+  loggedInAdmin: state.adminData
 });
 
 const mapDispatchToProps = dispatch => ({
-  onfetchAdmin: () => fetchAdmin(dispatch)
+  onSuccessLogin: username => dispatch(successLogin(username))
 });
 
 export default connect(

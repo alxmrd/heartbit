@@ -13,7 +13,8 @@ import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Snackbar from "@material-ui/core/Snackbar";
 import MySnackbarContentWrapper from "../components/MySnackbarContentWrapper.js";
-
+import { connect } from "react-redux";
+import { successLogin } from "../store/actions/actions";
 const styles = theme => ({
   layout: {
     width: "auto",
@@ -87,7 +88,10 @@ class Login extends Component {
         if (responseJson.status === "success") {
           //alert("Logged in");
           sessionStorage.setItem("token", responseJson.token);
+          sessionStorage.setItem("username", responseJson.username);
+          const username = { username: this.state.username };
 
+          this.props.onSuccessLogin(username);
           this.setState({ redirectToReferrer: true });
         } else {
           this.setState({ open: true, message: responseJson.message });
@@ -174,7 +178,15 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  onSuccessLogin: PropTypes.func.isRequired
 };
+const LoginWithStyles = withStyles(styles)(Login);
 
-export default withStyles(styles)(Login);
+const mapDispatchToProps = dispatch => ({
+  onSuccessLogin: username => dispatch(successLogin(username))
+});
+export default connect(
+  null,
+  mapDispatchToProps
+)(LoginWithStyles);

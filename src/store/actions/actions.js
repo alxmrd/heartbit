@@ -27,6 +27,7 @@ import { CLEAN_PATIENT_DATA } from "../actions/types";
 import { UPDATE_PATIENT } from "../actions/types";
 import { NEW_ADMIN } from "../actions/types";
 import { CLEAN_ADMIN_DATA } from "../actions/types";
+import { LOGGED_IN_ADMIN } from "../actions/types";
 
 import history from "../../history";
 
@@ -219,6 +220,38 @@ export const newVolunteer = (dispatch, userData) => {
       alert(error, "SERVER error 500 ");
     });
 };
+
+export const successLogin = ({ username }) => dispatch => {
+  fetch(`http://localhost:8080/api/login/success?input=${username}`, {
+    method: "GET",
+    cache: "no-cache",
+    headers: {
+      ...headers,
+      Authorization: "Bearer " + sessionStorage.getItem("token")
+    },
+
+    referrer: "no-referrer"
+  })
+    .then(result => result.json())
+    .then(res => {
+      dispatch({
+        type: LOGGED_IN_ADMIN,
+        payload: res
+      });
+    })
+
+    .catch(error => {
+      alert(error, "SERVER error 500 ");
+    });
+};
+// export const successLogin = successfullData => dispatch => {
+//   // const state = getState();
+//   dispatch({
+//     type: LOGGED_IN_ADMIN,
+//     payload: successfullData
+//   });
+// };
+
 export const newPatient = (dispatch, userData) => {
   fetch(`http://localhost:8080/api/insertpatient`, {
     method: "POST",

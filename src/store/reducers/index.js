@@ -14,6 +14,7 @@ import defibrillatorDataReducer from "./defibrillatorDataReducer";
 import defibrillatorSuccessReducer from "./defibrillatorSuccessReducer";
 import patientSuccessReducer from "./patientSuccessReducer";
 import adminSuccessReducer from "./adminSuccessReducer";
+import loggedInAdminReducer from "./loggedInAdminReducer";
 
 export default combineReducers({
   volunteers: volunteersReducer,
@@ -30,5 +31,6 @@ export default combineReducers({
   adminSuccessData: adminSuccessReducer,
   eventSuccessData: newSuccessEventReducer,
   successMessage: successMessageReducer,
-  defibrillatorData: defibrillatorDataReducer
+  defibrillatorData: defibrillatorDataReducer,
+  adminData: loggedInAdminReducer
 });

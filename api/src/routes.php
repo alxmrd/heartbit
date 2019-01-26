@@ -818,6 +818,8 @@ $app->post('/api/insertdefibrillator', function (ServerRequestInterface $request
 
 
 });
+
+
 $app->get('/api/volunteer/search', function (ServerRequestInterface $request, ResponseInterface $response, array $args) {
     global $pdo;
 
@@ -1277,6 +1279,46 @@ $app->post('/api/insertadmin', function (ServerRequestInterface $request, Respon
         }
     }
 
+});
+
+$app->get('/api/login/success', function (ServerRequestInterface $request, ResponseInterface $response, array $args) {
+    global $pdo;
+
+   $input = $request->getQueryParam('input');
+
+
+    $query = " SELECT * FROM ekab WHERE  username=:username ";
+   
+
+    $result = $pdo->prepare($query);
+    $result->execute(array(':username' => $input));
+  
+   
+    $count = $result->rowCount();
+   
+    if ($count== 0){
+        $message = "O χρήστης που αναζητήσατε, δεν υπάρχει!";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message, 409);
+        $myObj = new stdClass();
+        $myObj->message = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 404);
+       
+
+        return $response;
+
+    }
+    $user = $result->fetch(PDO::FETCH_ASSOC);
+  
+
+    // $myObj = new stdClass();
+    // $myObj->user = $user;
+   
+    $response = json_encode($user, JSON_NUMERIC_CHECK);
+    return $response;
+
+   
 });
 
 $app->add(function ($req, $res, $next) {
