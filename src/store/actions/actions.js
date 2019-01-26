@@ -24,6 +24,7 @@ import { UPDATE_DEFIBRILLATOR } from "../actions/types";
 import { CLEAN_DEFIBRILLATOR_DATA } from "../actions/types";
 import { NEW_PATIENT } from "../actions/types";
 import { CLEAN_PATIENT_DATA } from "../actions/types";
+import { UPDATE_PATIENT } from "../actions/types";
 
 import history from "../../history";
 
@@ -294,6 +295,13 @@ export const editDefibrillator = id => dispatch => {
     payload: id
   });
 };
+export const editPatient = id => dispatch => {
+  // const state = getState();
+  dispatch({
+    type: DIALOG_OPEN,
+    payload: id
+  });
+};
 
 export const lockerClick = defibrillatorData => dispatch => {
   // const state = getState();
@@ -336,6 +344,31 @@ export const updateVolunteer = (id, userData) => dispatch => {
           })
         : dispatch({
             type: UPDATE_VOLUNTEER,
+            payload: res
+          });
+    })
+    .catch(error => {
+      alert(error, "SERVER error 500 ");
+    });
+};
+export const updatePatient = (id, patientData) => dispatch => {
+  fetch(`http://localhost:8080/api/editpatient/${id}`, {
+    method: "POST",
+    headers: {
+      ...headers,
+      Authorization: "Bearer " + sessionStorage.getItem("token")
+    },
+    body: JSON.stringify(patientData)
+  })
+    .then(result => result.json())
+    .then(res => {
+      res.httpstatus === "error"
+        ? dispatch({
+            type: ISINVALID,
+            payload: res
+          })
+        : dispatch({
+            type: UPDATE_PATIENT,
             payload: res
           });
     })

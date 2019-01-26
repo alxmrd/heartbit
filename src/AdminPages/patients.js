@@ -13,7 +13,10 @@ import {
   fetchPatients,
   newPatient,
   errorMessageCleaner,
-  clearPatientData
+  clearPatientData,
+  editPatient,
+  idCleaner,
+  updatePatient
 } from "../store/actions/actions";
 import { connect } from "react-redux";
 import Fab from "@material-ui/core/Fab";
@@ -31,6 +34,8 @@ import {
 import InsertPatientDialog from "../components/PatientComponents/InsertPatientDialog";
 import Snackbar from "@material-ui/core/Snackbar";
 import MySnackbarContentWrapper from "../components/MySnackbarContentWrapper";
+import EditIcon from "@material-ui/icons/Edit";
+import EditPatientDialog from "../components/PatientComponents/EditPatientDialog";
 
 const styles = theme => ({
   root: {
@@ -82,34 +87,41 @@ class patients extends Component {
       open: false,
       page: 0,
       rowsPerPage: 5,
-      gender: "0",
+      gender: "m", //male
       hasChanged: false,
       name: "",
       surname: "",
       address: "",
       history: "",
       birthdate: "",
-      description: ""
+      description: "",
+      openEditDialog: false
     };
   }
   componentDidUpdate(prevProps) {
     // Typical usage (don't forget to compare props):
-    // if (this.props.defibrillator !== prevProps.defibrillator) {
-    //   this.setState({
-    //     ...this.props.defibrillator
-    //   });
-    // }
+    if (this.props.patient !== prevProps.patient) {
+      this.setState({
+        ...this.props.patient
+      });
+    }
     if (
       this.props.newPatient.message !== prevProps.newPatient.message &&
       this.props.newPatient.message === "success"
     ) {
       this.handleClose();
-
+      this.handleCloseEditDialog();
       const newPatientData = this.props.newPatient;
 
       this.props.onClearPatientData(newPatientData);
     }
   }
+  handlePencilClick = (e, id) => {
+    e.stopPropagation();
+    this.setState({ openEditDialog: true });
+    this.props.onEditPatient(id);
+  };
+
   handleSubmit = event => {
     event.preventDefault();
 
@@ -127,6 +139,24 @@ class patients extends Component {
 
     this.props.onNewPatient(dataPouStelnw);
   };
+  handleUpdate = event => {
+    event.preventDefault();
+
+    const dataPouStelnw = {
+      gender: this.state.gender,
+      email: this.state.email,
+      birthdate: this.state.birthdate,
+      description: this.state.description,
+      history: this.state.history,
+
+      name: this.state.name,
+      surname: this.state.surname,
+      address: this.state.address
+    };
+    const id = this.props.id;
+    this.props.onUpdatePatient(id, dataPouStelnw);
+  };
+
   handleChangeNumber = event => {
     this.setState({
       [event.target.id]: event.target.valueAsNumber,
@@ -145,7 +175,34 @@ class patients extends Component {
   };
 
   handleClose = () => {
-    this.setState({ open: false, hasChanged: false });
+    this.setState({
+      open: false,
+      hasChanged: false,
+      gender: "m",
+
+      name: "",
+      surname: "",
+      address: "",
+      history: "",
+      birthdate: "",
+      description: ""
+    });
+  };
+  handleCloseEditDialog = () => {
+    this.setState({
+      openEditDialog: false,
+      hasChanged: false,
+      gender: "m",
+
+      name: "",
+      surname: "",
+      address: "",
+      history: "",
+      birthdate: "",
+      description: ""
+    });
+    const id = this.props.id;
+    this.props.onCloseDialog(id);
   };
   componentDidMount() {
     // If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
@@ -159,12 +216,12 @@ class patients extends Component {
     this.setState({ rowsPerPage: event.target.value });
   };
   handleGenderChange = event => {
-    this.setState({ gender: event.target.value });
+    this.setState({ gender: event.target.value, hasChanged: true });
   };
 
   render() {
-    const { classes, patients, errormessage } = this.props;
-    const { rowsPerPage, page } = this.state;
+    const { classes, patients, errormessage, patient } = this.props;
+    const { rowsPerPage, page, gender } = this.state;
     return (
       <Fragment>
         <div className={classes.root}>
@@ -183,9 +240,11 @@ class patients extends Component {
                 <TableCell>Επώνυμο</TableCell>
                 <TableCell>Διεύθυνση</TableCell>
                 <TableCell>Έτος Γέννησης</TableCell>
-                <TableCell>Φύλο</TableCell>
+
                 <TableCell>Ιστορικό</TableCell>
                 <TableCell>Περιγραφή</TableCell>
+                <TableCell>Φύλο</TableCell>
+                <TableCell>Επεξεργασία Ασθενή</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -199,8 +258,11 @@ class patients extends Component {
                       <TableCell>{row.address}</TableCell>
 
                       <TableCell>{row.birthdate}</TableCell>
+
+                      <TableCell>{row.history}</TableCell>
+                      <TableCell>{row.description}</TableCell>
                       <TableCell>
-                        {row.gender === 0 ? (
+                        {row.gender === "m" ? (
                           <MuiThemeProvider theme={theme}>
                             <Tooltip title="Άντρας" placement="bottom">
                               <IconButton
@@ -231,8 +293,19 @@ class patients extends Component {
                           </MuiThemeProvider>
                         )}
                       </TableCell>
-                      <TableCell>{row.history}</TableCell>
-                      <TableCell>{row.description}</TableCell>
+                      <TableCell>
+                        <IconButton
+                          onClick={e => this.handlePencilClick(e, row.id)}
+                          color="inherit"
+                        >
+                          <Tooltip
+                            title="Επεξεργασία Απινιδωτή"
+                            placement="bottom"
+                          >
+                            <EditIcon />
+                          </Tooltip>
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -268,11 +341,22 @@ class patients extends Component {
             open={this.state.open}
             onClose={this.handleClose}
             onGenderChange={this.handleGenderChange}
-            gender={this.state.gender}
+            gender={gender}
             onCreateFormChangeNumber={this.handleChangeNumber}
             onCreateFormChange={this.handleChange}
             hasChanged={this.state.hasChanged}
             onCreate={this.handleSubmit}
+          />
+          <EditPatientDialog
+            open={this.state.openEditDialog}
+            onClose={this.handleCloseEditDialog}
+            onGenderChange={this.handleGenderChange}
+            gender={this.state.gender}
+            onEditFormChangeNumber={this.handleChangeNumber}
+            onEditFormChange={this.handleChange}
+            hasChanged={this.state.hasChanged}
+            onUpdate={this.handleUpdate}
+            patient={patient}
           />
         </Paper>
         <Snackbar
@@ -308,7 +392,12 @@ patients.propTypes = {
   errormessage: PropTypes.string,
   onErrorMessageCleaner: PropTypes.func.isRequired,
   onClearPatientData: PropTypes.func,
-  newPatient: PropTypes.object
+  newPatient: PropTypes.object,
+  onEditPatient: PropTypes.func.isRequired,
+  onCloseDialog: PropTypes.func.isRequired,
+  id: PropTypes.number,
+  patient: PropTypes.object,
+  onUpdatePatient: PropTypes.func.isRequired
 };
 
 const patientWithStyles = withStyles(styles)(patients);
@@ -316,7 +405,9 @@ const patientWithStyles = withStyles(styles)(patients);
 const mapStateToProps = state => ({
   patients: state.patients,
   errormessage: state.error.patmessage,
-  newPatient: state.patientSuccessData
+  newPatient: state.patientSuccessData,
+  id: state.id,
+  patient: state.patients.filter(patient => patient.id === state.id)[0] || {}
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -325,7 +416,11 @@ const mapDispatchToProps = dispatch => ({
   onErrorMessageCleaner: errormessage =>
     dispatch(errorMessageCleaner(errormessage)),
   onClearPatientData: newPatientData =>
-    dispatch(clearPatientData(newPatientData))
+    dispatch(clearPatientData(newPatientData)),
+  onEditPatient: id => dispatch(editPatient(id)),
+  onCloseDialog: id => dispatch(idCleaner(id)),
+  onUpdatePatient: (id, dataPouStelnw) =>
+    dispatch(updatePatient(id, dataPouStelnw))
 });
 
 export default connect(

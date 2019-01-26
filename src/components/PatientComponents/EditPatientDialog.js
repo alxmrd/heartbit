@@ -23,7 +23,7 @@ const styles = theme => ({
   }
 });
 
-class InsertPatientDialog extends React.Component {
+class EditPatientDialog extends React.Component {
   constructor(props) {
     super();
     this.props = props;
@@ -36,16 +36,16 @@ class InsertPatientDialog extends React.Component {
       classes,
       onGenderChange,
       gender,
-      onCreateFormChange,
-      onCreateFormChangeNumber,
+      onEditFormChange,
+      onEditFormChangeNumber,
       hasChanged,
-      onCreate
+      onUpdate,
+      patient
     } = this.props;
-    // var Numgender = parseInt(gender);
 
     return (
       <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
-        <form onSubmit={onCreate}>
+        <form onSubmit={onUpdate}>
           <DialogTitle id="form-dialog-title">Εισαγωγή Ασθενή</DialogTitle>
           <DialogContent>
             <FormControl margin="dense" required fullWidth>
@@ -54,7 +54,8 @@ class InsertPatientDialog extends React.Component {
                 id="name"
                 name="name"
                 type="name"
-                onChange={onCreateFormChange}
+                defaultValue={patient.name}
+                onChange={onEditFormChange}
                 autoFocus
                 inputProps={{
                   title: "Eισάγετε Όνομα Ασθενή"
@@ -67,7 +68,8 @@ class InsertPatientDialog extends React.Component {
                 id="surname"
                 name="surname"
                 type="name"
-                onChange={onCreateFormChange}
+                onChange={onEditFormChange}
+                defaultValue={patient.surname}
                 autoFocus
                 inputProps={{
                   title: "Eισάγετε Επώνυμο"
@@ -82,7 +84,8 @@ class InsertPatientDialog extends React.Component {
               <Input
                 id="address"
                 type="text"
-                onChange={onCreateFormChange}
+                onChange={onEditFormChange}
+                defaultValue={patient.address}
                 fullWidth
                 inputProps={{
                   title: "Eισάγετε Διεύθυνση"
@@ -97,7 +100,7 @@ class InsertPatientDialog extends React.Component {
               <Input
                 id="birthdate"
                 type="number"
-                onChange={onCreateFormChangeNumber}
+                onChange={onEditFormChangeNumber}
                 fullWidth
                 inputProps={{
                   title: "Eισάγετε Έτος Γέννησης",
@@ -114,6 +117,7 @@ class InsertPatientDialog extends React.Component {
               required
             >
               <FormLabel component="legend">Γένος</FormLabel>
+
               <RadioGroup
                 aria-label="Gender"
                 name="gender1"
@@ -154,7 +158,8 @@ class InsertPatientDialog extends React.Component {
               <Input
                 id="history"
                 type="text"
-                onChange={onCreateFormChange}
+                onChange={onEditFormChange}
+                defaultValue={patient.history}
                 fullWidth
                 inputProps={{
                   title: "Iστορικό Ασθενή"
@@ -168,7 +173,8 @@ class InsertPatientDialog extends React.Component {
               <Input
                 id="description"
                 type="text"
-                onChange={onCreateFormChange}
+                onChange={onEditFormChange}
+                defaultValue={patient.description}
                 fullWidth
                 inputProps={{
                   title: "Περιγραφή Ασθενή"
@@ -183,7 +189,7 @@ class InsertPatientDialog extends React.Component {
               Ακυρωση
             </Button>
             <Button type="submit" color="primary" disabled={!hasChanged}>
-              Εισαγωγη
+              Eνημερωση
             </Button>
           </DialogActions>
         </form>
@@ -192,18 +198,19 @@ class InsertPatientDialog extends React.Component {
   }
 }
 
-const InsertPatientDialogWithStyles = withStyles(styles)(InsertPatientDialog);
+const EditPatientDialogWithStyles = withStyles(styles)(EditPatientDialog);
 
-InsertPatientDialog.propTypes = {
+EditPatientDialog.propTypes = {
   classes: PropTypes.object.isRequired,
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   hasChanged: PropTypes.bool,
-  onCreateFormChange: PropTypes.func,
-  onCreateFormChangeNumber: PropTypes.func,
+  onEditFormChange: PropTypes.func,
+  onEditFormChangeNumber: PropTypes.func,
   onGenderChange: PropTypes.func.isRequired,
-  gender: PropTypes.string.isRequired,
-  onCreate: PropTypes.func
+  gender: PropTypes.string,
+  onUpdate: PropTypes.func,
+  patient: PropTypes.object
 };
 
-export default InsertPatientDialogWithStyles;
+export default EditPatientDialogWithStyles;

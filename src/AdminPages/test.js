@@ -1,191 +1,203 @@
-import React, { Component } from "react";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import EditIcon from "@material-ui/icons/Edit";
-import { Button } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import {
-  editVolunteer,
-  setVolunteerActivity,
-  idCleaner
-} from "../../store/actions/actions";
+import { Button, Dialog } from "@material-ui/core";
+import React from "react";
 import { connect } from "react-redux";
-import Snackbar from "@material-ui/core/Snackbar";
-import Activity from "./Activity";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import FormControl from "@material-ui/core/FormControl";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormLabel from "@material-ui/core/FormLabel";
 
 const styles = theme => ({
-  root: {
-    width: "100%",
-    marginTop: theme.spacing.unit * 3,
-    overflowX: "auto"
+  formControl: {
+    marginTop: theme.spacing.unit
   },
-  table: {
-    minWidth: 700
-  },
-  row: {
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.background.default
-    }
+  group: {
+    margin: `${theme.spacing.unit}px 0`,
+    flexDirection: "row"
   }
 });
 
-class VolunteerTable extends Component {
+class InsertPatientDialog extends React.Component {
   constructor(props) {
     super();
     this.props = props;
     this.state = {
-      openSnack: false,
-      vertical: "top",
-      horizontal: "center"
+      // gender: "female"
     };
   }
-
-  handleOnOffButtonClick = e => {
-    e.stopPropagation();
-    this.setState({ openSnack: true });
-  };
-
-  handleClose = e => {
-    e.stopPropagation();
-    this.setState({ openSnack: false });
-    this.props.onClose();
-  };
-
-  handleActivity = (e, status) => {
-    e.stopPropagation();
-
-    const id = this.props.id;
-    this.props.onSetVolunteerActivity(status, id);
-
-    this.setState({
-      openSnack: false
-    });
-    this.props.onClose();
+  handleClickShowPassword = () => {
+    this.setState(state => ({ showPassword: !state.showPassword }));
   };
 
   render() {
-    const { classes, tabledata, onEditClick, onRowClick } = this.props;
-    const { vertical, horizontal, openSnack } = this.state;
+    const {
+      open,
+      onClose,
+      classes,
+      onGenderChange,
+      gender,
+      onCreateFormChange,
+      onCreateFormChangeNumber,
+      hasChanged,
+      onCreate
+    } = this.props;
     return (
-      <Paper className={classes.root}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>username</TableCell>
+      <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
+        <form onSubmit={onCreate}>
+          <DialogTitle id="form-dialog-title">Εισαγωγή Ασθενή</DialogTitle>
+          <DialogContent>
+            <FormControl margin="dense" required fullWidth>
+              <InputLabel htmlFor="name">Όνομα</InputLabel>
+              <Input
+                id="name"
+                name="name"
+                type="name"
+                onChange={onCreateFormChange}
+                autoFocus
+                inputProps={{
+                  title: "Eισάγετε Όνομα Ασθενή"
+                }}
+              />
+            </FormControl>
+            <FormControl margin="dense" required fullWidth>
+              <InputLabel htmlFor="surname">Επώνυμο</InputLabel>
+              <Input
+                id="surname"
+                name="surname"
+                type="name"
+                onChange={onCreateFormChange}
+                autoFocus
+                inputProps={{
+                  title: "Eισάγετε Επώνυμο"
+                }}
+              />
+            </FormControl>
+            <FormControl margin="dense" fullWidth>
+              <InputLabel shrink={true} htmlFor="address">
+                Διεύθυνση
+              </InputLabel>
 
-              <TableCell>name</TableCell>
-              <TableCell>surname</TableCell>
-              <TableCell>email</TableCell>
-              <TableCell>Birthday</TableCell>
+              <Input
+                id="address"
+                type="text"
+                onChange={onCreateFormChange}
+                fullWidth
+                inputProps={{
+                  title: "Eισάγετε Διεύθυνση"
+                }}
+              />
+            </FormControl>
+            <FormControl margin="dense" fullWidth>
+              <InputLabel shrink={true} htmlFor="number">
+                Έτος Γέννησης
+              </InputLabel>
 
-              <TableCell>address</TableCell>
-              <TableCell>Activate/Deactivate Volunteer</TableCell>
-              <TableCell>Edit Volunteer</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {tabledata.map(function(item, key) {
-              return (
-                <TableRow
-                  key={item.id}
-                  onClick={() => onRowClick(item.id)}
-                  className={classes.row}
-                  hover
-                >
-                  <TableCell>{item.username}</TableCell>
+              <Input
+                id="birthdate"
+                type="number"
+                onChange={onCreateFormChangeNumber}
+                fullWidth
+                inputProps={{
+                  title: "Eισάγετε Έτος Γέννησης",
+                  max: 2010,
+                  min: 1950,
 
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.surname}</TableCell>
-                  <TableCell>{item.email}</TableCell>
+                  step: "1"
+                }}
+              />
+            </FormControl>
+            <FormControl
+              component="fieldset"
+              className={classes.formControl}
+              required
+            >
+              <FormLabel component="legend">Γένος</FormLabel>
+              <RadioGroup
+                aria-label="Gender"
+                name="gender1"
+                className={classes.group}
+                value={gender}
+                onChange={onGenderChange}
+              >
+                <FormControlLabel
+                  value="0"
+                  control={<Radio color="primary" />}
+                  label="Aνδρας"
+                />
+                <FormControlLabel
+                  value="1"
+                  control={<Radio />}
+                  label="Γυναίκα"
+                />
+              </RadioGroup>
+            </FormControl>
+            <FormControl margin="dense" fullWidth>
+              <InputLabel htmlFor="history">Ιστορικό</InputLabel>
 
-                  <TableCell>{item.dateofbirth}</TableCell>
-                  <TableCell>{item.address}</TableCell>
+              <Input
+                id="history"
+                type="text"
+                onChange={onCreateFormChange}
+                fullWidth
+                inputProps={{
+                  title: "Iστορικό Ασθενή"
+                }}
+                multiline
+              />
+            </FormControl>
+            <FormControl margin="dense" fullWidth>
+              <InputLabel htmlFor="description">Περιγραφή</InputLabel>
 
-                  <Activity
-                    status={item.status}
-                    onOffClick={e => {
-                      this.handleOnOffButtonClick(e);
-                      // this.props.onEditVolunteer(item.id);
-                    }}
-                    onOnClick={(e, id) => {
-                      this.handleClick(e);
-                      this.props.onEditVolunteer(item.id);
-                    }}
-                  />
-                  <Snackbar
-                    anchorOrigin={{ vertical, horizontal }}
-                    open={openSnack}
-                    // onClose={this.handleClose}
-                    ContentProps={{
-                      "aria-describedby": "message-id"
-                    }}
-                    message={
-                      <span id="message-id">
-                        Are you sure you want to deactivate this User?
-                      </span>
-                    }
-                    action={[
-                      <Button
-                        key="Deactivate"
-                        color="primary"
-                        size="small"
-                        onClick={e => this.handleActivity(e, item.status)}
-                      >
-                        Deactivate
-                      </Button>,
+              <Input
+                id="description"
+                type="text"
+                onChange={onCreateFormChange}
+                fullWidth
+                inputProps={{
+                  title: "Περιγραφή Ασθενή"
+                }}
+                multiline
+              />
+            </FormControl>
+          </DialogContent>
 
-                      <Button
-                        key="undo"
-                        color="secondary"
-                        size="small"
-                        onClick={e => this.handleClose(e)}
-                      >
-                        Cancel
-                      </Button>
-                    ]}
-                  />
-                  <TableCell>
-                    <Button onClick={e => onEditClick(e, item.id)}>
-                      <EditIcon />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </Paper>
+          <DialogActions>
+            <Button onClick={onClose} color="primary">
+              Ακυρωση
+            </Button>
+            <Button type="submit" color="primary" disabled={!hasChanged}>
+              Εισαγωγη
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
     );
   }
 }
 
-VolunteerTable.propTypes = {
-  tabledata: PropTypes.array.isRequired,
-  onRowClick: PropTypes.func.isRequired,
-  onEditClick: PropTypes.func.isRequired,
-  onEditVolunteer: PropTypes.func.isRequired,
-  classes: PropTypes.object.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onSetVolunteerActivity: PropTypes.func.isRequired,
-  id: PropTypes.string
-};
-const VolunteerTableWithStyles = withStyles(styles)(VolunteerTable);
+const InsertPatientDialogWithStyles = withStyles(styles)(InsertPatientDialog);
 const mapStateToProps = state => ({
-  id: state.id
-});
-const mapDispatchToProps = dispatch => ({
-  onClose: id => dispatch(idCleaner(id)),
-  onSetVolunteerActivity: (status, id) =>
-    dispatch(setVolunteerActivity(status, id)),
-  onEditVolunteer: id => dispatch(editVolunteer(id))
+  volunteerData:
+    state.volunteers.filter(volunteer => volunteer.id === state.id)[0] || {}
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(VolunteerTableWithStyles);
+InsertPatientDialog.propTypes = {
+  classes: PropTypes.object.isRequired,
+  onClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  hasChanged: PropTypes.bool,
+  onCreateFormChange: PropTypes.func,
+  onCreateFormChangeNumber: PropTypes.func,
+  onGenderChange: PropTypes.func.isRequired,
+  gender: PropTypes.string.isRequired,
+  onCreate: PropTypes.func
+};
+
+export default connect(mapStateToProps)(InsertPatientDialogWithStyles);
