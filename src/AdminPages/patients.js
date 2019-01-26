@@ -36,6 +36,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import MySnackbarContentWrapper from "../components/MySnackbarContentWrapper";
 import EditIcon from "@material-ui/icons/Edit";
 import EditPatientDialog from "../components/PatientComponents/EditPatientDialog";
+import PatientCard from "../components/PatientComponents/PatientCard";
 
 const styles = theme => ({
   root: {
@@ -95,7 +96,8 @@ class patients extends Component {
       history: "",
       birthdate: "",
       description: "",
-      openEditDialog: false
+      openEditDialog: false,
+      openCard: false
     };
   }
   componentDidUpdate(prevProps) {
@@ -218,6 +220,19 @@ class patients extends Component {
   handleGenderChange = event => {
     this.setState({ gender: event.target.value, hasChanged: true });
   };
+  handleRowClick = (e, id) => {
+    e.stopPropagation();
+
+    this.setState({
+      openCard: true
+    });
+    this.props.onEditPatient(id);
+  };
+  handleCardClose = () => {
+    this.setState({ openCard: false });
+    const id = this.props.id;
+    this.props.onCloseDialog(id);
+  };
 
   render() {
     const { classes, patients, errormessage, patient } = this.props;
@@ -252,7 +267,12 @@ class patients extends Component {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(row => {
                   return (
-                    <TableRow key={row.id} className={classes.row} hover>
+                    <TableRow
+                      key={row.id}
+                      className={classes.row}
+                      hover
+                      onClick={e => this.handleRowClick(e, row.id)}
+                    >
                       <TableCell>{row.name}</TableCell>
                       <TableCell>{row.surname}</TableCell>
                       <TableCell>{row.address}</TableCell>
@@ -264,7 +284,7 @@ class patients extends Component {
                       <TableCell>
                         {row.gender === "m" ? (
                           <MuiThemeProvider theme={theme}>
-                            <Tooltip title="Άντρας" placement="bottom">
+                            <Tooltip title="Άνδρας" placement="bottom">
                               <IconButton
                                 color="primary"
                                 aria-label="Directions"
@@ -371,6 +391,11 @@ class patients extends Component {
             hasChanged={this.state.hasChanged}
             onUpdate={this.handleUpdate}
             patient={patient}
+          />
+          <PatientCard
+            open={this.state.openCard}
+            onClose={this.handleCardClose}
+            scroll={this.state.scroll}
           />
         </Paper>
         <Snackbar
