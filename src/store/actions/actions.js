@@ -25,6 +25,8 @@ import { CLEAN_DEFIBRILLATOR_DATA } from "../actions/types";
 import { NEW_PATIENT } from "../actions/types";
 import { CLEAN_PATIENT_DATA } from "../actions/types";
 import { UPDATE_PATIENT } from "../actions/types";
+import { NEW_ADMIN } from "../actions/types";
+import { CLEAN_ADMIN_DATA } from "../actions/types";
 
 import history from "../../history";
 
@@ -246,7 +248,35 @@ export const newPatient = (dispatch, userData) => {
       alert(error, "SERVER error 500 ");
     });
 };
+export const newAdmin = (dispatch, adminData) => {
+  fetch(`http://localhost:8080/api/insertadmin`, {
+    method: "POST",
+    cache: "no-cache",
+    headers: {
+      ...headers,
+      Authorization: "Bearer " + sessionStorage.getItem("token")
+    },
+    redirect: "follow",
+    referrer: "no-referrer",
+    body: JSON.stringify(adminData)
+  })
+    .then(result => result.json())
+    .then(res => {
+      res.httpstatus === "error"
+        ? dispatch({
+            type: ISINVALID,
+            payload: res
+          })
+        : dispatch({
+            type: NEW_ADMIN,
+            payload: res
+          });
+    })
 
+    .catch(error => {
+      alert(error, "SERVER error 500 ");
+    });
+};
 export const errorMessageCleaner = errormessage => dispatch => {
   dispatch({
     type: CLEAR_ISINVALID,
@@ -278,6 +308,12 @@ export const clearPatientData = patientData => dispatch => {
   dispatch({
     type: CLEAN_PATIENT_DATA,
     payload: patientData
+  });
+};
+export const clearAdminData = adminData => dispatch => {
+  dispatch({
+    type: CLEAN_ADMIN_DATA,
+    payload: adminData
   });
 };
 

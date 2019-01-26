@@ -207,15 +207,25 @@ class App extends React.Component {
                 </Link>
                 <Link to="/home" className={classes.link}>
                   <ListItem>
-                    <Tooltip title="Αρχική" placement="right">
+                    <Tooltip title="Προφίλ Διαχειριστή" placement="right">
                       <ListItemIcon>
-                        <i className="material-icons">account_circle</i>
+                        <i className="material-icons">home</i>
                       </ListItemIcon>
                     </Tooltip>
                     <ListItemText primary="Προφίλ Διαχειριστή" />
                   </ListItem>
                 </Link>
                 <Divider />
+                <Link to="/admin" className={classes.link}>
+                  <ListItem>
+                    <Tooltip title="Διαχειριστές" placement="right">
+                      <ListItemIcon>
+                        <i className="material-icons">account_circle</i>
+                      </ListItemIcon>
+                    </Tooltip>
+                    <ListItemText primary="Περιστατικό" />
+                  </ListItem>
+                </Link>
                 <Link to="/Volunteers" className={classes.link}>
                   <ListItem>
                     <Tooltip title="Εθελοντές" placement="right">

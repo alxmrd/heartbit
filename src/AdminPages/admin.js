@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import Tooltip from "@material-ui/core/Tooltip";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -8,8 +8,23 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core";
-import { fetchAdmin } from "../store/actions/actions";
+import {
+  fetchAdmin,
+  newAdmin,
+  errorMessageCleaner,
+  clearAdminData
+} from "../store/actions/actions";
 import { connect } from "react-redux";
+import { Fab } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import InsertAdminDialog from "../components/AdminComponents/InsertAdminDialog";
+import TablePaginationActionsWrapped from "../components/TablePaginationActions";
+import TableFooter from "@material-ui/core/TableFooter";
+import TablePagination from "@material-ui/core/TablePagination";
+import Snackbar from "@material-ui/core/Snackbar";
+import MySnackbarContentWrapper from "../components/MySnackbarContentWrapper";
 
 const styles = theme => ({
   root: {
@@ -24,9 +39,18 @@ const styles = theme => ({
     margin: theme.spacing.unit * 2
   },
   absolute: {
-    position: "absolute",
-    bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 3
+    position: "fixed",
+    bottom: theme.spacing.unit * 6.5,
+    right: theme.spacing.unit * 3,
+    boxShadow: "5px 5px  5px grey "
+  },
+  row: {
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.background.default
+    }
+  },
+  tableWrapper: {
+    float: "right"
   }
 });
 
@@ -36,75 +60,239 @@ class admin extends Component {
     this.props = props;
     this.state = {
       data: [],
-      open: false
+      page: 0,
+      rowsPerPage: 5,
+      open: false,
+      hasChanged: false,
+      showPassword: false,
+      type: "",
+      name: "",
+      surname: "",
+      email: "",
+      address: "",
+      username: "",
+      password: ""
     };
+  }
+  componentDidMount() {
+    // If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
+    this.props.onfetchAdmin();
+  }
+  componentDidUpdate(prevProps) {
+    // Typical usage (don't forget to compare props):
+    // if (this.props.patient !== prevProps.patient) {
+    //   this.setState({
+    //     ...this.props.patient
+    //   });
+    // }
+    if (
+      this.props.newAdmin.message !== prevProps.newAdmin.message &&
+      this.props.newAdmin.message === "success"
+    ) {
+      this.handleDialogClose();
+      // this.handleCloseEditDialog();
+      const newAdminData = this.props.newAdmin;
+
+      this.props.onClearAdminData(newAdminData);
+    }
   }
   handleClickOpen = () => {
     this.setState({ open: true });
   };
 
-  handleClose = () => {
-    this.setState({ open: false });
+  handleDialogClose = () => {
+    this.setState({
+      open: false,
+      hasChanged: false,
+      showPassword: false,
+      type: "",
+      name: "",
+      surname: "",
+      email: "",
+      address: "",
+      username: "",
+      password: ""
+    });
+  };
+  handleClickShowPassword = () => {
+    this.setState(state => ({ showPassword: !state.showPassword }));
+  };
+  handleChangePage = (event, page) => {
+    this.setState({ page });
+  };
+  handleChangeRowsPerPage = event => {
+    this.setState({ rowsPerPage: event.target.value });
   };
 
-  componentDidMount() {
-    // If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
-    this.props.onfetchAdmin();
-  }
+  onGenerate = event => {
+    event.preventDefault();
+
+    var generator = require("generate-password");
+
+    var password = generator.generate({
+      length: 10,
+      numbers: true
+    });
+
+    // 'uEyMTw32v9'
+    this.setState({
+      password: password,
+      hasChanged: true
+    });
+  };
+  handleChange = event => {
+    this.setState({
+      [event.target.id]: event.target.value,
+
+      hasChanged: true
+    });
+  };
+  handleSubmit = event => {
+    event.preventDefault();
+
+    const dataPouStelnw = {
+      type: this.state.type,
+      email: this.state.email,
+      name: this.state.name,
+      surname: this.state.surname,
+      username: this.state.username,
+      address: this.state.address,
+      password: this.state.password
+    };
+
+    this.props.onNewAdmin(dataPouStelnw);
+  };
 
   render() {
-    const { classes, admin } = this.props;
+    const { classes, admin, errormessage } = this.props;
+    const { rowsPerPage, page } = this.state;
     return (
-      <Paper className={classes.root}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>id</TableCell>
-              <TableCell>type</TableCell>
-              <TableCell>name</TableCell>
-              <TableCell>surname</TableCell>
-              <TableCell>email</TableCell>
-              <TableCell>address</TableCell>
-              <TableCell>username</TableCell>
-              <TableCell>password</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {admin.map(function(item, key) {
-              return (
-                <TableRow key={item.id}>
-                  <TableCell component="th" scope="item">
-                    {item.id}
-                  </TableCell>
-                  <TableCell>{item.type}</TableCell>
-                  <TableCell>{item.name}</TableCell>
+      <React.Fragment>
+        <div className={classes.root}>
+          <Toolbar>
+            <i className="material-icons teal600 md-36">account_circle</i>
+            <Typography variant="h6" color="inherit" className={classes.grow}>
+              Διαχειριστές
+            </Typography>
+          </Toolbar>
+        </div>
+        <Paper className={classes.root}>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Tύπος</TableCell>
+                <TableCell>Όνομα</TableCell>
+                <TableCell>Επώνυμο</TableCell>
+                <TableCell>Ε-mail</TableCell>
+                <TableCell>Διεύθυνση</TableCell>
+                <TableCell>Όνομα Χρήστη</TableCell>
+                <TableCell>Κωδικός</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {admin
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map(row => {
+                  return (
+                    <TableRow key={row.id} hover className={classes.row}>
+                      <TableCell>{row.type}</TableCell>
+                      <TableCell>{row.name}</TableCell>
 
-                  <TableCell>{item.surname}</TableCell>
-                  <TableCell>{item.email}</TableCell>
-                  <TableCell>{item.address}</TableCell>
-                  <TableCell>{item.username}</TableCell>
-                  <TableCell>{item.password}</TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </Paper>
+                      <TableCell>{row.surname}</TableCell>
+                      <TableCell>{row.email}</TableCell>
+                      <TableCell>{row.address}</TableCell>
+                      <TableCell>{row.username}</TableCell>
+                      <TableCell>{row.password}</TableCell>
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+            <TableFooter className={classes.tableWrapper}>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  colSpan={3}
+                  count={admin.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  SelectProps={{
+                    native: false
+                  }}
+                  onChangePage={this.handleChangePage}
+                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                  ActionsComponent={TablePaginationActionsWrapped}
+                />
+              </TableRow>
+            </TableFooter>
+          </Table>
+          <Tooltip title="Εισαγωγή Ασθενή">
+            <Fab
+              onClick={this.handleClickOpen}
+              color="secondary"
+              className={classes.absolute}
+            >
+              <AddIcon />
+            </Fab>
+          </Tooltip>
+          <InsertAdminDialog
+            open={this.state.open}
+            onCreateFormChange={this.handleChange}
+            onCreate={this.handleSubmit}
+            onClose={this.handleDialogClose}
+            Generate={this.onGenerate}
+            password={this.state.password}
+            onPasswordVisibility={this.handleClickShowPassword}
+            visibility={this.state.showPassword}
+            hasChanged={this.state.hasChanged}
+          />
+        </Paper>
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left"
+          }}
+          open={errormessage ? true : false}
+          autoHideDuration={6000}
+          onClose={errormessage =>
+            this.props.onErrorMessageCleaner(errormessage)
+          }
+        >
+          <MySnackbarContentWrapper
+            onClose={errormessage =>
+              this.props.onErrorMessageCleaner(errormessage)
+            }
+            variant="error"
+            className={classes.margin}
+            message={errormessage}
+          />
+        </Snackbar>
+      </React.Fragment>
     );
   }
 }
 admin.propTypes = {
   classes: PropTypes.object.isRequired,
   onfetchAdmin: PropTypes.func.isRequired,
-  admin: PropTypes.array.isRequired
+  admin: PropTypes.array.isRequired,
+  onNewAdmin: PropTypes.func.isRequired,
+  errormessage: PropTypes.string,
+  onErrorMessageCleaner: PropTypes.func.isRequired,
+  newAdmin: PropTypes.object,
+  onClearAdminData: PropTypes.func
 };
 const adminWithStyles = withStyles(styles)(admin);
 const mapStateToProps = state => ({
-  admin: state.admin
+  admin: state.admin,
+  errormessage: state.error.admmessage,
+  newAdmin: state.adminSuccessData
 });
 
 const mapDispatchToProps = dispatch => ({
-  onfetchAdmin: () => fetchAdmin(dispatch)
+  onfetchAdmin: () => fetchAdmin(dispatch),
+  onNewAdmin: dataPouStelnw => newAdmin(dispatch, dataPouStelnw),
+  onErrorMessageCleaner: errormessage =>
+    dispatch(errorMessageCleaner(errormessage)),
+  onClearAdminData: newAdminData => dispatch(clearAdminData(newAdminData))
 });
 
 export default connect(

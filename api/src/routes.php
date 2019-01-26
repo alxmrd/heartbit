@@ -1125,6 +1125,160 @@ $app->post('/api/editpatient/{id}', function (ServerRequestInterface $request, R
 
 });
 
+$app->post('/api/insertadmin', function (ServerRequestInterface $request, ResponseInterface $response, array $args) {
+    global $pdo;
+    require_once 'validation/validationRules.php';
+    $adminData = json_decode(file_get_contents('php://input'));
+
+    $username = $adminData->{'username'};
+    $name = $adminData->{'name'};
+    $surname = $adminData->{'surname'};
+    $password = $adminData->{'password'};
+ 
+
+    $address = $adminData->{'address'};
+    $email = $adminData->{'email'};
+    $type = $adminData->{'type'};
+
+    if (!$usernameValidator->validate($username)) {
+        $message = "Πληκτρολογήσατε μη αποδεκτό Όνομα Χρήστη.";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->admmessage = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+    if (!$nameValidator->validate($name)) {
+        $message = "Πληκτρολογήσατε μη αποδεκτό Όνομα.";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->admmessage = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+    if (!$surnameValidator->validate($surname)) {
+        $message = "Πληκτρολογήσατε μη αποδεκτό Επώνυμο.";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->admmessage = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+    if (!$emailValidator->validate($email)) {
+        $message = "Μη αποδεκτή μορφή E-mail.";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->admmessage = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+    if (!$adminTypeValidator->validate($type)) {
+        $message = "Πληκτρολογήσατε μη αποδεκτό Tύπο διαχειριστή.";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->admmessage = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+   
+ 
+   
+
+    if (!$addressValidator->validate($address)) {
+        $message = "Mη αποδεκτή μορφή Διεύθυνσης. ";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->admmessage = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    }
+  
+
+    $query = "SELECT * FROM ekab WHERE username=:username";
+    $result = $pdo->prepare($query);
+    $result->execute(array(':username' => $username));
+    $count = $result->rowCount();
+    $user = $result->fetch(PDO::FETCH_BOTH);
+
+    if ($count == 1 && !empty($user)) {
+        $message = "Υπάρχει ήδη διαχειριστής με αυτο το Όνομα Χρήστη";
+        $httpstatus = "error";
+        $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message);
+        $myObj = new stdClass();
+        $myObj->admmessage = $message;
+        $myObj->httpstatus = $httpstatus;
+        $response = $response->withJson($myObj, 409);
+
+        return $response;
+    } else {
+        $query = "SELECT * FROM ekab WHERE email=:email";
+        $result = $pdo->prepare($query);
+        $result->execute(array(':email' => $email));
+        $count = $result->rowCount();
+        $user = $result->fetch(PDO::FETCH_BOTH);
+        if ($count == 1 && !empty($user)) {
+            $message = "Υπάρχει ήδη διαχειριστής με αυτο το E-mail";
+            $httpstatus = "error";
+            $data = array('httpstatus' => $httpstatus, 'data' => null, 'message' => $message, 409);
+            $myObj = new stdClass();
+            $myObj->admmessage = $message;
+            $myObj->httpstatus = $httpstatus;
+            $response = $response->withJson($myObj, 409);
+
+            return $response;
+        } else {
+           
+            $query = "INSERT INTO ekab (username,name,surname,password,email,address,type) VALUES (:username,:name,:surname,:password,:email,:address,:type)";
+            $result = $pdo->prepare($query);
+
+            $result->execute(array(':username' => $username, ':name' => $name, ':surname' => $surname, ':password' => $password, ':email' => $email, ':address' => $address, ':type' => $type));
+            $lastId = $pdo->lastInsertId();
+          
+            $message = "success";
+            //  $response=json_encode($lastId);
+            $myObj = new stdClass();
+            $myObj->id = $lastId;
+            $myObj->username = $username;
+            $myObj->name = $name;
+            $myObj->surname = $surname;
+            $myObj->password = $password;
+            $myObj->email = $email;
+            $myObj->type = $type;
+            $myObj->tel2 = $tel2;
+    
+            $myObj->address = $address;
+
+            
+            $myObj->message = $message;
+           
+
+            $response = json_encode($myObj, JSON_NUMERIC_CHECK);
+
+            return $response;
+
+        }
+    }
+
+});
+
 $app->add(function ($req, $res, $next) {
     $response = $next($req, $res);
     return $response
