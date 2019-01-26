@@ -31,7 +31,8 @@ import Snackbar from "@material-ui/core/Snackbar";
 import MySnackbarContentWrapper from "../components/MySnackbarContentWrapper";
 import EditIcon from "@material-ui/icons/Edit";
 import { IconButton } from "@material-ui/core";
-
+import AdminCard from "../components/AdminComponents/AdminCard";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 const styles = theme => ({
   root: {
     width: "100%",
@@ -78,7 +79,8 @@ class admin extends Component {
       email: "",
       address: "",
       username: "",
-      password: ""
+      password: "",
+      openCard: false
     };
   }
   componentDidMount() {
@@ -105,6 +107,20 @@ class admin extends Component {
   }
   handleClickOpen = () => {
     this.setState({ open: true });
+  };
+  handleClickAway = () => {
+    this.setState({
+      open: false,
+      hasChanged: false,
+      showPassword: false,
+      type: "",
+      name: "",
+      surname: "",
+      email: "",
+      address: "",
+      username: "",
+      password: ""
+    });
   };
 
   handleDialogClose = () => {
@@ -206,6 +222,28 @@ class admin extends Component {
     const id = this.props.id;
     this.props.onUpdateAdmin(id, dataPouStelnw);
   };
+  handleRowClick = (e, id) => {
+    e.stopPropagation();
+
+    this.setState({
+      openCard: true
+    });
+    this.props.onEditAdmin(id);
+  };
+  handleCardClose = () => {
+    this.setState({
+      openCard: false,
+      type: "",
+      name: "",
+      surname: "",
+      email: "",
+      address: "",
+      username: "",
+      password: ""
+    });
+    const id = this.props.id;
+    this.props.onCloseDialog(id);
+  };
 
   render() {
     const { classes, admins, errormessage, admin } = this.props;
@@ -239,7 +277,12 @@ class admin extends Component {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(row => {
                   return (
-                    <TableRow key={row.id} hover className={classes.row}>
+                    <TableRow
+                      key={row.id}
+                      hover
+                      className={classes.row}
+                      onClick={e => this.handleRowClick(e, row.id)}
+                    >
                       <TableCell>{row.type}</TableCell>
                       <TableCell>{row.name}</TableCell>
 
@@ -292,29 +335,43 @@ class admin extends Component {
               <AddIcon />
             </Fab>
           </Tooltip>
-          <InsertAdminDialog
-            open={this.state.open}
-            onCreateFormChange={this.handleChange}
-            onCreate={this.handleSubmit}
-            onClose={this.handleDialogClose}
-            Generate={this.onGenerate}
-            password={this.state.password}
-            onPasswordVisibility={this.handleClickShowPassword}
-            visibility={this.state.showPassword}
-            hasChanged={this.state.hasChanged}
-          />
-          <EditAdminDialog
-            open={this.state.openEditDialog}
-            onEditFormChange={this.handleChange}
-            onUpdate={this.handleUpdate}
-            onClose={this.handleCloseEditDialog}
-            Generate={this.onGenerate}
-            password={this.state.password}
-            onPasswordVisibility={this.handleClickShowPassword}
-            visibility={this.state.showPassword}
-            hasChanged={this.state.hasChanged}
-            admin={admin}
-          />
+          <ClickAwayListener onClickAway={this.handleClickAway}>
+            <InsertAdminDialog
+              open={this.state.open}
+              onCreateFormChange={this.handleChange}
+              onCreate={this.handleSubmit}
+              onClose={this.handleDialogClose}
+              Generate={this.onGenerate}
+              password={this.state.password}
+              onPasswordVisibility={this.handleClickShowPassword}
+              visibility={this.state.showPassword}
+              hasChanged={this.state.hasChanged}
+            />
+          </ClickAwayListener>
+          <ClickAwayListener onClickAway={this.handleClickAway}>
+            <EditAdminDialog
+              open={this.state.openEditDialog}
+              onEditFormChange={this.handleChange}
+              onUpdate={this.handleUpdate}
+              onClose={this.handleCloseEditDialog}
+              Generate={this.onGenerate}
+              password={this.state.password}
+              onPasswordVisibility={this.handleClickShowPassword}
+              visibility={this.state.showPassword}
+              hasChanged={this.state.hasChanged}
+              admin={admin}
+            />
+          </ClickAwayListener>
+          <ClickAwayListener onClickAway={this.handleClickAway}>
+            <AdminCard
+              open={this.state.openCard}
+              onClose={this.handleCardClose}
+              scroll={this.state.scroll}
+              onPasswordVisibility={this.handleClickShowPassword}
+              visibility={this.state.showPassword}
+              password={this.state.password}
+            />
+          </ClickAwayListener>
         </Paper>
         <Snackbar
           anchorOrigin={{
