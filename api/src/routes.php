@@ -1476,6 +1476,23 @@ $app->get('/api/login/success', function (ServerRequestInterface $request, Respo
 
    
 });
+$app->post('/api/arduino/simulator', function (ServerRequestInterface $request, ResponseInterface $response, array $args) {
+    global $pdo;
+
+   $locker = $request->getQueryParam('locker');
+   $defibrillator_id=$request->getQueryParam('id');
+
+   $myObj = new stdClass();
+   $myObj->locker = $locker;
+   $myObj->id = $defibrillator_id;
+
+
+   
+  
+    return json_encode($myObj);
+
+   
+});
 
 $app->add(function ($req, $res, $next) {
     $response = $next($req, $res);

@@ -124,7 +124,7 @@ class Home extends React.Component {
             />
 
             <TextField
-              key={loggedInAdmin.id}
+              // key={loggedInAdmin.id}
               id="email"
               type="email"
               label="email"
@@ -139,7 +139,7 @@ class Home extends React.Component {
             />
 
             <TextField
-              key={loggedInAdmin.id}
+              // key={loggedInAdmin.id}
               id="address"
               type="address"
               label="Διεύθυνση"

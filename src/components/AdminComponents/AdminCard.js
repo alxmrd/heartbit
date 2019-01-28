@@ -71,7 +71,7 @@ class AdminCard extends React.Component {
             />
           }
           // subheader="Όνομα Χρήστη"
-          title="Kαρτέλα Διαχειρισ΄τη"
+          title="Kαρτέλα Διαχειριστή"
         />
 
         <Divider />
