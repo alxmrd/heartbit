@@ -12,7 +12,7 @@ export default () => (
         // className={classes.LoginButton}
         onClick={() => sessionStorage.clear()}
       >
-        <Link to="/">RETURN TO LOGIN</Link>
+        <Link to={`${process.env.PUBLIC_URL}/`}>RETURN TO LOGIN</Link>
       </Button>
     )}
   </div>
