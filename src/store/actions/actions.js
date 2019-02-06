@@ -55,7 +55,7 @@ export const fetchVolunteers = dispatch => {
     )
     .catch(error => {
       alert("Απαιτείται σύνδεση");
-      history.push("/login");
+      history.push("/");
     });
 };
 
@@ -76,7 +76,7 @@ export const fetchDefifrillators = dispatch => {
     )
     .catch(error => {
       alert("Απαιτείται σύνδεση");
-      history.push("/login");
+      history.push("/");
     });
 };
 export const changeDefibrillatorFlag = defibrillatorData => dispatch => {
@@ -146,7 +146,7 @@ export const fetchAdmin = dispatch => {
     )
     .catch(error => {
       alert("Απαιτείται σύνδεση");
-      history.push("/login");
+      history.push("/");
     });
 };
 
@@ -167,7 +167,7 @@ export const fetchEvents = dispatch => {
     )
     .catch(error => {
       alert("Απαιτείται σύνδεση");
-      history.push("/login");
+      history.push("/");
     });
 };
 
@@ -188,7 +188,7 @@ export const fetchPatients = dispatch => {
     )
     .catch(error => {
       alert("Απαιτείται σύνδεση");
-      history.push("/login");
+      history.push("/");
     });
 };
 

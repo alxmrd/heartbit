@@ -1,6 +1,6 @@
 <IfModule mod_rewrite.c>
-   RewriteEngine on
-   RewriteRule ^$  http://zafora.icte.uowm.gr/~ictest00661//     [L]
-   RewriteRule (.*) http://zafora.icte.uowm.gr/~ictest00661//$1 [L]
-   RewriteRule .* - [env=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]
 </IfModule>

@@ -158,13 +158,13 @@ class App extends React.Component {
                       className={classes.LoginButton}
                       onClick={() => sessionStorage.clear()}
                     >
-                      <Link to="/login" className={classes.link}>
+                      <Link to="/" className={classes.link}>
                         ΑΠΟΣΥΝΔΕΣΗ
                       </Link>
                     </Button>
                   ) : (
                     <Button color="inherit" className={classes.LoginButton}>
-                      <Link to="/login" className={classes.link}>
+                      <Link to="/" className={classes.link}>
                         LOGIN
                       </Link>
                     </Button>

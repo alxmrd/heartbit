@@ -1,7 +1,7 @@
 {
   "name": "heartbit",
   "version": "0.1.0",
-  "homepage": "http://zafora.icte.uowm.gr/~ictest00661/api/public/heartbit",
+  "homepage": "http://alxmrd.com/",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^3.8.1",

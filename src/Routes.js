@@ -19,7 +19,7 @@ export default function route() {
       <Route path="/patients" exact component={patients} />
       <Route path="/admin" exact component={admin} />
       <Route path="/event" exact component={event} />
-      <Route path="/login" exact component={Login} />
+      <Route path="/" exact component={Login} />
       <Route path="/AppMapContainer" exact component={AppMapContainer} />
 
       <Route component={NotFound} />
