@@ -1,5 +1,5 @@
 export const PostData = (type, userData) => {
-  let url = `http://localhost:8080/api/${type}`;
+  let url = `${process.env.REACT_APP_URL}/api/${type}`;
 
   return new Promise((resolve, reject) => {
     fetch(url, {

@@ -39,7 +39,7 @@ const headers = {
 };
 
 export const fetchVolunteers = dispatch => {
-  fetch(`http://localhost:8080/api/volunteers`, {
+  fetch(`${process.env.REACT_APP_URL}/api/volunteers`, {
     headers: {
       ...headers,
       Authorization: "Bearer " + sessionStorage.getItem("token")
@@ -60,7 +60,7 @@ export const fetchVolunteers = dispatch => {
 };
 
 export const fetchDefifrillators = dispatch => {
-  fetch(`http://localhost:8080/api/defibrillators`, {
+  fetch(`${process.env.REACT_APP_URL}/api/defibrillators`, {
     headers: {
       ...headers,
       Authorization: "Bearer " + sessionStorage.getItem("token")
@@ -80,7 +80,7 @@ export const fetchDefifrillators = dispatch => {
     });
 };
 export const changeDefibrillatorFlag = defibrillatorData => dispatch => {
-  fetch(`http://localhost:8080/api/defibrillator/presentflag`, {
+  fetch(`${process.env.REACT_APP_URL}/api/defibrillator/presentflag`, {
     method: "POST",
     cache: "no-cache",
     headers: {
@@ -105,7 +105,7 @@ export const changeDefibrillatorFlag = defibrillatorData => dispatch => {
 };
 
 export const changeDefibrillatorLocker = defibrillatorData => dispatch => {
-  fetch(`http://localhost:8080/api/defibrillator/locker`, {
+  fetch(`${process.env.REACT_APP_URL}/api/defibrillator/locker`, {
     method: "POST",
     cache: "no-cache",
     headers: {
@@ -130,7 +130,7 @@ export const changeDefibrillatorLocker = defibrillatorData => dispatch => {
 };
 
 export const fetchAdmin = dispatch => {
-  fetch(`http://localhost:8080//api/admin`, {
+  fetch(`${process.env.REACT_APP_URL}//api/admin`, {
     headers: {
       ...headers,
       Authorization: "Bearer " + sessionStorage.getItem("token")
@@ -151,7 +151,7 @@ export const fetchAdmin = dispatch => {
 };
 
 export const fetchEvents = dispatch => {
-  fetch(`http://localhost:8080//api/event`, {
+  fetch(`${process.env.REACT_APP_URL}//api/event`, {
     headers: {
       ...headers,
       Authorization: "Bearer " + sessionStorage.getItem("token")
@@ -172,7 +172,7 @@ export const fetchEvents = dispatch => {
 };
 
 export const fetchPatients = dispatch => {
-  fetch(`http://localhost:8080//api/patients`, {
+  fetch(`${process.env.REACT_APP_URL}//api/patients`, {
     headers: {
       ...headers,
       Authorization: "Bearer " + sessionStorage.getItem("token")
@@ -193,7 +193,7 @@ export const fetchPatients = dispatch => {
 };
 
 export const newVolunteer = (dispatch, userData) => {
-  fetch(`http://localhost:8080/api/insertvolunteer`, {
+  fetch(`${process.env.REACT_APP_URL}/api/insertvolunteer`, {
     method: "POST",
     cache: "no-cache",
     headers: {
@@ -223,7 +223,7 @@ export const newVolunteer = (dispatch, userData) => {
 };
 
 export const successLogin = ({ username }) => dispatch => {
-  fetch(`http://localhost:8080/api/login/success?input=${username}`, {
+  fetch(`${process.env.REACT_APP_URL}/api/login/success?input=${username}`, {
     method: "GET",
     cache: "no-cache",
     headers: {
@@ -254,7 +254,7 @@ export const successLogin = ({ username }) => dispatch => {
 // };
 
 export const newPatient = (dispatch, userData) => {
-  fetch(`http://localhost:8080/api/insertpatient`, {
+  fetch(`${process.env.REACT_APP_URL}/api/insertpatient`, {
     method: "POST",
     cache: "no-cache",
     headers: {
@@ -283,7 +283,7 @@ export const newPatient = (dispatch, userData) => {
     });
 };
 export const newAdmin = (dispatch, adminData) => {
-  fetch(`http://localhost:8080/api/insertadmin`, {
+  fetch(`${process.env.REACT_APP_URL}/api/insertadmin`, {
     method: "POST",
     cache: "no-cache",
     headers: {
@@ -404,7 +404,7 @@ export const SnackClose = defibrillatorData => dispatch => {
 };
 
 export const updateVolunteer = (id, userData) => dispatch => {
-  fetch(`http://localhost:8080/api/editvolunteer/${id}`, {
+  fetch(`${process.env.REACT_APP_URL}/api/editvolunteer/${id}`, {
     method: "POST",
     headers: {
       ...headers,
@@ -430,7 +430,7 @@ export const updateVolunteer = (id, userData) => dispatch => {
 };
 
 export const updateAdmin = (id, adminData) => dispatch => {
-  fetch(`http://localhost:8080/api/editadmin/${id}`, {
+  fetch(`${process.env.REACT_APP_URL}/api/editadmin/${id}`, {
     method: "POST",
     headers: {
       ...headers,
@@ -455,7 +455,7 @@ export const updateAdmin = (id, adminData) => dispatch => {
     });
 };
 export const updatePatient = (id, patientData) => dispatch => {
-  fetch(`http://localhost:8080/api/editpatient/${id}`, {
+  fetch(`${process.env.REACT_APP_URL}/api/editpatient/${id}`, {
     method: "POST",
     headers: {
       ...headers,
@@ -481,7 +481,7 @@ export const updatePatient = (id, patientData) => dispatch => {
 };
 
 export const updateDefibrillator = defibrillatorData => dispatch => {
-  fetch(`http://localhost:8080/api/editdefibrillator`, {
+  fetch(`${process.env.REACT_APP_URL}/api/editdefibrillator`, {
     method: "POST",
     headers: {
       ...headers,
@@ -514,7 +514,7 @@ export const idCleaner = id => dispatch => {
 };
 
 export const setVolunteerActivity = (sendstatus, id) => dispatch => {
-  fetch(`http://localhost:8080/api/deactivate/${id}`, {
+  fetch(`${process.env.REACT_APP_URL}/api/deactivate/${id}`, {
     method: "POST",
 
     cache: "no-cache",
@@ -541,7 +541,7 @@ export const setVolunteerActivity = (sendstatus, id) => dispatch => {
 };
 
 export const insertEventClick = datapoustelnw => dispatch => {
-  fetch(`http://localhost:8080/api/insertevent`, {
+  fetch(`${process.env.REACT_APP_URL}/api/insertevent`, {
     method: "POST",
     cache: "no-cache",
     headers: {
@@ -568,7 +568,7 @@ export const insertEventClick = datapoustelnw => dispatch => {
 };
 
 export const insertDefibrillatorClick = datapoustelnw => dispatch => {
-  fetch(`http://localhost:8080/api/insertdefibrillator`, {
+  fetch(`${process.env.REACT_APP_URL}/api/insertdefibrillator`, {
     method: "POST",
     cache: "no-cache",
     headers: {
@@ -594,7 +594,7 @@ export const insertDefibrillatorClick = datapoustelnw => dispatch => {
     });
 };
 export const SearchOnVolunteers = ({ searched }) => dispatch => {
-  fetch(`http://localhost:8080/api/volunteer/search?input=${searched}`, {
+  fetch(`${process.env.REACT_APP_URL}/api/volunteer/search?input=${searched}`, {
     method: "GET",
     cache: "no-cache",
     headers: {
