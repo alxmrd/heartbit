@@ -195,7 +195,7 @@ class App extends React.Component {
                   </IconButton>
                 </div>
                 <Divider />
-                <Link to="/Map" className={classes.link}>
+                <Link to="/map" className={classes.link}>
                   <ListItem>
                     <Tooltip title="Χάρτης" placement="right">
                       <ListItemIcon>

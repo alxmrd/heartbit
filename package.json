@@ -1,7 +1,7 @@
 {
   "name": "heartbit",
   "version": "0.1.0",
-  "homepage": "http://alxmrd.com",
+  "homepage": "https://alxmrd.com/",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^3.8.1",

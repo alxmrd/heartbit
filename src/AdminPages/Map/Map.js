@@ -16,7 +16,7 @@ const mapStyles = {
   marginTop: "100px"
 };
 
-export class MapContainer extends Component {
+export class map extends Component {
   state = {
     showingInfoWindow: false, //Hides or the shows the infoWindow
     activeMarker: {}, //Shows the active marker upon click
@@ -106,7 +106,7 @@ export class MapContainer extends Component {
   }
 }
 
-MapContainer.propTypes = {
+map.propTypes = {
   google: PropTypes.object,
   onSearch: PropTypes.func,
   address: PropTypes.string,
@@ -135,7 +135,7 @@ const mapDispatchToProps = dispatch => ({
 
 const WrappedContainer = GoogleApiWrapper({
   apiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
-})(MapContainer);
+})(map);
 
 export default connect(
   mapStateToProps,
