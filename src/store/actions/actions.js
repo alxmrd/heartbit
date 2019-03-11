@@ -130,7 +130,7 @@ export const changeDefibrillatorLocker = defibrillatorData => dispatch => {
 };
 
 export const fetchAdmin = dispatch => {
-  fetch(`${process.env.REACT_APP_URL}//api/admin`, {
+  fetch(`${process.env.REACT_APP_URL}/api/admin`, {
     headers: {
       ...headers,
       Authorization: "Bearer " + sessionStorage.getItem("token")
@@ -151,7 +151,7 @@ export const fetchAdmin = dispatch => {
 };
 
 export const fetchEvents = dispatch => {
-  fetch(`${process.env.REACT_APP_URL}//api/event`, {
+  fetch(`${process.env.REACT_APP_URL}/api/event`, {
     headers: {
       ...headers,
       Authorization: "Bearer " + sessionStorage.getItem("token")
@@ -170,9 +170,23 @@ export const fetchEvents = dispatch => {
       history.push("/");
     });
 };
+export const sendMessage = sendData => dispatch => {
+  fetch(`${process.env.REACT_APP_URL}/api/sendMessage`, {
+    method: "POST",
+    cache: "no-cache",
+    headers: {
+      ...headers,
+      Authorization: "Bearer " + sessionStorage.getItem("token")
+    },
+    redirect: "follow",
+    referrer: "no-referrer",
+    body: JSON.stringify(sendData)
+  })
+  
+};
 
 export const fetchPatients = dispatch => {
-  fetch(`${process.env.REACT_APP_URL}//api/patients`, {
+  fetch(`${process.env.REACT_APP_URL}/api/patients`, {
     headers: {
       ...headers,
       Authorization: "Bearer " + sessionStorage.getItem("token")

@@ -13,7 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ambulance3 from "../ambulance3.png";
 import { connect } from "react-redux";
-import { successLogin } from "../store/actions/actions";
+import { successLogin, sendMessage } from "../store/actions/actions";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { TextField, Divider } from "@material-ui/core";
 
@@ -51,7 +51,7 @@ const styles = theme => ({
 });
 
 class Home extends React.Component {
-  state = { expanded: false };
+  state = { expanded: false, message: "" };
 
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
@@ -62,6 +62,18 @@ class Home extends React.Component {
 
     this.props.onSuccessLogin(username);
   }
+  handleMessageChange = event => {
+    this.setState({
+      [event.target.id]: event.target.value
+    });
+  };
+  handleSendMessage = () => {
+    const sendData = { message: this.state.message };
+    this.props.onSend(sendData);
+    this.setState({
+      message: ""
+    });
+  };
   render() {
     const { classes, loggedInAdmin } = this.props;
 
@@ -154,18 +166,24 @@ class Home extends React.Component {
             />
 
             <TextField
-              id="outlined-textarea"
+              id="message"
               margin="normal"
+              value={this.state.message}
               label="Πληκτρολογείστε Μήνυμα"
               placeholder=""
+              name="message"
               multiline
               variant="outlined"
               className={classes.textField}
               fullWidth
+              onChange={this.handleMessageChange}
               InputProps={{
                 endAdornment: (
                   <InputAdornment variant="outlined" position="end">
-                    <IconButton color="primary">
+                    <IconButton
+                      color="primary"
+                      onClick={this.handleSendMessage}
+                    >
                       <i className="material-icons">send</i>
                     </IconButton>
                   </InputAdornment>
@@ -183,7 +201,8 @@ class Home extends React.Component {
 Home.propTypes = {
   classes: PropTypes.object.isRequired,
   onSuccessLogin: PropTypes.func.isRequired,
-  loggedInAdmin: PropTypes.object.isRequired
+  loggedInAdmin: PropTypes.object.isRequired,
+  onSend: PropTypes.func.isRequired
 };
 const HomeWithStyles = withStyles(styles)(Home);
 
@@ -192,7 +211,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSuccessLogin: username => dispatch(successLogin(username))
+  onSuccessLogin: username => dispatch(successLogin(username)),
+  onSend: sendData => dispatch(sendMessage(sendData))
 });
 
 export default connect(

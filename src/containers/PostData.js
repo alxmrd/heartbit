@@ -1,6 +1,6 @@
 export const PostData = (type, userData) => {
   let url = `${process.env.REACT_APP_URL}/api/${type}`;
-  console.log(process.env.REACT_APP_URL);
+
   return new Promise((resolve, reject) => {
     fetch(url, {
       //credentials: 'include',
