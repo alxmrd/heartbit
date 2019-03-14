@@ -181,8 +181,7 @@ export const sendMessage = sendData => dispatch => {
     redirect: "follow",
     referrer: "no-referrer",
     body: JSON.stringify(sendData)
-  })
-  
+  });
 };
 
 export const fetchPatients = dispatch => {
@@ -553,7 +552,53 @@ export const setVolunteerActivity = (sendstatus, id) => dispatch => {
       alert(error, "error");
     });
 };
+export const sendEvent = datapoustelnw => {
+  return async dispatch => {
+    try {
+      await fetch(`${process.env.REACT_APP_URL}/api/insertevent`, {
+        method: "POST",
+        cache: "no-cache",
+        headers: {
+          ...headers,
+          Authorization: "Bearer " + sessionStorage.getItem("token")
+        },
+        redirect: "follow",
+        referrer: "no-referrer",
+        body: JSON.stringify(datapoustelnw)
+      })
+        .then(result => result.json())
+        .then(res => {
+          res.httpstatus === "error"
+            ? dispatch({
+                type: ISINVALID,
+                payload: res
+              })
+            : dispatch({ type: INSERT_EVENT, payload: res });
+        })
+        .catch(error => error.json())
+        .catch(error => {
+          alert(error, "SERVER error 500 ");
+        });
 
+      fetch(`${process.env.REACT_APP_URL}/api/sendEvent`, {
+        method: "POST",
+        cache: "no-cache",
+        headers: {
+          ...headers,
+          Authorization: "Bearer " + sessionStorage.getItem("token")
+        },
+        redirect: "follow",
+        referrer: "no-referrer",
+        body: JSON.stringify(datapoustelnw)
+      });
+    } catch (e) {
+      dispatch({
+        type: ISINVALID,
+        payload: e
+      });
+    }
+  };
+};
 export const insertEventClick = datapoustelnw => dispatch => {
   fetch(`${process.env.REACT_APP_URL}/api/insertevent`, {
     method: "POST",

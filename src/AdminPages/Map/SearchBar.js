@@ -5,7 +5,7 @@ import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import Typography from "@material-ui/core/Typography";
 import { connect } from "react-redux";
 import {
-  insertEventClick,
+  sendEvent,
   selectPlace,
   clearSelectedPlace,
   errorMessageCleaner,
@@ -138,7 +138,8 @@ class SearchBar extends React.Component {
       address: this.state.address
     };
 
-    this.props.onInsertEventClick(dataPouStelnw);
+    // this.props.onInsertEventClick(dataPouStelnw)
+    this.props.onSendEventToApp(dataPouStelnw);
     this.props.onClearSelectPlace(this.props.selectPlace);
 
     this.setState({
@@ -368,8 +369,8 @@ const mapStateToProps = state => ({
   successmessage: state.successMessage
 });
 const mapDispatchToProps = dispatch => ({
-  onInsertEventClick: (longitude, latitude, address) =>
-    dispatch(insertEventClick(longitude, latitude, address)),
+  onSendEventToApp: (longitude, latitude, address) =>
+    dispatch(sendEvent(longitude, latitude, address)),
   onInsertDefibrillatorClick: (longitude, latitude, address) =>
     dispatch(insertDefibrillatorClick(longitude, latitude, address)),
   onSelectPlace: (longitude, latitude, address) =>
