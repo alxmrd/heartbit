@@ -136,8 +136,8 @@ class defibrillators extends Component {
       id: id,
       presentflag: flag
     };
-    this.props.onFlagClick(defibrillatorData);
-    this.setState({ openSnack: true });
+    this.props.onChangeFlag(defibrillatorData);
+    // this.setState({ openSnack: true });
   };
   handleLocker = (e, id, locker) => {
     e.stopPropagation();
@@ -146,8 +146,8 @@ class defibrillators extends Component {
       id: id,
       locker: locker
     };
-    this.props.onLockerClick(defibrillatorData);
-    this.setState({ openSnack: true });
+    this.props.onChangeLocker(defibrillatorData);
+    // this.setState({ openSnack: true });
   };
   handleYesClick = (e, defibrillatorData) => {
     e.preventDefault();

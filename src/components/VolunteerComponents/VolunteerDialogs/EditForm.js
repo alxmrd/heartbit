@@ -21,9 +21,11 @@ function EditForm({
   onUpdate,
   onClose,
   Generate,
+  RFIDgenerate,
   password,
   onPasswordVisibility,
-  visibility
+  visibility,
+  RFID
 }) {
   return (
     <form onSubmit={onUpdate}>
@@ -226,6 +228,27 @@ function EditForm({
             <option value="Κρήτη">Κρήτη</option>
           </NativeSelect>
         </FormControl>
+        <FormControl margin="dense" fullWidth>
+          <InputLabel htmlFor="rfid">RFID</InputLabel>
+          <Input
+            value={RFID}
+            id="RFID"
+            name="RFID"
+            type="text"
+            //defaultValue={volunteerData.RFID}
+            onChange={onEditFormChange}
+            inputProps={{
+              title: "Eισάγετε RFID "
+            }}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton onClick={RFIDgenerate}>
+                  <i className="material-icons">cached</i>
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        </FormControl>
         <DialogActions>
           <Button onClick={onClose} color="primary">
             ΑΚΥΡΩΣΗ
@@ -249,7 +272,9 @@ EditForm.propTypes = {
   Generate: PropTypes.func,
   password: PropTypes.string,
   visibility: PropTypes.bool,
-  onPasswordVisibility: PropTypes.func
+  onPasswordVisibility: PropTypes.func,
+  RFID: PropTypes.number,
+  RFIDgenerate: PropTypes.func
 };
 
 const mapStateToProps = state => ({

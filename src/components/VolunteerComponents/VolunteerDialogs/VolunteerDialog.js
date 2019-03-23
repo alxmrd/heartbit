@@ -40,6 +40,7 @@ const initState = {
   tel2: "",
   address: "",
   location: "",
+  RFID: "",
   showPassword: false
 };
 
@@ -103,7 +104,8 @@ class VolunteerDialog extends Component {
       tel1: "",
       tel2: "",
       address: "",
-      location: ""
+      location: "",
+      RFID: ""
     });
   };
 
@@ -121,7 +123,8 @@ class VolunteerDialog extends Component {
       name: this.state.name,
       surname: this.state.surname,
       address: this.state.address,
-      location: this.state.location
+      location: this.state.location,
+      RFID: this.state.RFID
     };
 
     this.props.onNewVolunteer(dataPouStelnw);
@@ -143,6 +146,23 @@ class VolunteerDialog extends Component {
       hasChanged: true
     });
   };
+  onRFIDGenerate = event => {
+    event.preventDefault();
+
+    var generator = require("generate-password");
+
+    var RFID = generator.generate({
+      length: 10,
+      numbers: true,
+      exclude: "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM"
+    });
+
+    // 'uEyMTw32v9'
+    this.setState({
+      RFID: RFID,
+      hasChanged: true
+    });
+  };
 
   handleUpdate = event => {
     event.preventDefault();
@@ -158,7 +178,8 @@ class VolunteerDialog extends Component {
       name: this.state.name,
       surname: this.state.surname,
       address: this.state.address,
-      location: this.state.location
+      location: this.state.location,
+      RFID: this.state.RFID
     };
     const id = this.props.id;
     this.props.onUpdateVolunteer(id, dataPouStelnw);
@@ -183,9 +204,11 @@ class VolunteerDialog extends Component {
               disabled={!this.state.hasChanged}
               onUpdate={this.handleUpdate}
               Generate={this.onGenerate}
+              RFIDgenerate={this.onRFIDGenerate}
               password={this.state.password}
               onPasswordVisibility={this.handleClickShowPassword}
               visibility={this.state.showPassword}
+              RFID={this.state.RFID}
             />
           ) : (
             <CreateForm
@@ -194,7 +217,9 @@ class VolunteerDialog extends Component {
               onCreate={this.handleSubmit}
               onClose={this.handleDialogClose}
               Generate={this.onGenerate}
+              RFIDgenerate={this.onRFIDGenerate}
               password={this.state.password}
+              RFID={this.state.RFID}
               onPasswordVisibility={this.handleClickShowPassword}
               visibility={this.state.showPassword}
             />

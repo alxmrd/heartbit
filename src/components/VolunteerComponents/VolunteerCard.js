@@ -254,6 +254,20 @@ class VolunteerCard extends React.Component {
             }}
             variant="outlined"
           />
+          <TextField
+            id="RFID"
+            type="rfid "
+            label="RFID"
+            name="rfid"
+            className={classes.textField}
+            defaultValue={volunteerData.RFID}
+            fullWidth
+            margin="normal"
+            InputProps={{
+              readOnly: true
+            }}
+            variant="outlined"
+          />
         </DialogContent>
 
         <DialogActions>

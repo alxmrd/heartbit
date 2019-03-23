@@ -19,7 +19,9 @@ function EditForm({
   Generate,
   password,
   onPasswordVisibility,
-  visibility
+  visibility,
+  RFIDgenerate,
+  RFID
 }) {
   return (
     <form onSubmit={onCreate}>
@@ -208,6 +210,27 @@ function EditForm({
           <option value="Κρήτη">Κρήτη</option>
         </NativeSelect>
       </FormControl>
+      <FormControl margin="dense" fullWidth>
+        <InputLabel htmlFor="rfid">RFID</InputLabel>
+        <Input
+          value={RFID}
+          id="RFID"
+          name="RFID"
+          type="text"
+          //defaultValue={volunteerData.RFID}
+          onChange={onCreateFormChange}
+          inputProps={{
+            title: "Eισάγετε RFID "
+          }}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton onClick={RFIDgenerate}>
+                <i className="material-icons">cached</i>
+              </IconButton>
+            </InputAdornment>
+          }
+        />
+      </FormControl>
       <DialogActions>
         <Button onClick={onClose} color="primary">
           Aκυρωση
@@ -228,7 +251,9 @@ EditForm.propTypes = {
   Generate: PropTypes.func,
   password: PropTypes.string.isRequired,
   visibility: PropTypes.bool,
-  onPasswordVisibility: PropTypes.func
+  onPasswordVisibility: PropTypes.func,
+  RFID: PropTypes.number,
+  RFIDgenerate: PropTypes.func
 };
 
 export default EditForm;
