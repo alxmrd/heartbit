@@ -17,10 +17,19 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import Routes from "./Routes";
-import { Provider } from "react-redux";
-import store from "./store/store";
+import { connect } from "react-redux";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Tooltip from "@material-ui/core/Tooltip";
+import { withRouter } from "react-router-dom";
+import Pusher from "pusher-js";
+import {
+  changeDefibrillatorLockerByArduino,
+  changeDefibrillatorPresentFlagByArduino,
+  storeArduinoData,
+  clearArduinoData
+} from "./store/actions/actions";
+import Snackbar from "@material-ui/core/Snackbar";
+import MySnackbarContentWrapper from "./components/MySnackbarContentWrapper";
 
 const drawerWidth = 240;
 
@@ -100,12 +109,18 @@ const styles = theme => ({
   link: {
     color: "wheat",
     textDecoration: "none"
+  },
+  margin: {
+    margin: theme.spacing.unit
   }
 });
 
 class App extends React.Component {
   state = {
-    open: false
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+    warning: ""
   };
 
   handleDrawerOpen = () => {
@@ -116,178 +131,293 @@ class App extends React.Component {
     this.setState({ open: false });
   };
 
-  render() {
-    const { classes, theme } = this.props;
+  componentDidMount() {
+    var pusher = new Pusher("2f7f2a748cacde676705", {
+      cluster: "eu",
+      forceTLS: true
+    });
 
+    var channel = pusher.subscribe("channel");
+    channel.bind("arduino", data => {
+      this.props.onStoreArduinoData(data);
+      if (data.identifier === "locker") {
+        const defibrillatorData = {
+          id: parseInt(data.id),
+          locker: parseInt(data.locker)
+        };
+
+        this.props.onChangeDefibrillatorLockerByArduino(defibrillatorData);
+        if (defibrillatorData.locker === 0) {
+          this.setState({
+            warning: "O απινιδωτής " + data.id + " κλειδώθηκε"
+          });
+        } else {
+          this.setState({
+            warning: "O απινιδωτής " + data.id + " ξεκλειδώθηκε"
+          });
+        }
+      }
+      if (data.identifier === "presentflag") {
+        const defibrillatorData = {
+          id: parseInt(data.id),
+          presentflag: parseInt(data.presentflag)
+        };
+
+        this.props.onChangeDefibrillatorPresentFlagByArduino(defibrillatorData);
+        if (defibrillatorData.locker === 0) {
+          this.setState({
+            warning: "O απινιδωτής " + data.id + " βρίσκεται πλέον στη θέση του"
+          });
+        } else {
+          this.setState({
+            warning: "O απινιδωτής" + data.id + "είναι εκτός θέσης"
+          });
+        }
+      }
+      if (data.identifier === "lowtempwarning") {
+        this.setState({
+          warning: "H θερμοκρασία του απινιδωτή " + data.id + " είναι χαμηλή!"
+        });
+      }
+      if (data.identifier === "hightempwarning") {
+        this.setState({
+          warning: "H θερμοκρασία του απινιδωτή " + data.id + " είναι υψηλή!"
+        });
+      }
+    });
+  }
+  handleClose = () => {
+    this.props.onClearArduinoData(this.props.arduinoData);
+  };
+  render() {
+    const { classes, theme, arduinoData } = this.props;
+    const { vertical, horizontal } = this.state;
     return (
-      <Provider store={store}>
-        <div className={classes.root}>
-          <CssBaseline />
-          <div id="map" />
-          {sessionStorage.getItem("token") ? (
-            <React.Fragment>
-              <AppBar
-                position="fixed"
-                className={classNames(classes.appBar, {
-                  [classes.appBarShift]: this.state.open
-                })}
-              >
-                <Toolbar disableGutters={!this.state.open}>
-                  <IconButton
+      <div className={classes.root}>
+        <CssBaseline />
+        <div id="map" />
+        {sessionStorage.getItem("token") ? (
+          <React.Fragment>
+            <AppBar
+              position="fixed"
+              className={classNames(classes.appBar, {
+                [classes.appBarShift]: this.state.open
+              })}
+            >
+              <Toolbar disableGutters={!this.state.open}>
+                <IconButton
+                  color="inherit"
+                  aria-label="Open drawer"
+                  onClick={this.handleDrawerOpen}
+                  className={classNames(classes.menuButton, {
+                    [classes.hide]: this.state.open
+                  })}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Typography
+                  variant="h4"
+                  color="primary"
+                  className={classes.grow}
+                >
+                  <Link to="/home" className={classes.link}>
+                    HeartBit
+                  </Link>
+                </Typography>
+                {sessionStorage.getItem("token") ? (
+                  <Button
                     color="inherit"
-                    aria-label="Open drawer"
-                    onClick={this.handleDrawerOpen}
-                    className={classNames(classes.menuButton, {
-                      [classes.hide]: this.state.open
-                    })}
+                    className={classes.LoginButton}
+                    onClick={() => sessionStorage.clear()}
                   >
-                    <MenuIcon />
-                  </IconButton>
-                  <Typography
-                    variant="h4"
-                    color="primary"
-                    className={classes.grow}
-                  >
-                    <Link to="/home" className={classes.link}>
-                      HeartBit
+                    <Link to="/" className={classes.link}>
+                      ΑΠΟΣΥΝΔΕΣΗ
                     </Link>
-                  </Typography>
-                  {sessionStorage.getItem("token") ? (
-                    <Button
-                      color="inherit"
-                      className={classes.LoginButton}
-                      onClick={() => sessionStorage.clear()}
-                    >
-                      <Link to="/" className={classes.link}>
-                        ΑΠΟΣΥΝΔΕΣΗ
-                      </Link>
-                    </Button>
-                  ) : (
-                    <Button color="inherit" className={classes.LoginButton}>
-                      <Link to="/" className={classes.link}>
-                        LOGIN
-                      </Link>
-                    </Button>
-                  )}
-                </Toolbar>
-              </AppBar>
-              <Drawer
-                variant="permanent"
-                className={classNames(classes.drawer, {
+                  </Button>
+                ) : (
+                  <Button color="inherit" className={classes.LoginButton}>
+                    <Link to="/" className={classes.link}>
+                      LOGIN
+                    </Link>
+                  </Button>
+                )}
+              </Toolbar>
+            </AppBar>
+            <Drawer
+              variant="permanent"
+              className={classNames(classes.drawer, {
+                [classes.drawerOpen]: this.state.open,
+                [classes.drawerClose]: !this.state.open
+              })}
+              classes={{
+                paper: classNames({
                   [classes.drawerOpen]: this.state.open,
                   [classes.drawerClose]: !this.state.open
-                })}
-                classes={{
-                  paper: classNames({
-                    [classes.drawerOpen]: this.state.open,
-                    [classes.drawerClose]: !this.state.open
-                  })
-                }}
-                open={this.state.open}
-              >
-                <div className={classes.toolbar}>
-                  <IconButton onClick={this.handleDrawerClose}>
-                    {theme.direction === "rtl" ? (
-                      <ChevronRightIcon />
-                    ) : (
-                      <ChevronLeftIcon />
-                    )}
-                  </IconButton>
-                </div>
-                <Divider />
-                <Link to="/map" className={classes.link}>
-                  <ListItem>
-                    <Tooltip title="Χάρτης" placement="right">
-                      <ListItemIcon>
-                        <i className="material-icons">map</i>
-                      </ListItemIcon>
-                    </Tooltip>
-                    <ListItemText primary="Χάρτης" />
-                  </ListItem>
-                </Link>
-                <Link to="/home" className={classes.link}>
-                  <ListItem>
-                    <Tooltip title="Προφίλ Διαχειριστή" placement="right">
-                      <ListItemIcon>
-                        <i className="material-icons">home</i>
-                      </ListItemIcon>
-                    </Tooltip>
-                    <ListItemText primary="Προφίλ Διαχειριστή" />
-                  </ListItem>
-                </Link>
-                <Divider />
-                <Link to="/admin" className={classes.link}>
-                  <ListItem>
-                    <Tooltip title="Διαχειριστές" placement="right">
-                      <ListItemIcon>
-                        <i className="material-icons">account_circle</i>
-                      </ListItemIcon>
-                    </Tooltip>
-                    <ListItemText primary="Περιστατικό" />
-                  </ListItem>
-                </Link>
-                <Link to="/Volunteers" className={classes.link}>
-                  <ListItem>
-                    <Tooltip title="Εθελοντές" placement="right">
-                      <ListItemIcon>
-                        <i className="material-icons">supervised_user_circle</i>
-                      </ListItemIcon>
-                    </Tooltip>
-                    <ListItemText primary="Εθελοντές" />
-                  </ListItem>
-                </Link>
-                <Link to="/defibrillators" className={classes.link}>
-                  <ListItem>
-                    <Tooltip title="Απινιδωτές" placement="right">
-                      <ListItemIcon>
-                        <i className="material-icons">local_hospital</i>
-                      </ListItemIcon>
-                    </Tooltip>
-                    <ListItemText primary="Απινιδωτές" />
-                  </ListItem>
-                </Link>
-                <Link to="/patients" className={classes.link}>
-                  <ListItem>
-                    <Tooltip title="Ασθενείς" placement="right">
-                      <ListItemIcon>
-                        <i className="material-icons">healing</i>
-                      </ListItemIcon>
-                    </Tooltip>
-                    <ListItemText primary="Ασθενείς" />
-                  </ListItem>
-                </Link>
-                <Link to="/event" className={classes.link}>
-                  <ListItem>
-                    <Tooltip title="Περιστατικά" placement="right">
-                      <ListItemIcon>
-                        <i className="material-icons">add_location</i>
-                      </ListItemIcon>
-                    </Tooltip>
-                    <ListItemText primary="Περιστατικό" />
-                  </ListItem>
-                </Link>
-                <Divider />
-              </Drawer>
-              <main className={classes.content}>
-                <div className={classes.toolbar} />
-                <Routes />
-              </main>
-            </React.Fragment>
-          ) : (
-            <main className={classes.login}>
+                })
+              }}
+              open={this.state.open}
+            >
+              <div className={classes.toolbar}>
+                <IconButton onClick={this.handleDrawerClose}>
+                  {theme.direction === "rtl" ? (
+                    <ChevronRightIcon />
+                  ) : (
+                    <ChevronLeftIcon />
+                  )}
+                </IconButton>
+              </div>
+              <Divider />
+              <Link to="/map" className={classes.link}>
+                <ListItem>
+                  <Tooltip title="Χάρτης" placement="right">
+                    <ListItemIcon>
+                      <i className="material-icons">map</i>
+                    </ListItemIcon>
+                  </Tooltip>
+                  <ListItemText primary="Χάρτης" />
+                </ListItem>
+              </Link>
+              <Link to="/home" className={classes.link}>
+                <ListItem>
+                  <Tooltip title="Προφίλ Διαχειριστή" placement="right">
+                    <ListItemIcon>
+                      <i className="material-icons">home</i>
+                    </ListItemIcon>
+                  </Tooltip>
+                  <ListItemText primary="Προφίλ Διαχειριστή" />
+                </ListItem>
+              </Link>
+              <Divider />
+              <Link to="/admin" className={classes.link}>
+                <ListItem>
+                  <Tooltip title="Διαχειριστές" placement="right">
+                    <ListItemIcon>
+                      <i className="material-icons">account_circle</i>
+                    </ListItemIcon>
+                  </Tooltip>
+                  <ListItemText primary="Περιστατικό" />
+                </ListItem>
+              </Link>
+              <Link to="/Volunteers" className={classes.link}>
+                <ListItem>
+                  <Tooltip title="Εθελοντές" placement="right">
+                    <ListItemIcon>
+                      <i className="material-icons">supervised_user_circle</i>
+                    </ListItemIcon>
+                  </Tooltip>
+                  <ListItemText primary="Εθελοντές" />
+                </ListItem>
+              </Link>
+              <Link to="/defibrillators" className={classes.link}>
+                <ListItem>
+                  <Tooltip title="Απινιδωτές" placement="right">
+                    <ListItemIcon>
+                      <i className="material-icons">local_hospital</i>
+                    </ListItemIcon>
+                  </Tooltip>
+                  <ListItemText primary="Απινιδωτές" />
+                </ListItem>
+              </Link>
+              <Link to="/patients" className={classes.link}>
+                <ListItem>
+                  <Tooltip title="Ασθενείς" placement="right">
+                    <ListItemIcon>
+                      <i className="material-icons">healing</i>
+                    </ListItemIcon>
+                  </Tooltip>
+                  <ListItemText primary="Ασθενείς" />
+                </ListItem>
+              </Link>
+              <Link to="/event" className={classes.link}>
+                <ListItem>
+                  <Tooltip title="Περιστατικά" placement="right">
+                    <ListItemIcon>
+                      <i className="material-icons">add_location</i>
+                    </ListItemIcon>
+                  </Tooltip>
+                  <ListItemText primary="Περιστατικό" />
+                </ListItem>
+              </Link>
+              <Divider />
+            </Drawer>
+            <main className={classes.content}>
               <div className={classes.toolbar} />
               <Routes />
+              <Snackbar
+                anchorOrigin={{ vertical, horizontal }}
+                open={arduinoData.identifier ? true : false}
+                onClose={this.handleClose}
+                ContentProps={{
+                  "aria-describedby": "message-id"
+                }}
+                autoHideDuration={6000}
+              >
+                <MySnackbarContentWrapper
+                  onClose={this.handleClose}
+                  variant="warning"
+                  className={classes.margin}
+                  message={this.state.warning}
+                />
+              </Snackbar>
+
+              {/* <Snackbar
+          anchorOrigin={{ vertical, horizontal }}
+          open={arduinoData.message ? true : false}
+          // onClose={errormessage =>
+          //   this.props.onErrorMessageCleaner(errormessage)
+          // }
+          ContentProps={{
+            "aria-describedby": "message-id"
+          }}
+          autoHideDuration={6000}
+        >
+          <MySnackbarContentWrapper
+            // onClose={errormessage =>
+            //   this.props.onErrorMessageCleaner(errormessage)
+            // }
+            variant="error"
+            className={classes.margin}
+            message={errormessage}
+          />
+        </Snackbar> */}
             </main>
-          )}
-        </div>
-      </Provider>
+          </React.Fragment>
+        ) : (
+          <main className={classes.login}>
+            <div className={classes.toolbar} />
+            <Routes />
+          </main>
+        )}
+      </div>
     );
   }
 }
 
 App.propTypes = {
   classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
+  arduinoData: PropTypes.object.isRequired,
+  onChangeDefibrillatorLockerByArduino: PropTypes.func,
+  onChangeDefibrillatorPresentFlagByArduino: PropTypes.func,
+  onStoreArduinoData: PropTypes.func,
+  onClearArduinoData: PropTypes.func
 };
+const AppWithStyles = withStyles(styles, { withTheme: true })(App);
+const mapStateToProps = state => ({
+  arduinoData: state.arduinoData
+});
+const mapDispatchToProps = dispatch => ({
+  onChangeDefibrillatorLockerByArduino: defibrillatorData =>
+    dispatch(changeDefibrillatorLockerByArduino(defibrillatorData)),
+  onChangeDefibrillatorPresentFlagByArduino: defibrillatorData =>
+    dispatch(changeDefibrillatorPresentFlagByArduino(defibrillatorData)),
+  onStoreArduinoData: data => dispatch(storeArduinoData(data)),
 
-export default withStyles(styles, { withTheme: true })(App);
+  onClearArduinoData: data => dispatch(clearArduinoData(data))
+});
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(AppWithStyles)
+);

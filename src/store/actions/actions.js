@@ -29,7 +29,8 @@ import { NEW_ADMIN } from "../actions/types";
 import { CLEAN_ADMIN_DATA } from "../actions/types";
 import { LOGGED_IN_ADMIN } from "../actions/types";
 import { UPDATE_ADMIN } from "../actions/types";
-
+import { STORE_ARDUINO_DATA } from "../actions/types";
+import { ARDUINO_DATA_CLEANER } from "../actions/types";
 import history from "../../history";
 
 const headers = {
@@ -128,7 +129,30 @@ export const changeDefibrillatorLocker = defibrillatorData => dispatch => {
       alert(error, "SERVER error 500 ");
     });
 };
-
+export const changeDefibrillatorLockerByArduino = defibrillatorData => dispatch => {
+  dispatch({
+    type: CHANGE_DEFIBRILLATOR_LOCKER,
+    payload: defibrillatorData
+  });
+};
+export const changeDefibrillatorPresentFlagByArduino = defibrillatorData => dispatch => {
+  dispatch({
+    type: CHANGE_DEFIBRILLATOR_FLAG,
+    payload: defibrillatorData
+  });
+};
+export const storeArduinoData = data => dispatch => {
+  dispatch({
+    type: STORE_ARDUINO_DATA,
+    payload: data
+  });
+};
+export const clearArduinoData = data => dispatch => {
+  dispatch({
+    type: ARDUINO_DATA_CLEANER,
+    payload: data
+  });
+};
 export const fetchAdmin = dispatch => {
   fetch(`${process.env.REACT_APP_URL}/api/admin`, {
     headers: {

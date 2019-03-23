@@ -7,7 +7,8 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import FooterPage from "./containers/FooterPage.js";
 import { CssBaseline } from "@material-ui/core";
 import history from "./history";
-
+import { Provider } from "react-redux";
+import store from "./store/store";
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -35,8 +36,9 @@ ReactDOM.render(
   <Router history={history}>
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
-
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
       <FooterPage />
     </MuiThemeProvider>
   </Router>,
