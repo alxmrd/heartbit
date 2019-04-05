@@ -26,7 +26,9 @@ import {
   changeDefibrillatorLockerByArduino,
   changeDefibrillatorPresentFlagByArduino,
   storeArduinoData,
-  clearArduinoData
+  changeDefibrillatorLocker,
+  clearArduinoData,
+  eventApproval
 } from "./store/actions/actions";
 import Snackbar from "@material-ui/core/Snackbar";
 import MySnackbarContentWrapper from "./components/MySnackbarContentWrapper";
@@ -184,6 +186,15 @@ class App extends React.Component {
           warning: "H θερμοκρασία του απινιδωτή " + data.id + " είναι υψηλή!"
         });
       }
+    });
+    channel.bind("apinidotis", data => {
+      const defibrillatorData = {
+        id: data.id,
+        locker: 0
+      };
+      this.props.onChangeLocker(defibrillatorData);
+
+      this.props.onEventApproval({ id: this.props.lastEvent.id });
     });
   }
   handleClose = () => {
@@ -400,11 +411,16 @@ App.propTypes = {
   onChangeDefibrillatorLockerByArduino: PropTypes.func,
   onChangeDefibrillatorPresentFlagByArduino: PropTypes.func,
   onStoreArduinoData: PropTypes.func,
-  onClearArduinoData: PropTypes.func
+  onClearArduinoData: PropTypes.func,
+  onChangeLocker: PropTypes.func,
+  onEventApproval: PropTypes.func,
+  lastEvent: PropTypes.object
 };
 const AppWithStyles = withStyles(styles, { withTheme: true })(App);
 const mapStateToProps = state => ({
-  arduinoData: state.arduinoData
+  arduinoData: state.arduinoData,
+  defibrillators: state.defibrillators,
+  lastEvent: state.event[state.event.length - 1]
 });
 const mapDispatchToProps = dispatch => ({
   onChangeDefibrillatorLockerByArduino: defibrillatorData =>
@@ -412,8 +428,11 @@ const mapDispatchToProps = dispatch => ({
   onChangeDefibrillatorPresentFlagByArduino: defibrillatorData =>
     dispatch(changeDefibrillatorPresentFlagByArduino(defibrillatorData)),
   onStoreArduinoData: data => dispatch(storeArduinoData(data)),
+  onChangeLocker: defibrillatorData =>
+    dispatch(changeDefibrillatorLocker(defibrillatorData)),
 
-  onClearArduinoData: data => dispatch(clearArduinoData(data))
+  onClearArduinoData: data => dispatch(clearArduinoData(data)),
+  onEventApproval: id => dispatch(eventApproval(id))
 });
 export default withRouter(
   connect(

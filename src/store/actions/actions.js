@@ -13,6 +13,7 @@ import { ISINVALID } from "../actions/types";
 import { CLEAR_ISINVALID } from "../actions/types";
 import { CLEAN_VOLUNTEER_DATA } from "../actions/types";
 import { SEARCH_VOLUNTEER } from "../actions/types";
+import { SEARCH_ADMIN } from "../actions/types";
 import { CLEAR_SELECT_PLACE } from "../actions/types";
 import { CLEAR_SUCCESS_MESSAGE } from "../actions/types";
 import { INSERT_DEFIBRILLATOR } from "../actions/types";
@@ -31,6 +32,7 @@ import { LOGGED_IN_ADMIN } from "../actions/types";
 import { UPDATE_ADMIN } from "../actions/types";
 import { STORE_ARDUINO_DATA } from "../actions/types";
 import { ARDUINO_DATA_CLEANER } from "../actions/types";
+import { EVENT_CORRESPODENCE } from "../actions/types";
 import history from "../../history";
 
 const headers = {
@@ -122,6 +124,30 @@ export const changeDefibrillatorLocker = defibrillatorData => dispatch => {
     .then(res =>
       dispatch({
         type: CHANGE_DEFIBRILLATOR_LOCKER,
+        payload: res
+      })
+    )
+    .catch(error => {
+      alert(error, "SERVER error 500 ");
+    });
+};
+export const eventApproval = id => dispatch => {
+  fetch(`${process.env.REACT_APP_URL}/api/eventCorrespodence`, {
+    method: "POST",
+    cache: "no-cache",
+    headers: {
+      ...headers,
+      Authorization: "Bearer " + sessionStorage.getItem("token")
+    },
+    redirect: "follow",
+    referrer: "no-referrer",
+    body: JSON.stringify(id)
+  })
+    .then(result => result.json())
+
+    .then(res =>
+      dispatch({
+        type: EVENT_CORRESPODENCE,
         payload: res
       })
     )
@@ -696,6 +722,34 @@ export const SearchOnVolunteers = ({ searched }) => dispatch => {
             payload: res
           })
         : dispatch({ type: SEARCH_VOLUNTEER, payload: res });
+    })
+
+    .catch(error => error.json())
+    .catch(error => {
+      alert(error, "SERVER error 500 ");
+    });
+};
+
+export const SearchOnAdmin = ({ searched }) => dispatch => {
+  fetch(`${process.env.REACT_APP_URL}/api/admin/search?input=${searched}`, {
+    method: "GET",
+    cache: "no-cache",
+    headers: {
+      ...headers,
+      Authorization: "Bearer " + sessionStorage.getItem("token")
+    },
+    redirect: "follow",
+    referrer: "no-referrer"
+    // body: JSON.stringify(searched)
+  })
+    .then(result => result.json())
+    .then(res => {
+      res.httpstatus === "error"
+        ? dispatch({
+            type: ISINVALID,
+            payload: res
+          })
+        : dispatch({ type: SEARCH_ADMIN, payload: res });
     })
 
     .catch(error => error.json())

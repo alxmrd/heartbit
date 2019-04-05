@@ -15,7 +15,8 @@ import {
   clearAdminData,
   editAdmin,
   idCleaner,
-  updateAdmin
+  updateAdmin,
+  SearchOnAdmin
 } from "../store/actions/actions";
 import { connect } from "react-redux";
 import { Fab } from "@material-ui/core";
@@ -33,6 +34,10 @@ import EditIcon from "@material-ui/icons/Edit";
 import { IconButton } from "@material-ui/core";
 import AdminCard from "../components/AdminComponents/AdminCard";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import SearchIcon from "@material-ui/icons/Search";
+import CloseIcon from "@material-ui/icons/Close";
+import InputBase from "@material-ui/core/InputBase";
+import Divider from "@material-ui/core/Divider";
 const styles = theme => ({
   root: {
     width: "100%",
@@ -58,6 +63,28 @@ const styles = theme => ({
   },
   tableWrapper: {
     float: "right"
+  },
+  search: {
+    padding: "2px 4px",
+    display: "flex",
+    grow: 1,
+    alignItems: "center",
+    width: 400,
+    marginRight: 20,
+    marginTop: 20,
+    float: "right"
+  },
+  input: {
+    marginLeft: 8,
+    flex: 1
+  },
+  iconButton: {
+    padding: 10
+  },
+  divider: {
+    width: 1,
+    height: 28,
+    margin: 4
   }
 });
 
@@ -80,7 +107,9 @@ class admin extends Component {
       address: "",
       username: "",
       password: "",
-      openCard: false
+      openCard: false,
+      searched: "",
+      reload: true
     };
   }
   componentDidMount() {
@@ -244,9 +273,42 @@ class admin extends Component {
     const id = this.props.id;
     this.props.onCloseDialog(id);
   };
+  handleChangeSearch = event => {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  };
+  handleSearch = event => {
+    event.preventDefault();
+
+    const SearchedInput = { searched: this.state.searched };
+
+    this.props.onSearch(SearchedInput);
+    this.setState({
+      reload: false
+    });
+  };
+  handleSearchClear = event => {
+    event.preventDefault();
+    this.setState({
+      searched: ""
+    });
+    this.props.onfetchAdmin();
+  };
+  enterPressed(event) {
+    var code = event.keyCode || event.which;
+    if (code === 13) {
+      const SearchedInput = { searched: this.state.searched };
+
+      this.props.onSearch(SearchedInput);
+      this.setState({
+        reload: false
+      });
+    }
+  }
 
   render() {
-    const { classes, admins, errormessage, admin } = this.props;
+    const { classes, admins, errormessage, admin, searcherror } = this.props;
     const { rowsPerPage, page } = this.state;
     return (
       <React.Fragment>
@@ -259,6 +321,51 @@ class admin extends Component {
           </Toolbar>
         </div>
         <Paper className={classes.root}>
+          <Paper className={classes.search} elevation={1}>
+            <InputBase
+              className={classes.input}
+              placeholder="Αναζήτηση"
+              name="searched"
+              value={this.state.searched}
+              onChange={this.handleChangeSearch}
+              onKeyPress={this.enterPressed.bind(this)}
+            />
+            {this.state.searched.length > 0 && (
+              <IconButton
+                color="inherit"
+                className={classes.iconButton}
+                aria-label="Directions"
+              >
+                <CloseIcon
+                  // className={classes.searchIcon}
+                  aria-label="Αναζήτηση"
+                  onClick={this.handleSearchClear}
+                />
+              </IconButton>
+            )}
+            <Divider className={classes.divider} />
+            <IconButton
+              color="primary"
+              className={classes.iconButton}
+              aria-label="Directions"
+            >
+              <SearchIcon
+                // className={classes.searchIcon}
+                aria-label="Αναζήτηση"
+                onClick={this.handleSearch}
+              />
+            </IconButton>
+            <Divider className={classes.divider} />
+            <IconButton
+              color="primary"
+              disabled={this.state.reload}
+              className={classes.iconButton}
+              aria-label="Directions"
+              onClick={this.handleSearchClear}
+            >
+              <i className="material-icons">history</i>
+            </IconButton>
+          </Paper>
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
@@ -393,6 +500,24 @@ class admin extends Component {
             message={errormessage}
           />
         </Snackbar>
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left"
+          }}
+          open={searcherror ? true : false}
+          autoHideDuration={6000}
+          onClose={searcherror => this.props.onErrorMessageCleaner(searcherror)}
+        >
+          <MySnackbarContentWrapper
+            onClose={searcherror =>
+              this.props.onErrorMessageCleaner(searcherror)
+            }
+            variant="error"
+            className={classes.margin}
+            message={searcherror}
+          />
+        </Snackbar>
       </React.Fragment>
     );
   }
@@ -404,6 +529,7 @@ admin.propTypes = {
   admin: PropTypes.object.isRequired,
   onNewAdmin: PropTypes.func.isRequired,
   errormessage: PropTypes.string,
+  searcherror: PropTypes.string,
   onErrorMessageCleaner: PropTypes.func.isRequired,
   newAdmin: PropTypes.object,
   onClearAdminData: PropTypes.func,
@@ -411,12 +537,14 @@ admin.propTypes = {
   EditAdmin: PropTypes.func,
   onCloseDialog: PropTypes.func.isRequired,
   onUpdateAdmin: PropTypes.func.isRequired,
-  id: PropTypes.number
+  id: PropTypes.number,
+  onSearch: PropTypes.func.isRequired
 };
 const adminWithStyles = withStyles(styles)(admin);
 const mapStateToProps = state => ({
   admins: state.admin,
   errormessage: state.error.admmessage,
+  searcherror: state.error.message,
   newAdmin: state.adminSuccessData,
   id: state.id,
   admin: state.admin.filter(admin => admin.id === state.id)[0] || {}
@@ -424,6 +552,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onfetchAdmin: () => fetchAdmin(dispatch),
+  onSearch: SearchedInput => dispatch(SearchOnAdmin(SearchedInput)),
   onNewAdmin: dataPouStelnw => newAdmin(dispatch, dataPouStelnw),
   onErrorMessageCleaner: errormessage =>
     dispatch(errorMessageCleaner(errormessage)),

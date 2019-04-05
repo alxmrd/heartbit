@@ -138,7 +138,7 @@ class SearchBar extends React.Component {
       address: this.state.address
     };
 
-    // this.props.onInsertEventClick(dataPouStelnw)
+    //this.props.onInsertEventClick(dataPouStelnw);
     this.props.onSendEventToApp(dataPouStelnw);
     this.props.onClearSelectPlace(this.props.selectPlace);
 

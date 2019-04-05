@@ -122,7 +122,10 @@ class Event extends Component {
                       <TableCell>{row.datetime}</TableCell>
                       <TableCell>
                         {row.correspondence === 0 ? (
-                          <Tooltip title="Με Ανταπόκριση" placement="bottom">
+                          <Tooltip
+                            title={row.correspondencetime}
+                            placement="bottom"
+                          >
                             <i className="material-icons teal600 md-36">
                               check_circle
                             </i>
